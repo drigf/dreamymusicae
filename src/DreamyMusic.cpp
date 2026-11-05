@@ -5,10 +5,93 @@
 /*                                                                 */
 /*******************************************************************/
 
+#define DREAMY_LOG_ADD_PARAM 1
+static void DreamyLog(const char* fmt, ...);
 #include "DreamyMusic.h"
 #include "DreamyDSP.h"
 #include <cstdio>
 #include <cstring>
+#include <cstdarg>
+#include <ctime>
+
+#define DREAMY_LOG_PATH "/tmp/dreamymusic.log"
+
+/*------------------------------------------------------------------
+ * Diagnostic File Logger (/tmp/dreamymusic.log)
+ *------------------------------------------------------------------*/
+static void DreamyLog(const char* fmt, ...) {
+    FILE* fp = std::fopen(DREAMY_LOG_PATH, "a");
+    if (!fp) return;
+
+    std::time_t now = std::time(nullptr);
+    struct std::tm* t = std::localtime(&now);
+    if (t) {
+        std::fprintf(fp, "[%02d:%02d:%02d] ", t->tm_hour, t->tm_min, t->tm_sec);
+    }
+
+    va_list args;
+    va_start(args, fmt);
+    std::vfprintf(fp, fmt, args);
+    va_end(args);
+
+    std::fprintf(fp, "\n");
+    std::fflush(fp);
+    std::fclose(fp);
+}
+
+static const char* CmdToString(PF_Cmd cmd) {
+    switch (cmd) {
+        case PF_Cmd_ABOUT:              return "PF_Cmd_ABOUT";
+        case PF_Cmd_GLOBAL_SETUP:       return "PF_Cmd_GLOBAL_SETUP";
+        case PF_Cmd_GLOBAL_SETDOWN:     return "PF_Cmd_GLOBAL_SETDOWN";
+        case PF_Cmd_PARAMS_SETUP:       return "PF_Cmd_PARAMS_SETUP";
+        case PF_Cmd_SEQUENCE_SETUP:     return "PF_Cmd_SEQUENCE_SETUP";
+        case PF_Cmd_SEQUENCE_RESETUP:   return "PF_Cmd_SEQUENCE_RESETUP";
+        case PF_Cmd_SEQUENCE_FLATTEN:   return "PF_Cmd_SEQUENCE_FLATTEN";
+        case PF_Cmd_SEQUENCE_SETDOWN:   return "PF_Cmd_SEQUENCE_SETDOWN";
+        case PF_Cmd_FRAME_SETUP:        return "PF_Cmd_FRAME_SETUP";
+        case PF_Cmd_RENDER:             return "PF_Cmd_RENDER";
+        case PF_Cmd_FRAME_SETDOWN:      return "PF_Cmd_FRAME_SETDOWN";
+        case PF_Cmd_USER_CHANGED_PARAM: return "PF_Cmd_USER_CHANGED_PARAM";
+        case PF_Cmd_UPDATE_PARAMS_UI:   return "PF_Cmd_UPDATE_PARAMS_UI";
+        case PF_Cmd_SMART_PRE_RENDER:   return "PF_Cmd_SMART_PRE_RENDER";
+        case PF_Cmd_SMART_RENDER:       return "PF_Cmd_SMART_RENDER";
+        default:                        return "PF_Cmd_OTHER";
+    }
+}
+
+/*------------------------------------------------------------------
+ * PluginDataEntryFunction2: Modern AE 2024-2026 Entry Verification
+ *------------------------------------------------------------------*/
+extern "C" DllExport PF_Err
+PluginDataEntryFunction2(
+    void                *inPtr,
+    PF_PluginDataCB2    inPluginDataCallBackPtr,
+    void                *inSPBasicSuitePtr,
+    const char          *inHostName,
+    const char          *inHostVersion)
+{
+    DreamyLog("PluginDataEntryFunction2 called: host='%s' version='%s'",
+              inHostName ? inHostName : "null",
+              inHostVersion ? inHostVersion : "null");
+
+    PF_Err result = PF_Err_INVALID_INDEX;
+    if (inPluginDataCallBackPtr) {
+        result = inPluginDataCallBackPtr(
+            inPtr,
+            reinterpret_cast<const A_u_char*>(PLUGIN_NAME),
+            reinterpret_cast<const A_u_char*>(PLUGIN_MATCH_NAME),
+            reinterpret_cast<const A_u_char*>(PLUGIN_CATEGORY),
+            reinterpret_cast<const A_u_char*>("EffectMain"),
+            'eFKT',
+            PF_PLUG_IN_VERSION,
+            PF_PLUG_IN_SUBVERS,
+            8,
+            reinterpret_cast<const A_u_char*>(""));
+    }
+    DreamyLog("PluginDataEntryFunction2 result=%d", (int)result);
+    return result;
+}
 
 /*------------------------------------------------------------------
  * PF_Cmd_ABOUT: Displays plugin info in After Effects About dialog
@@ -59,6 +142,15 @@ GlobalSetup(
     out_data->out_flags2 =
         PF_OutFlag2_PARAM_GROUP_START_COLLAPSED_FLAG |
         PF_OutFlag2_SUPPORTS_THREADED_RENDERING;
+
+    DreamyLog("GlobalSetup complete: my_version=0x%x (%d), out_flags=0x%x, out_flags2=0x%x, sizeof(PF_InData)=%zu, sizeof(PF_OutData)=%zu, sizeof(PF_ParamDef)=%zu",
+              (unsigned int)out_data->my_version,
+              (int)out_data->my_version,
+              (unsigned int)out_data->out_flags,
+              (unsigned int)out_data->out_flags2,
+              sizeof(PF_InData),
+              sizeof(PF_OutData),
+              sizeof(PF_ParamDef));
 
     return PF_Err_NONE;
 }
@@ -388,6 +480,10 @@ ParamsSetup(
     PF_END_TOPIC(ID_TOPIC_CRT_END);
 
     out_data->num_params = DREAMY_NUM_PARAMS;
+    DreamyLog("ParamsSetup complete: registered num_params=%d (offset of out_data->num_params=%zu, offset of in_data->effect_ref=%zu)",
+              (int)out_data->num_params,
+              offsetof(PF_OutData, num_params),
+              offsetof(PF_InData, effect_ref));
     return PF_Err_NONE;
 }
 
@@ -587,6 +683,10 @@ EffectMain(
 {
     PF_Err err = PF_Err_NONE;
 
+    if (cmd != PF_Cmd_RENDER) {
+        DreamyLog("EffectMain enter: cmd=%d (%s)", (int)cmd, CmdToString(cmd));
+    }
+
     try {
         switch (cmd) {
             case PF_Cmd_ABOUT:
@@ -603,6 +703,9 @@ EffectMain(
 
             case PF_Cmd_RENDER:
                 err = Render(in_data, out_data, params, output);
+                if (err != PF_Err_NONE) {
+                    DreamyLog("Render returned error=%d", (int)err);
+                }
                 break;
 
             case PF_Cmd_UPDATE_PARAMS_UI:
@@ -614,6 +717,11 @@ EffectMain(
         }
     } catch (...) {
         err = PF_Err_INTERNAL_STRUCT_DAMAGED;
+        DreamyLog("EXCEPTION caught in EffectMain during cmd=%d (%s)!", (int)cmd, CmdToString(cmd));
+    }
+
+    if (cmd != PF_Cmd_RENDER || err != PF_Err_NONE) {
+        DreamyLog("EffectMain exit: cmd=%d (%s) -> err=%d", (int)cmd, CmdToString(cmd), (int)err);
     }
 
     return err;

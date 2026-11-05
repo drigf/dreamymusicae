@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>DreamyMusic</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.adobe.AfterEffects.DreamyMusicVHS</string>
+	<string>com.nsdev.DreamyMusicVHS</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -15,12 +13,16 @@
 	<key>CFBundlePackageType</key>
 	<string>eFKT</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>FXTC</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
-	<key>CSResourcesFileMapped</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>12.0</string>
+	<key>LSRequiresCarbon</key>
 	<true/>
+	<key>NSAppleScriptEnabled</key>
+	<string>No</string>
 </dict>
 </plist>

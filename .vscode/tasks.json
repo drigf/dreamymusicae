@@ -45,7 +45,7 @@
         {
             "label": "Install Plugin to Adobe After Effects MediaCore",
             "type": "shell",
-            "command": "sudo cp -R \"${workspaceFolder}/build/Release/DreamyMusic.plugin\" \"/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/\"",
+            "command": "sudo rm -rf \"/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/DreamyMusic.plugin\" && sudo cp -R \"${workspaceFolder}/build/Release/DreamyMusic.plugin\" \"/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/\" && sudo chown -R $(whoami):admin \"/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/DreamyMusic.plugin\"",
             "dependsOn": [
                 "Build DreamyMusic.plugin (Release)"
             ],

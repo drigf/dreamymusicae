@@ -133,7 +133,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10000092400000100000001 /* PkgInfo in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,7 +154,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nxcrun Rez -d AE_OS_MAC -i \"${SRCROOT}/include/AE_SDK\" -o \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DreamyMusic.rsrc\" -useDF \"${SRCROOT}/src/DreamyMusicPiPL.r\"\ncp -f \"${SRCROOT}/Mac/PkgInfo\" \"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/PkgInfo\"\n";
+			shellScript = "mkdir -p \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nrm -f \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DreamyMusicPiPL.rsrc\" \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PkgInfo\"\nxcrun Rez -d AE_OS_MAC -i \"${SRCROOT}/include/AE_SDK\" -o \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DreamyMusic.rsrc\" -useDF \"${SRCROOT}/src/DreamyMusicPiPL.r\"\ncp -f \"${SRCROOT}/Mac/PkgInfo\" \"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/PkgInfo\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

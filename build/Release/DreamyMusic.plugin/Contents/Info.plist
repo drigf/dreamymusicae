@@ -4,12 +4,10 @@
 <dict>
 	<key>BuildMachineOSBuild</key>
 	<string>26A434</string>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>DreamyMusic</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.adobe.AfterEffects.DreamyMusicVHS</string>
+	<string>com.nsdev.DreamyMusicVHS</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -17,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>eFKT</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>FXTC</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -25,9 +23,7 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
+	<string>1</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
@@ -46,5 +42,9 @@
 	<string>27B52</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>12.0</string>
+	<key>LSRequiresCarbon</key>
+	<true/>
+	<key>NSAppleScriptEnabled</key>
+	<string>No</string>
 </dict>
 </plist>

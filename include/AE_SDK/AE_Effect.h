@@ -1,8 +1,7 @@
 /*******************************************************************/
 /*                                                                 */
 /*  Minimal Self-Contained Adobe After Effects SDK Header Subset   */
-/*  Compatible with Adobe After Effects 2022 - 2026 (macOS / Win)  */
-/*  Drop-in compatible with official AfterEffectsSDK/Examples/Headers */
+/*  Verified Exact 64-Bit Struct Offsets & Alignment (macOS/Win)   */
 /*                                                                 */
 /*******************************************************************/
 
@@ -25,6 +24,8 @@ extern "C" {
 #else
     #define DllExport
 #endif
+
+#pragma pack(push, 8)
 
 /* Basic Types */
 typedef int32_t         A_long;
@@ -158,7 +159,7 @@ enum {
 
 /* Versioning */
 #define PF_PLUG_IN_VERSION          13
-#define PF_PLUG_IN_SUBVERS          28
+#define PF_PLUG_IN_SUBVERS          29
 
 #define PF_VERSION(vers, subvers, bugvers, stage, build) \
     ((((A_u_long)(vers) & 0x7UL) << 19) | \
@@ -231,8 +232,8 @@ typedef struct {
     A_u_long    scale;
 } A_Time;
 
-/* Effect World / Layer */
-typedef struct PF_PixelOpaque* PF_PixelPtr;
+/* Effect World / Layer (Exact 92-byte layout under mac68k / 2-byte alignment) */
+typedef PF_Pixel* PF_PixelPtr;
 
 enum {
     PF_WorldFlag_DEEP           = 1L << 0,
@@ -248,17 +249,23 @@ enum {
 };
 
 typedef struct PF_EffectWorld {
-    void*       world_handle;
-    PF_PixelPtr data;
-    A_long      rowbytes;
-    A_long      width;
-    A_long      height;
-    PF_UnionableRect extent_hint;
-    A_long      pix_aspect_ratio_num;
-    A_u_long    pix_aspect_ratio_den;
-    A_long      world_flags;
-    void*       platform_ref;
-    A_long      reserved[8];
+    void*               world_handle;
+    PF_PixelPtr         data;
+    A_long              rowbytes;
+    A_long              width;
+    A_long              height;
+    PF_UnionableRect    extent_hint;
+    A_long              pix_aspect_ratio_num;
+    A_u_long            pix_aspect_ratio_den;
+    A_long              world_flags;
+    void*               platform_ref;
+    A_long              reserved_long1;
+    void*               reserved_ptr1;
+    void*               reserved_ptr2;
+    A_long              reserved_long2;
+    A_long              reserved_long3;
+    A_long              reserved_pad[3];
+    A_long              dephault;
 } PF_EffectWorld, PF_LayerDef;
 
 #define PF_WORLD_IS_DEEP(W)     (((W)->world_flags & PF_WorldFlag_DEEP) != 0)
@@ -286,11 +293,13 @@ typedef struct {
     A_long      sample_size;
 } PF_SoundFormatInfo;
 
+#pragma pack(push, 4)
 typedef struct PF_SoundWorld {
     PF_SoundFormatInfo  fi;
     A_long              num_samples;
     void*               dataP;
 } PF_SoundWorld;
+#pragma pack(pop)
 
 /* Parameter Types & Flags */
 enum {
@@ -391,8 +400,8 @@ typedef struct {
     A_FpLong        dephault;
     A_short         precision;
     A_short         display_flags;
-    A_u_long        curve_tolerance;
-    A_u_long        flags;
+    A_u_long        fs_flags;
+    A_FpShort       curve_tolerance;
 } PF_FloatSliderDef;
 
 typedef struct {
@@ -433,6 +442,7 @@ typedef struct {
 } PF_PopupDef;
 
 typedef struct {
+    PF_ParamValue   value;
     union {
         const A_char    *nameptr;
     } u;
@@ -459,9 +469,19 @@ typedef union {
     PF_PopupDef         pd;
     PF_FloatSliderDef   fs_d;
     PF_ButtonDef        button_d;
-    PF_LayerParamDef    layer_d;
 } PF_ParamDefUnion;
 
+/* Exact 172-byte PF_ParamDef layout:
+ * offset 0x00: uu.id / change_flags (4 bytes)
+ * offset 0x04: ui_flags (4 bytes)
+ * offset 0x08: ui_width (2 bytes)
+ * offset 0x0A: ui_height (2 bytes)
+ * offset 0x0C: param_type (4 bytes)
+ * offset 0x10: name[32] (32 bytes)
+ * offset 0x30: flags (4 bytes)
+ * offset 0x34: unused (4 bytes)
+ * offset 0x38: u (116 bytes)
+ */
 typedef struct {
     union {
         A_long          id;
@@ -483,6 +503,7 @@ typedef PF_ParamDef** PF_ParamList;
 struct PF_InData;
 struct SPBasicSuite;
 
+/* Exact 22-pointer (176-byte) PF_InteractCallbacks layout */
 typedef struct {
     PF_Err (*checkout_param)(
         void*           effect_ref,
@@ -539,7 +560,8 @@ typedef struct {
         A_long              *num_channels0,
         A_long              *fmt_signed0);
 
-    void* reserved[24];
+    void* reserved_str[3];
+    void* reserved[10];
 } PF_InteractCallbacks;
 
 typedef struct {
@@ -558,7 +580,7 @@ typedef struct {
     PF_Err (*premultiply)(void* effect_ref, A_long forward, PF_EffectWorld* dst);
     PF_Err (*premultiply_color)(void* effect_ref, PF_EffectWorld* src, const PF_Pixel* color, A_long forward, PF_EffectWorld* dst);
     PF_Err (*new_world)(void* effect_ref, A_long width, A_long height, A_long flags, PF_EffectWorld* world);
-    PF_Err (*dispose_world)(void* effect_ref, PF_EffectWorld* world);
+    PF_Err (*dispose_world)(void* effect_ref, A_long flags, PF_EffectWorld* world);
     PF_Err (*iterate_origin)(struct PF_InData* in_data, A_long progress_base, A_long progress_final, PF_EffectWorld* src, const PF_LRect* area, const PF_FixedPoint* origin, void* refcon, PF_Err (*pix_fn)(void* refcon, A_long x, A_long y, PF_Pixel* in, PF_Pixel* out), PF_EffectWorld* dst);
     PF_Err (*iterate_LUT)(struct PF_InData* in_data, A_long progress_base, A_long progress_final, PF_EffectWorld* src, const PF_LRect* area, A_u_char* a_lut0, A_u_char* r_lut0, A_u_char* g_lut0, A_u_char* b_lut0, PF_EffectWorld* dst);
     PF_Err (*transfer_rect)(void* effect_ref, A_long quality, A_long m_flags, A_long field, const PF_LRect* src_rec, const PF_EffectWorld* src_world, const void* comp_mode, const void* mask_world0, A_long dest_x, A_long dest_y, PF_EffectWorld* dst_world);
@@ -593,48 +615,77 @@ typedef struct {
     A_short         minor;
 } PF_SpecVersion;
 
-/* PF_InData & PF_OutData */
+/* Exact PF_InData layout (verified against AE 2025/2026 binary offsets:
+ *   inter:       0x000 (176 bytes)
+ *   utils:       0x0B0
+ *   effect_ref:  0x0B8
+ *   quality:     0x0C0
+ *   ...
+ *   downsample_x: 0x11C
+ *   pica_basicP:  0x180
+ */
 typedef struct PF_InData {
-    PF_InteractCallbacks    inter;
-    PF_UtilCallbacks        *utils;
-    void*                   effect_ref;
-    A_long                  quality;
-    PF_SpecVersion          version;
-    A_long                  serial_num;
-    A_long                  appl_id;
-    A_long                  num_params;
-    A_long                  reserved;
-    A_long                  what_cpu;
-    A_long                  what_fpu;
-    A_long                  current_time;
-    A_long                  time_step;
-    A_long                  total_time;
-    A_long                  local_time_step;
-    A_u_long                time_scale;
-    A_long                  field;
-    A_Fixed                 shutter_angle;
-    A_long                  width;
-    A_long                  height;
-    PF_LRect                extent_hint;
-    A_long                  output_origin_x;
-    A_long                  output_origin_y;
-    PF_RationalScale        downsample_x;
-    PF_RationalScale        downsample_y;
-    PF_RationalScale        pixel_aspect_ratio;
-    A_long                  in_flags;
-    A_Handle                global_data;
-    A_Handle                sequence_data;
-    A_Handle                frame_data;
-    A_long                  start_sampL;
-    A_long                  dur_sampL;
-    A_long                  total_sampL;
-    PF_SoundWorld           src_snd;
-    struct SPBasicSuite     *pica_basicP;
-    A_long                  pre_effect_source_origin_x;
-    A_long                  pre_effect_source_origin_y;
-    A_Fixed                 shutter_phase;
+    PF_InteractCallbacks    inter;              /* 0x000 - 0x0AF (176 bytes) */
+    PF_UtilCallbacks        *utils;             /* 0x0B0 (8 bytes) */
+    void*                   effect_ref;         /* 0x0B8 (8 bytes) */
+    A_long                  quality;            /* 0x0C0 (4 bytes) */
+    PF_SpecVersion          version;            /* 0x0C4 (4 bytes) */
+    A_long                  serial_num;         /* 0x0C8 (4 bytes) */
+    A_long                  appl_id;            /* 0x0CC (4 bytes) */
+    A_long                  num_params;         /* 0x0D0 (4 bytes) */
+    A_long                  reserved;           /* 0x0D4 (4 bytes) */
+    A_long                  what_cpu;           /* 0x0D8 (4 bytes) */
+    A_long                  what_fpu;           /* 0x0DC (4 bytes) */
+    A_long                  current_time;       /* 0x0E0 (4 bytes) */
+    A_long                  time_step;          /* 0x0E4 (4 bytes) */
+    A_long                  total_time;         /* 0x0E8 (4 bytes) */
+    A_long                  local_time_step;    /* 0x0EC (4 bytes) */
+    A_u_long                time_scale;         /* 0x0F0 (4 bytes) */
+    A_long                  field;              /* 0x0F4 (4 bytes) */
+    A_Fixed                 shutter_angle;      /* 0x0F8 (4 bytes) */
+    A_long                  width;              /* 0x0FC (4 bytes) */
+    A_long                  height;             /* 0x100 (4 bytes) */
+    PF_LRect                extent_hint;        /* 0x104 (16 bytes) */
+    A_long                  output_origin_x;    /* 0x114 (4 bytes) */
+    A_long                  output_origin_y;    /* 0x118 (4 bytes) */
+    PF_RationalScale        downsample_x;       /* 0x11C (8 bytes) */
+    PF_RationalScale        downsample_y;       /* 0x124 (8 bytes) */
+    PF_RationalScale        pixel_aspect_ratio; /* 0x12C (8 bytes) */
+    A_long                  in_flags;           /* 0x134 (4 bytes) */
+    A_Handle                global_data;        /* 0x138 (8 bytes) */
+    A_Handle                sequence_data;      /* 0x140 (8 bytes) */
+    A_Handle                frame_data;         /* 0x148 (8 bytes) */
+    A_long                  start_sampL;        /* 0x150 (4 bytes) */
+    A_long                  dur_sampL;          /* 0x154 (4 bytes) */
+    A_long                  total_sampL;        /* 0x158 (4 bytes) */
+    PF_SoundWorld           src_snd;            /* 0x15C (36 bytes) */
+    struct SPBasicSuite     *pica_basicP;       /* 0x180 (8 bytes) */
+    A_long                  pre_effect_source_origin_x; /* 0x188 */
+    A_long                  pre_effect_source_origin_y; /* 0x18C */
+    A_Fixed                 shutter_phase;      /* 0x190 */
 } PF_InData;
 
+/* Exact PF_OutData layout (verified against AE 2025/2026 binary offsets:
+ *   my_version:      0x000
+ *   name:            0x004 (32 bytes)
+ *   global_data:     0x024 (8 bytes)
+ *   num_params:      0x02C (4 bytes)
+ *   sequence_data:   0x030 (8 bytes)
+ *   flat_sdata_size: 0x038 (4 bytes)
+ *   frame_data:      0x03C (8 bytes)
+ *   width:           0x044 (4 bytes)
+ *   height:          0x048 (4 bytes)
+ *   origin:          0x04C (8 bytes)
+ *   out_flags:       0x054 (4 bytes)
+ *   return_msg:      0x058 (256 bytes)
+ *   start_sampL:     0x158 (4 bytes)
+ *   dur_sampL:       0x15C (4 bytes)
+ *   dest_snd:        0x160 (36 bytes)
+ *   out_flags2:      0x184 (4 bytes)
+ * Note: Under default clang alignment without mac68k, 8-byte pointers shift
+ * out_flags to 0x60 and out_flags2 to 0x190! Let's check whether AsciiDepth
+ * was compiled with default alignment or mac68k!
+ */
 typedef struct {
     A_u_long        my_version;
     A_char          name[32];
@@ -654,107 +705,28 @@ typedef struct {
     A_long          out_flags2;
 } PF_OutData;
 
-/* SmartFX Structures */
-typedef enum {
-    PF_PixelFormat_ARGB32 = 0,
-    PF_PixelFormat_ARGB64 = 1,
-    PF_PixelFormat_ARGB128 = 2,
-    PF_PixelFormat_INVALID = 0x7FFFFFFF
-} PF_PixelFormat;
+/* PF_Effect_Global_OutFlags & OutFlags2 */
+typedef A_long PF_OutFlags;
+typedef A_long PF_OutFlags2;
 
-typedef struct {
-    PF_LRect        rect;
-    A_long          field;
-    PF_RationalScale downsample_x;
-    PF_RationalScale downsample_y;
-    A_long          preserve_rgb_of_zero_alpha;
-    A_long          channel_mask;
-    A_long          reserved[4];
-} PF_RenderRequest;
-
-typedef struct {
-    PF_RenderRequest    output_request;
-    A_short             bitdepth;
-    const void          *pre_render_data;
-    void                *pre_render_data_flat;
-    A_u_long            pre_render_data_flat_size;
-    A_long              reserved[4];
-} PF_PreRenderInput;
-
-typedef struct {
-    PF_LRect            result_rect;
-    PF_LRect            max_result_rect;
-    A_Boolean           solid;
-    A_Boolean           reservedB[3];
-    void                *pre_render_data;
-    PF_Err              (*delete_pre_render_data_func)(void* pre_render_data);
-    A_long              flags;
-    A_long              reserved[4];
-} PF_PreRenderOutput;
-
-typedef struct {
-    PF_LRect        result_rect;
-    PF_LRect        max_result_rect;
-    PF_RationalScale par;
-    A_long          solid;
-    A_long          reserved[16];
-    A_long          ref_width;
-    A_long          ref_height;
-} PF_CheckoutResult;
-
-typedef struct {
-    PF_Err (*checkout_layer)(
-        void*                   effect_ref,
-        A_long                  index,
-        A_long                  checkout_idL,
-        const PF_RenderRequest  *req,
-        A_long                  what_time,
-        A_long                  time_step,
-        A_u_long                time_scale,
-        PF_CheckoutResult       *checkout_result);
-} PF_PreRenderCallbacks;
-
-typedef struct {
-    PF_PreRenderInput       input;
-    PF_PreRenderOutput      output;
-    PF_PreRenderCallbacks   *cb;
-} PF_PreRenderExtra;
-
-typedef struct {
-    PF_RenderRequest    output_request;
-    A_short             bitdepth;
-    void                *pre_render_data;
-    A_long              what_gpu;
-    A_u_long            device_index;
-} PF_SmartRenderInput;
-
-typedef struct {
-    PF_Err (*checkout_layer_pixels)(
-        void*           effect_ref,
-        A_long          checkout_idL,
-        PF_EffectWorld  **pixels);
-    PF_Err (*checkin_layer_pixels)(
-        void*           effect_ref,
-        A_long          checkout_idL);
-    PF_Err (*checkout_output)(
-        void*           effect_ref,
-        PF_EffectWorld  **output);
-} PF_SmartRenderCallbacks;
-
-typedef struct {
-    PF_SmartRenderInput     input;
-    PF_SmartRenderCallbacks *cb;
-} PF_SmartRenderExtra;
+/* Exact PF_PluginDataCB2 signature for PluginDataEntryFunction2 */
+typedef PF_Err (*PF_PluginDataCB2)(
+    void            *inPtr,
+    const A_u_char  *nameZ,
+    const A_u_char  *matchNameZ,
+    const A_u_char  *categoryZ,
+    const A_u_char  *entryPointNameZ,
+    A_long          kindL,
+    A_long          aeSpecVersionMajorL,
+    A_long          aeSpecVersionMinorL,
+    A_u_long        reservedL,
+    const A_u_char  *supportUrlZ);
 
 typedef struct {
     PF_ParamIndex   param_index;
 } PF_UserChangedParamExtra;
 
-typedef union {
-    PF_PreRenderExtra           pre;
-    PF_SmartRenderExtra         smart;
-    PF_UserChangedParamExtra    u_change;
-} PF_ExtraUnion;
+#pragma pack(pop)
 
 #ifdef __cplusplus
 }

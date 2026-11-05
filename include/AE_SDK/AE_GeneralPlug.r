@@ -1,16 +1,15 @@
 /*******************************************************************/
 /*  AE_GeneralPlug.r                                               */
-/*  Rez definition for Adobe After Effects PiPL resource           */
+/*  Exact Rez definition for Adobe After Effects PiPL resource     */
 /*******************************************************************/
 
 #ifndef _AE_GENERAL_PLUG_R_
 #define _AE_GENERAL_PLUG_R_
 
 type 'PiPL' {
-    longint = 0;
-    longint = 0;
+    longint = 0;        /* version */
     longint = $$CountOf(properties);
-    wide array properties {
+    array properties {
         switch {
             case Kind:
                 literal longint = '8BIM';
@@ -23,7 +22,7 @@ type 'PiPL' {
                 literal longint = '8BIM';
                 key literal longint = 'name';
                 longint = 0;
-                longint = (nameEnd[$$ArrayIndex(properties)] - nameStart[$$ArrayIndex(properties)]);
+                longint = (nameEnd[$$ArrayIndex(properties)] - nameStart[$$ArrayIndex(properties)]) / 8;
               nameStart:
                 pstring;
               nameEnd:
@@ -33,37 +32,37 @@ type 'PiPL' {
                 literal longint = '8BIM';
                 key literal longint = 'catg';
                 longint = 0;
-                longint = (catEnd[$$ArrayIndex(properties)] - catStart[$$ArrayIndex(properties)]);
+                longint = (catEnd[$$ArrayIndex(properties)] - catStart[$$ArrayIndex(properties)]) / 8;
               catStart:
                 pstring;
               catEnd:
                 align long;
 
-            case CodeMacARM64:
-                literal longint = '8BIM';
-                key literal longint = 'mAMR';
-                longint = 0;
-                longint = (armEnd[$$ArrayIndex(properties)] - armStart[$$ArrayIndex(properties)]);
-              armStart:
-                cstring;
-              armEnd:
-                align long;
-
             case CodeMacIntel64:
                 literal longint = '8BIM';
-                key literal longint = '8664';
+                key literal longint = 'mi64';
                 longint = 0;
-                longint = (x64End[$$ArrayIndex(properties)] - x64Start[$$ArrayIndex(properties)]);
-              x64Start:
-                cstring;
-              x64End:
+                longint = (mi64End[$$ArrayIndex(properties)] - mi64Start[$$ArrayIndex(properties)]) / 8;
+              mi64Start:
+                pstring;
+              mi64End:
+                align long;
+
+            case CodeMacARM64:
+                literal longint = '8BIM';
+                key literal longint = 'ma64';
+                longint = 0;
+                longint = (ma64End[$$ArrayIndex(properties)] - ma64Start[$$ArrayIndex(properties)]) / 8;
+              ma64Start:
+                pstring;
+              ma64End:
                 align long;
 
             case CodeWin64X86:
                 literal longint = '8BIM';
                 key literal longint = '8664';
                 longint = 0;
-                longint = (win64End[$$ArrayIndex(properties)] - win64Start[$$ArrayIndex(properties)]);
+                longint = (win64End[$$ArrayIndex(properties)] - win64Start[$$ArrayIndex(properties)]) / 8;
               win64Start:
                 cstring;
               win64End:
@@ -96,9 +95,9 @@ type 'PiPL' {
                 literal longint = '8BIM';
                 key literal longint = 'eINF';
                 longint = 0;
-                longint = 4;
+                longint = 2;
                 integer;
-                integer = 0;
+                align long;
 
             case AE_Effect_Global_OutFlags:
                 literal longint = '8BIM';
@@ -118,7 +117,7 @@ type 'PiPL' {
                 literal longint = '8BIM';
                 key literal longint = 'eMNA';
                 longint = 0;
-                longint = (matchEnd[$$ArrayIndex(properties)] - matchStart[$$ArrayIndex(properties)]);
+                longint = (matchEnd[$$ArrayIndex(properties)] - matchStart[$$ArrayIndex(properties)]) / 8;
               matchStart:
                 pstring;
               matchEnd:
@@ -126,10 +125,20 @@ type 'PiPL' {
 
             case AE_Reserved_Info:
                 literal longint = '8BIM';
-                key literal longint = 'aeRs';
+                key literal longint = 'aeFL';
                 longint = 0;
                 longint = 4;
                 longint;
+
+            case AE_Effect_Support_URL:
+                literal longint = '8BIM';
+                key literal longint = 'eURL';
+                longint = 0;
+                longint = (urlEnd[$$ArrayIndex(properties)] - urlStart[$$ArrayIndex(properties)]) / 8;
+              urlStart:
+                pstring;
+              urlEnd:
+                align long;
         };
     };
 };

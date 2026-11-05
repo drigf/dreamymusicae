@@ -15,6 +15,19 @@
 #define PF_ADD_PARAM(IN_DATA, INDEX, DEF) \
     (*(IN_DATA)->inter.add_param)((IN_DATA)->effect_ref, (INDEX), (DEF))
 
+#ifdef DREAMY_LOG_ADD_PARAM
+    #define DREAMY_CHECK_ADD_PARAM(NAME, ID, ERR) \
+        do { \
+            if ((ERR) != PF_Err_NONE) { \
+                DreamyLog("PF_ADD_PARAM FAILED: name='%s' id=%d err=%d", (NAME), (int)(ID), (int)(ERR)); \
+                return (ERR); \
+            } \
+        } while (0)
+#else
+    #define DREAMY_CHECK_ADD_PARAM(NAME, ID, ERR) \
+        do { if ((ERR) != PF_Err_NONE) return (ERR); } while (0)
+#endif
+
 #define PF_CHECKOUT_PARAM(IN_DATA, INDEX, TIME, STEP, SCALE, PARAM) \
     (*(IN_DATA)->inter.checkout_param)((IN_DATA)->effect_ref, (INDEX), (TIME), (STEP), (SCALE), (PARAM))
 
@@ -51,7 +64,8 @@
         strncpy(def.name, (NAME), 31); \
         def.name[31] = '\0'; \
         def.uu.id = (ID); \
-        if ((priv_err = PF_ADD_PARAM(in_data, -1, &def)) != PF_Err_NONE) return priv_err; \
+        priv_err = PF_ADD_PARAM(in_data, -1, &def); \
+        DREAMY_CHECK_ADD_PARAM((NAME), (ID), priv_err); \
     } while (0)
 
 #define PF_END_TOPIC(ID) \
@@ -59,7 +73,8 @@
         PF_Err priv_err = PF_Err_NONE; \
         def.param_type = PF_Param_GROUP_END; \
         def.uu.id = (ID); \
-        if ((priv_err = PF_ADD_PARAM(in_data, -1, &def)) != PF_Err_NONE) return priv_err; \
+        priv_err = PF_ADD_PARAM(in_data, -1, &def); \
+        DREAMY_CHECK_ADD_PARAM("GROUP_END", (ID), priv_err); \
     } while (0)
 
 #define PF_ADD_FLOAT_SLIDERX(NAME, VALID_MIN, VALID_MAX, SLIDER_MIN, SLIDER_MAX, DFLT, PREC, DISP, FLAGS, ID) \
@@ -77,8 +92,10 @@
         def.u.fs_d.dephault = (A_FpLong)(DFLT); \
         def.u.fs_d.precision = (A_short)(PREC); \
         def.u.fs_d.display_flags = (A_short)(DISP); \
+        def.u.fs_d.curve_tolerance = 0.05f; \
         def.uu.id = (ID); \
-        if ((priv_err = PF_ADD_PARAM(in_data, -1, &def)) != PF_Err_NONE) return priv_err; \
+        priv_err = PF_ADD_PARAM(in_data, -1, &def); \
+        DREAMY_CHECK_ADD_PARAM((NAME), (ID), priv_err); \
     } while (0)
 
 #define PF_ADD_CHECKBOXX(NAME, DFLT, FLAGS, ID) \
@@ -92,7 +109,8 @@
         def.u.bd.dephault = (A_Boolean)(DFLT); \
         def.u.bd.u.nameptr = ""; \
         def.uu.id = (ID); \
-        if ((priv_err = PF_ADD_PARAM(in_data, -1, &def)) != PF_Err_NONE) return priv_err; \
+        priv_err = PF_ADD_PARAM(in_data, -1, &def); \
+        DREAMY_CHECK_ADD_PARAM((NAME), (ID), priv_err); \
     } while (0)
 
 #define PF_ADD_COLOR(NAME, R, G, B, ID) \
@@ -107,7 +125,8 @@
         def.u.cd.dephault.blue = (A_u_char)(B); \
         def.u.cd.value = def.u.cd.dephault; \
         def.uu.id = (ID); \
-        if ((priv_err = PF_ADD_PARAM(in_data, -1, &def)) != PF_Err_NONE) return priv_err; \
+        priv_err = PF_ADD_PARAM(in_data, -1, &def); \
+        DREAMY_CHECK_ADD_PARAM((NAME), (ID), priv_err); \
     } while (0)
 
 #define PF_ADD_POPUPX(NAME, CHOICES_COUNT, DFLT, CHOICES_STR, FLAGS, ID) \
@@ -122,7 +141,8 @@
         def.u.pd.value = (DFLT); \
         def.u.pd.u.namesptr = (CHOICES_STR); \
         def.uu.id = (ID); \
-        if ((priv_err = PF_ADD_PARAM(in_data, -1, &def)) != PF_Err_NONE) return priv_err; \
+        priv_err = PF_ADD_PARAM(in_data, -1, &def); \
+        DREAMY_CHECK_ADD_PARAM((NAME), (ID), priv_err); \
     } while (0)
 
 #define PF_ADD_LAYER(NAME, DFLT, ID) \
@@ -131,9 +151,10 @@
         def.param_type = PF_Param_LAYER; \
         strncpy(def.name, (NAME), 31); \
         def.name[31] = '\0'; \
-        def.u.layer_d.dephault = (DFLT); \
+        def.u.ld.dephault = (DFLT); \
         def.uu.id = (ID); \
-        if ((priv_err = PF_ADD_PARAM(in_data, -1, &def)) != PF_Err_NONE) return priv_err; \
+        priv_err = PF_ADD_PARAM(in_data, -1, &def); \
+        DREAMY_CHECK_ADD_PARAM((NAME), (ID), priv_err); \
     } while (0)
 
 #endif /* _H_AE_MACROS */

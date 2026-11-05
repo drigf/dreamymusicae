@@ -6,7 +6,7 @@
 #include "AE_GeneralPlug.r"
 
 resource 'PiPL' (16000) {
-    {   /* array properties: 12 elements */
+    {   /* array properties */
         /* [1] */
         Kind {
             AEEffect
@@ -37,7 +37,7 @@ resource 'PiPL' (16000) {
         /* [7] */
         AE_Effect_Spec_Version {
             13,
-            28
+            29
         },
         /* [8] */
         AE_Effect_Version {
@@ -61,7 +61,11 @@ resource 'PiPL' (16000) {
         },
         /* [13] */
         AE_Reserved_Info {
-            8
+            0
+        },
+        /* [14] */
+        AE_Effect_Support_URL {
+            ""
         }
     }
 };
