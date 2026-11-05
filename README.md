@@ -71,7 +71,7 @@ Maps image luminance (plus FM wave ridges and circuit-bent phase contours) throu
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
 | **Enable Color Gradient** | Checkbox | `On` | Master toggle for the color gradient synthesizer. Uncheck this to turn off the gradient colors and keep 100% of your original video colors. |
-| **Palette Preset** | Popup (8 modes) | `Sunset Dream (Ref 1 FM)` | Choose **Custom 4-Stop Gradient** to use your own color pickers below, pick one of the 6 built-in curated palettes, or choose **Off (Original Footage Colors)** to bypass gradient colorization. |
+| **Palette Preset** | Popup (8 modes) | `Sunset Dream` | Choose **Custom 4-Stop Gradient** to use your own color pickers below, pick one of the 6 built-in curated palettes, or choose **Off (Original Footage Colors)** to bypass gradient colorization. |
 | **Shadow Color (Stop 1)** | RGB Picker | `#140524` (Deep Violet) | Color mapped to dark shadows (`Luma 0.00 – 0.33`) when **Palette Preset** is set to `Custom 4-Stop Gradient`. |
 | **Low Midtone (Stop 2)** | RGB Picker | `#E026A6` (Electric Magenta) | Color mapped to lower midtones (`Luma 0.33 – 0.66`) in Custom mode. |
 | **High Midtone (Stop 3)** | RGB Picker | `#FF8F1A` (Fiery Orange-Gold) | Color mapped to upper midtones (`Luma 0.66 – 1.00`) in Custom mode. |
@@ -82,8 +82,8 @@ Maps image luminance (plus FM wave ridges and circuit-bent phase contours) throu
 
 #### Built-in Palette Presets:
 1. **Custom 4-Stop Gradient**: Uses your 4 custom RGB pickers (`Stop 1` through `Stop 4`).
-2. **Sunset Dream (Ref 1 FM)**: Deep night violet $\rightarrow$ electric magenta $\rightarrow$ fiery orange-gold $\rightarrow$ pastel cyan-white.
-3. **Acid Circuit Synth (Ref 2)**: Deep cobalt blue $\rightarrow$ acid lime green $\rightarrow$ solar yellow $\rightarrow$ hot neon magenta.
+2. **Sunset Dream**: Deep night violet $\rightarrow$ electric magenta $\rightarrow$ fiery orange-gold $\rightarrow$ pastel cyan-white.
+3. **Acid Circuit Synth**: Deep cobalt blue $\rightarrow$ acid lime green $\rightarrow$ solar yellow $\rightarrow$ hot neon magenta.
 4. **Neon Oscilloscope**: Warm phosphor amber $\rightarrow$ neon coral $\rightarrow$ electric indigo $\rightarrow$ laser cyan.
 5. **Cyberpunk VHS**: Midnight blue $\rightarrow$ hot pink $\rightarrow$ electric cyan $\rightarrow$ warm cream.
 6. **Thermal Phosphor CRT**: Void black $\rightarrow$ deep crimson $\rightarrow$ amber gold $\rightarrow$ incandescent white.
@@ -147,7 +147,7 @@ Simulates a physical cathode-ray tube television monitor with discrete RGB subpi
 | **Enable CRT Display** | Checkbox | `On` | Master bypass toggle for CRT scanlines, phosphor masks, and screen curvature. |
 | **Scanline Size (px)** | `2.0 – 24.0 px` | `4.0 px` | Vertical height of each CRT scanline cycle in pixels. Increase to `6–12 px` for bold, macro-zoom CRT lines. |
 | **Scanline Contrast** | `0% – 100%` | `45.0%` | Darkness of the gap between scanlines, featuring automatic highlight beam-bloom compensation so bright whites widen the electron beam naturally. |
-| **Phosphor Subpixel Mask** | Popup (4 modes) | `Trinitron Aperture Grille (Ref 3)` | Selects the physical RGB phosphor subpixel layout:<br>• **None (Scanlines Only)**<br>• **Trinitron Aperture Grille (Ref 3)**: Continuous vertical `R | G | B` stripes<br>• **Shadow Mask Delta Triad**: Brick-staggered RGB triads<br>• **Arcade Slot Mask**: Staggered slot mask with horizontal dark bridges |
+| **Phosphor Subpixel Mask** | Popup (4 modes) | `Trinitron Aperture Grille` | Selects the physical RGB phosphor subpixel layout:<br>• **None (Scanlines Only)**<br>• **Trinitron Aperture Grille**: Continuous vertical `R | G | B` stripes<br>• **Shadow Mask Delta Triad**: Brick-staggered RGB triads<br>• **Arcade Slot Mask**: Staggered slot mask with horizontal dark bridges |
 | **Phosphor Mask Intensity** | `0% – 100%` | `40.0%` | Visibility of the individual Red, Green, and Blue phosphor subpixels. Push to `75%–100%` for extreme macro close-up CRT aesthetics. |
 | **CRT Screen Curvature** | `0% – 100%` | `15.0%` | Applies spherical CRT glass barrel distortion and darkened tube-bezel corners. Set to `0%` for a flat-screen framing. |
 
@@ -155,16 +155,16 @@ Simulates a physical cathode-ray tube television monitor with discrete RGB subpi
 
 ## 3. Creative Recipes & Look Guides
 
-* **Look 1 — Glowing Rutt-Etra Vector Flower (Reference Image 1)**:
-  - **Palette Preset**: `Sunset Dream (Ref 1 FM)` (`Gradient Blend`: `95%`)
+* **Look 1 — Glowing Rutt-Etra Vector Oscilloscope**:
+  - **Palette Preset**: `Sunset Dream` (`Gradient Blend`: `95%`)
   - **FM & Rutt-Etra Waves**: `FM Wave Frequency`: `110`, `FM Wave Depth`: `35%`, `3D Scanline Elevation`: `75%`, `Oscilloscope Lines`: `85`, `Oscilloscope Beam Width`: `38%`
   - **Dreamy VHS & Halation**: `Dreamy Halation Glow`: `80%`
-* **Look 2 — Psychedelic Circuit-Bent TV Broadcast (Reference Image 2)**:
-  - **Palette Preset**: `Acid Circuit Synth (Ref 2)` (`Gradient Blend`: `90%`)
+* **Look 2 — Psychedelic Circuit-Bent TV Broadcast**:
+  - **Palette Preset**: `Acid Circuit Synth` (`Gradient Blend`: `90%`)
   - **Circuit Bending Glitch**: `Psychedelic Wavefolder`: `65%`, `Horizontal Sync Tear`: `45%`, `RGB Matrix Shift`: `35%`, `Digital Pin-Short (XOR)`: `15%`
   - **Dreamy VHS & Halation**: `VHS Color Bleed`: `75%`, `Tape Edge Wobble`: `40%`
-* **Look 3 — Macro Sony Trinitron CRT Monitor (Reference Image 3)**:
-  - **CRT Scanlines & Phosphor**: `Scanline Size (px)`: `6.0 px`, `Scanline Contrast`: `75%`, `Phosphor Subpixel Mask`: `Trinitron Aperture Grille (Ref 3)`, `Phosphor Mask Intensity`: `85%`, `CRT Screen Curvature`: `20%`
+* **Look 3 — Macro Sony Trinitron CRT Monitor**:
+  - **CRT Scanlines & Phosphor**: `Scanline Size (px)`: `6.0 px`, `Scanline Contrast`: `75%`, `Phosphor Subpixel Mask`: `Trinitron Aperture Grille`, `Phosphor Mask Intensity`: `85%`, `CRT Screen Curvature`: `20%`
   - **Dreamy VHS & Halation**: `Dreamy Halation Glow`: `45%`, `VHS Color Bleed`: `35%`
 
 ---
@@ -178,7 +178,7 @@ Simulates a physical cathode-ray tube television monitor with discrete RGB subpi
 * **Adobe After Effects** (2022 / 2023 / 2024 / 2025 / 2026)
 
 ### Option A: Build & Install from VS Code
-Open the `/Users/niall/Developer/AE Plugins/dreamymusic` folder in VS Code:
+Open the project folder (`dreamymusic`) in VS Code from wherever you cloned or downloaded it:
 * Press **`Cmd + Shift + B`** to run the default build task (`Build DreamyMusic.plugin (Release)`).
 * Or open the Command Palette (**`Cmd + Shift + P` $\rightarrow$ `Tasks: Run Task`**) to run any of the configured tasks in [`.vscode/tasks.json`](.vscode/tasks.json):
   1. `Build DreamyMusic.plugin (Release)`
@@ -187,7 +187,7 @@ Open the `/Users/niall/Developer/AE Plugins/dreamymusic` folder in VS Code:
   4. `Open Project in Xcode`
 
 ### Option B: Build from Terminal
-Run `xcodebuild` from the project root:
+From the project root directory, run `xcodebuild`:
 ```bash
 xcodebuild -project DreamyMusic.xcodeproj \
            -scheme DreamyMusic \
@@ -209,7 +209,7 @@ open DreamyMusic.xcodeproj
 Select the **DreamyMusic** scheme and press **`Cmd + B`** to build.
 
 ### Installing into Adobe After Effects
-Copy the built `.plugin` bundle into Adobe's shared **MediaCore** directory so After Effects loads it automatically:
+Copy the built `.plugin` bundle into Adobe's shared **MediaCore** directory (or your version-specific After Effects `Plug-ins` folder) so After Effects loads it automatically:
 ```bash
 cp -R "build/Release/DreamyMusic.plugin" "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/"
 ```
@@ -219,8 +219,11 @@ cp -R "build/Release/DreamyMusic.plugin" "/Library/Application Support/Adobe/Com
 
 ## 5. Two-Tier Live Diagnostic Logging System
 
-To make both casual monitoring and deep low-level debugging effortless, the plugin writes **two separate timestamped log files simultaneously** inside the dedicated [`logs/`](logs/) folder every time After Effects loads the plugin (implemented in [`include/AE_SDK/AE_Macros.h`](include/AE_SDK/AE_Macros.h) and [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp)):
+To make both casual monitoring and deep low-level debugging effortless, the plugin writes **two separate timestamped log files simultaneously** inside the project's [`logs/`](logs/) folder every time After Effects loads the plugin (implemented in [`include/AE_SDK/AE_Macros.h`](include/AE_SDK/AE_Macros.h) and [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp)):
 
+* **Automatic Path Resolution**:
+  - When built from source on any machine, Xcode automatically embeds the local project path (`$(SRCROOT)/logs`), so logs are written to `<your-project-folder>/logs/`.
+  - You can also override the log directory at runtime via the `DREAMY_LOG_DIR` environment variable, or use the universal mirror in `/tmp/dreamymusic_logs/`.
 * **Timestamped Filename Format**:
   - Friendly Live Log: `logs/dreamymusic_YYYY-MM-DD_HH-MM-SS.log`
   - Detailed Technical Log: `logs/dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log`
@@ -230,7 +233,7 @@ To make both casual monitoring and deep low-level debugging effortless, the plug
 
 ### Tier 1: Friendly Live Monitor Log (`logs/dreamymusic_YYYY-MM-DD_HH-MM-SS.log`)
 * **Locations**:
-  - Workspace Folder: [`/Users/niall/Developer/AE Plugins/dreamymusic/logs/`](logs/) (`dreamymusic_YYYY-MM-DD_HH-MM-SS.log` & `latest.log`)
+  - Project Folder: [`logs/`](logs/) (`dreamymusic_YYYY-MM-DD_HH-MM-SS.log` & `latest.log`)
   - Temp Mirror: `/tmp/dreamymusic_logs/`
 * **Purpose**: Clean, human-readable real-time status updates with icons—never floods your terminal during playback.
 * **What It Logs**:
@@ -239,14 +242,14 @@ To make both casual monitoring and deep low-level debugging effortless, the plug
   - `🎛️ [UI SETUP]`: Confirmation of all registered Effect Controls across the 6 collapsible topic groups.
   - `🎚️ [CONTROL CHANGED]` / `🎨 [PRESET CHANGED]` / `☑️ [TOGGLE CHANGED]`: Immediate feedback whenever you drag a slider, switch a palette/CRT preset, pick a color stop, or toggle a module in After Effects.
   - `🎬 [RENDER #N]`: Periodic render heartbeats (frames 1–5 and every 30th frame thereafter) summarizing resolution, bit depth, composition timestamp, live 3-band audio levels (`Audio[Bass, Mid, High]`), active gradient preset, and enabled visual modules.
-* **Watch Live in Terminal**:
+* **Watch Live in Terminal** (from the project root):
   ```bash
-  tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/logs/latest.log"
+  tail -f logs/latest.log
   ```
 
 ### Tier 2: In-Depth Technical Diagnostic Log (`logs/dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log`)
 * **Locations**:
-  - Workspace Folder: [`/Users/niall/Developer/AE Plugins/dreamymusic/logs/`](logs/) (`dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log` & `latest_detailed.log`)
+  - Project Folder: [`logs/`](logs/) (`dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log` & `latest_detailed.log`)
   - Temp Mirror: `/tmp/dreamymusic_logs/`
 * **Purpose**: Granular engineering telemetry for verifying ABI struct alignment, DSP audio checkout math, render performance, and pixel buffer changes.
 * **What It Logs**:
@@ -255,9 +258,9 @@ To make both casual monitoring and deep low-level debugging effortless, the plug
   - `[AUDIO DSP]`: `checkout_layer_audio` return code, audio layer index, sample rate (`48000 Hz`), checked-out sample count, raw waveform peak amplitude, raw 3-band IIR filter RMS (`Raw[B, M, H]`), user weight multipliers, and final modulation envelopes (`Out[B, M, H]`).
   - `[MODULE PARAMS]`: Full snapshot of all parameter values across Gradient, FM/Rutt-Etra, Circuit Bending, VHS, and CRT modules on logged frames.
   - `[UI_EVENT]`: Raw parameter index, type code, and internal floating-point/integer values on every `PF_Cmd_USER_CHANGED_PARAM`.
-* **Watch Live in Terminal**:
+* **Watch Live in Terminal** (from the project root):
   ```bash
-  tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/logs/latest_detailed.log"
+  tail -f logs/latest_detailed.log
   ```
 
 ---

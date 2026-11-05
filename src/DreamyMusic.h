@@ -87,7 +87,7 @@ enum {
     PARAM_CRT_SCANLINE_PITCH,       /* Scanline height in pixels (e.g. 2.0 - 12.0 px) */
     PARAM_CRT_SCANLINE_INTENSITY,   /* Scanline darkness / contrast */
     PARAM_CRT_PHOSPHOR_MASK,        /* Popup: None, Trinitron Aperture Grille, Shadow Mask Dot Triad, Slot Mask */
-    PARAM_CRT_PHOSPHOR_STRENGTH,    /* RGB Subpixel grille visibility (like Reference Image 3) */
+    PARAM_CRT_PHOSPHOR_STRENGTH,    /* RGB Subpixel grille visibility */
     PARAM_CRT_CURVATURE,            /* Subtle CRT glass barrel distortion & vignette */
     PARAM_TOPIC_CRT_END,
 
@@ -159,8 +159,8 @@ enum {
 /* Gradient Preset Modes (1-based popup index in AE) */
 enum {
     GRAD_MODE_CUSTOM = 1,
-    GRAD_MODE_SUNSET_DREAM,         /* Ref 1: Deep black/purple -> magenta -> neon orange -> pastel cyan/white */
-    GRAD_MODE_ACID_CIRCUIT,         /* Ref 2: Deep indigo -> electric green -> acid yellow -> hot magenta */
+    GRAD_MODE_SUNSET_DREAM,         /* Deep black/purple -> magenta -> neon orange -> pastel cyan/white */
+    GRAD_MODE_ACID_CIRCUIT,         /* Deep indigo -> electric green -> acid yellow -> hot magenta */
     GRAD_MODE_NEON_OSCILLOSCOPE,    /* Amber gold -> hot pink -> electric violet -> laser cyan */
     GRAD_MODE_CYBERPUNK_VHS,        /* Midnight blue -> neon magenta -> cyan -> warm cream */
     GRAD_MODE_THERMAL_CRT,          /* Void black -> crimson -> solar gold -> incandescent white */
@@ -171,7 +171,7 @@ enum {
 /* CRT Phosphor Mask Modes (1-based popup index in AE) */
 enum {
     CRT_MASK_NONE = 1,
-    CRT_MASK_TRINITRON_GRILLE,      /* Ref 3: Vertical R-G-B aperture grille stripes */
+    CRT_MASK_TRINITRON_GRILLE,      /* Vertical R-G-B aperture grille stripes */
     CRT_MASK_SHADOW_TRIAD,          /* Staggered delta RGB phosphor triad */
     CRT_MASK_SLOT_MASK              /* Arcade CRT staggered vertical slot mask */
 };

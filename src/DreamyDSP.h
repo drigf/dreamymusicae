@@ -212,7 +212,7 @@ inline void SetupGradientStops(
             break;
 
         case GRAD_MODE_SUNSET_DREAM:
-            /* Reference Image 1: Deep night violet -> electric magenta -> fiery orange-gold -> pastel cyan-white */
+            /* Deep night violet -> electric magenta -> fiery orange-gold -> pastel cyan-white */
             rp.stops[0] = { 0.08f, 0.02f, 0.14f, 1.0f };
             rp.stops[1] = { 0.88f, 0.15f, 0.65f, 1.0f };
             rp.stops[2] = { 1.00f, 0.56f, 0.10f, 1.0f };
@@ -220,7 +220,7 @@ inline void SetupGradientStops(
             break;
 
         case GRAD_MODE_ACID_CIRCUIT:
-            /* Reference Image 2: Deep cobalt blue -> acid lime green -> solar yellow -> hot neon magenta */
+            /* Deep cobalt blue -> acid lime green -> solar yellow -> hot neon magenta */
             rp.stops[0] = { 0.05f, 0.08f, 0.75f, 1.0f };
             rp.stops[1] = { 0.22f, 0.88f, 0.12f, 1.0f };
             rp.stops[2] = { 0.98f, 0.82f, 0.08f, 1.0f };
@@ -426,7 +426,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
     /*--------------------------------------------------------------
      * STAGE C: Circuit Bending Horizontal Line-Hold Tear & Smear
-     * (Reference Image 2 horizontal displacement & color smear)
+     * (Horizontal displacement & color smear)
      *--------------------------------------------------------------*/
     float bend_audio_mult = 1.0f + (rp.audio_high * 0.9f + rp.audio_bass * 0.6f) * rp.bend_audio_react;
     if (rp.bend_enable && rp.bend_smear_tear > 0.001f) {
@@ -443,7 +443,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
     /*--------------------------------------------------------------
      * STAGE D: Frequency Modulation (FM) & Rutt-Etra Scanline Synth
-     * (Reference Image 1 glowing 3D-displaced FM oscilloscope waves)
+     * (Glowing 3D-displaced FM oscilloscope waves)
      *--------------------------------------------------------------*/
     FloatRGBA base_col = SampleWorldBilinear(rp, sample_x, sample_y);
     float local_luma = Luminance(base_col);
@@ -483,7 +483,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
             base_col = SampleWorldBilinear(rp, sample_x, sample_y);
             local_luma = Luminance(base_col);
 
-            /* Generate the iconic Reference Image 1 glowing horizontal oscilloscope contour lines */
+            /* Generate glowing horizontal oscilloscope contour lines */
             if (rp.fm_scanline_density > 1.0f) {
                 float num_lines = rp.fm_scanline_density;
                 /* Deformed scanline coordinate combines vertical position, luminance elevation, and FM wave */
@@ -499,7 +499,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
                 float beam_width = Clamp01(rp.fm_line_thickness);
                 float core_beam  = SmoothStep(beam_width, beam_width * 0.15f, dist_to_line);
 
-                /* High-frequency dotted/stippled FM beam modulation along the line (like Ref Image 1) */
+                /* High-frequency dotted/stippled FM beam modulation along the line */
                 float dot_mod = 0.82f + 0.18f * fm_carrier_signal;
                 rutt_ribbon_glow = core_beam * dot_mod;
 
@@ -577,7 +577,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
     /*--------------------------------------------------------------
      * STAGE F: Circuit Bending (Analog Wavefolding & DAC Pin XOR)
-     * (Reference Image 2 psychedelic color wrapping & glitch)
+     * (Psychedelic color wrapping & glitch)
      *--------------------------------------------------------------*/
     if (rp.bend_enable) {
         /* 1. Cross-channel RGB feedback matrix rotation */
@@ -680,7 +680,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
     /*--------------------------------------------------------------
      * STAGE I: CRT Scanlines & Trinitron RGB Phosphor Subpixel Mask
-     * (Reference Image 3 discrete R-G-B vertical phosphor stripes + scanlines)
+     * (Discrete R-G-B vertical phosphor stripes + scanlines)
      *--------------------------------------------------------------*/
     if (rp.crt_enable) {
         float pitch = std::max(1.5f, rp.crt_scanline_pitch * rp.downsample_scale);
@@ -714,7 +714,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
             int triad_idx = ((sub_x % 3) + 3) % 3;
             float mask_r = 0.18f, mask_g = 0.18f, mask_b = 0.18f;
 
-            /* Discrete R, G, B phosphor cells with energy-preserving boost (like Reference Image 3) */
+            /* Discrete R, G, B phosphor cells with energy-preserving boost */
             if (triad_idx == 0) {
                 mask_r = 1.48f; mask_g = 0.15f; mask_b = 0.12f;
             } else if (triad_idx == 1) {

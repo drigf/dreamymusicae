@@ -1,0 +1,14 @@
+# Xcode & Build Artifacts
+build/
+DerivedData/
+*.xcuserdata/
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# Diagnostic Session Logs
+logs/*.log
+
+# macOS System Files
+.DS_Store
+

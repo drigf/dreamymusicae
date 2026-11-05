@@ -17,11 +17,16 @@ static void DreamyDetailLog(const char* fmt, ...);
 #include <chrono>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <cstdlib>
 #if defined(__APPLE__)
 #include <dispatch/dispatch.h>
 #endif
 
-#define DREAMY_WORKSPACE_LOG_DIR "/Users/niall/Developer/AE Plugins/dreamymusic/logs"
+#ifdef DREAMY_SOURCE_ROOT
+#define DREAMY_DEFAULT_LOG_DIR DREAMY_SOURCE_ROOT "/logs"
+#else
+#define DREAMY_DEFAULT_LOG_DIR ""
+#endif
 #define DREAMY_TMP_LOG_DIR "/tmp/dreamymusic_logs"
 
 static int g_render_frame_counter = 0;
@@ -29,6 +34,7 @@ static bool g_log_next_render = true;
 static bool g_logged_legacy_recovery = false;
 
 static bool g_log_paths_initialized = false;
+static char g_workspace_log_dir[512] = {0};
 static char g_workspace_log_path[512] = {0};
 static char g_workspace_detail_log_path[512] = {0};
 static char g_tmp_log_path[512] = {0};
@@ -43,7 +49,21 @@ static void EnsureLogSessionPaths() {
     if (g_log_paths_initialized) return;
     g_log_paths_initialized = true;
 
-    ::mkdir(DREAMY_WORKSPACE_LOG_DIR, 0777);
+    const char* env_log_dir = std::getenv("DREAMY_LOG_DIR");
+    if (env_log_dir && env_log_dir[0] != '\0') {
+        std::snprintf(g_workspace_log_dir, sizeof(g_workspace_log_dir), "%s", env_log_dir);
+    } else if (DREAMY_DEFAULT_LOG_DIR[0] != '\0') {
+        std::snprintf(g_workspace_log_dir, sizeof(g_workspace_log_dir), "%s", DREAMY_DEFAULT_LOG_DIR);
+    } else {
+        const char* home = std::getenv("HOME");
+        if (home && home[0] != '\0') {
+            std::snprintf(g_workspace_log_dir, sizeof(g_workspace_log_dir), "%s/Library/Logs/DreamyMusicVHS", home);
+        }
+    }
+
+    if (g_workspace_log_dir[0] != '\0') {
+        ::mkdir(g_workspace_log_dir, 0777);
+    }
     ::mkdir(DREAMY_TMP_LOG_DIR, 0777);
 
     char stamp[32] = {0};
@@ -57,22 +77,27 @@ static void EnsureLogSessionPaths() {
         std::snprintf(stamp, sizeof(stamp), "session");
     }
 
-    std::snprintf(g_workspace_log_path, sizeof(g_workspace_log_path),
-                  "%s/dreamymusic_%s.log", DREAMY_WORKSPACE_LOG_DIR, stamp);
-    std::snprintf(g_workspace_detail_log_path, sizeof(g_workspace_detail_log_path),
-                  "%s/dreamymusic_detailed_%s.log", DREAMY_WORKSPACE_LOG_DIR, stamp);
+    if (g_workspace_log_dir[0] != '\0') {
+        std::snprintf(g_workspace_log_path, sizeof(g_workspace_log_path),
+                      "%s/dreamymusic_%s.log", g_workspace_log_dir, stamp);
+        std::snprintf(g_workspace_detail_log_path, sizeof(g_workspace_detail_log_path),
+                      "%s/dreamymusic_detailed_%s.log", g_workspace_log_dir, stamp);
+
+        // Maintain 'latest.log' and 'latest_detailed.log' symlinks inside logs/ for easy tailing
+        char ws_latest[512] = {0};
+        char ws_latest_detail[512] = {0};
+        std::snprintf(ws_latest, sizeof(ws_latest), "%s/latest.log", g_workspace_log_dir);
+        std::snprintf(ws_latest_detail, sizeof(ws_latest_detail), "%s/latest_detailed.log", g_workspace_log_dir);
+        ::unlink(ws_latest);
+        ::unlink(ws_latest_detail);
+        ::symlink(g_workspace_log_path, ws_latest);
+        ::symlink(g_workspace_detail_log_path, ws_latest_detail);
+    }
+
     std::snprintf(g_tmp_log_path, sizeof(g_tmp_log_path),
                   "%s/dreamymusic_%s.log", DREAMY_TMP_LOG_DIR, stamp);
     std::snprintf(g_tmp_detail_log_path, sizeof(g_tmp_detail_log_path),
                   "%s/dreamymusic_detailed_%s.log", DREAMY_TMP_LOG_DIR, stamp);
-
-    // Maintain a 'latest.log' and 'latest_detailed.log' symlink inside logs/ for easy tailing
-    const char* ws_latest = DREAMY_WORKSPACE_LOG_DIR "/latest.log";
-    const char* ws_latest_detail = DREAMY_WORKSPACE_LOG_DIR "/latest_detailed.log";
-    ::unlink(ws_latest);
-    ::unlink(ws_latest_detail);
-    ::symlink(g_workspace_log_path, ws_latest);
-    ::symlink(g_workspace_detail_log_path, ws_latest_detail);
 
     const char* tmp_latest = DREAMY_TMP_LOG_DIR "/latest.log";
     const char* tmp_latest_detail = DREAMY_TMP_LOG_DIR "/latest_detailed.log";
@@ -170,8 +195,8 @@ static const char* CmdToFriendlyName(PF_Cmd cmd) {
 static const char* GradientModeToString(A_long mode) {
     switch (mode) {
         case GRAD_MODE_CUSTOM:            return "Custom 4-Stop Gradient";
-        case GRAD_MODE_SUNSET_DREAM:      return "Sunset Dream (Ref 1 FM)";
-        case GRAD_MODE_ACID_CIRCUIT:      return "Acid Circuit Synth (Ref 2)";
+        case GRAD_MODE_SUNSET_DREAM:      return "Sunset Dream";
+        case GRAD_MODE_ACID_CIRCUIT:      return "Acid Circuit Synth";
         case GRAD_MODE_NEON_OSCILLOSCOPE: return "Neon Oscilloscope";
         case GRAD_MODE_CYBERPUNK_VHS:     return "Cyberpunk VHS";
         case GRAD_MODE_THERMAL_CRT:       return "Thermal Phosphor CRT";
@@ -416,8 +441,8 @@ ParamsSetup(
         8,
         GRAD_MODE_SUNSET_DREAM,
         "Custom 4-Stop Gradient|"
-        "Sunset Dream (Ref 1 FM)|"
-        "Acid Circuit Synth (Ref 2)|"
+        "Sunset Dream|"
+        "Acid Circuit Synth|"
         "Neon Oscilloscope|"
         "Cyberpunk VHS|"
         "Thermal Phosphor CRT|"
@@ -640,7 +665,7 @@ ParamsSetup(
         4,
         CRT_MASK_TRINITRON_GRILLE,
         "None (Scanlines Only)|"
-        "Trinitron Aperture Grille (Ref 3)|"
+        "Trinitron Aperture Grille|"
         "Shadow Mask Delta Triad|"
         "Arcade Slot Mask",
         PF_ParamFlag_SUPERVISE,
