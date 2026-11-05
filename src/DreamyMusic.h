@@ -91,6 +91,18 @@ enum {
     PARAM_CRT_CURVATURE,            /* Subtle CRT glass barrel distortion & vignette */
     PARAM_TOPIC_CRT_END,
 
+    /* 7. Dreamy Echo Trail (Windows Cursor Trail Style Temporal/Spatial Ghosting) */
+    PARAM_TOPIC_ECHO_START,
+    PARAM_ECHO_ENABLE,              /* Enable / Disable Echo Trail */
+    PARAM_ECHO_COUNT,               /* Number of ghost copies in the trail (1 - 12) */
+    PARAM_ECHO_DELAY,               /* Time delay between trail copies in frames (0.2 - 8.0 frames) */
+    PARAM_ECHO_OFFSET,              /* Spatial cursor-trail offset / drift distance (px) */
+    PARAM_ECHO_OPACITY,             /* Trail transparency / opacity (0 - 100%) */
+    PARAM_ECHO_DECAY,               /* How quickly each successive ghost copy fades out (0 - 100%) */
+    PARAM_ECHO_GLOW,                /* Customizable glow intensity around the echo trail (0 - 200%) */
+    PARAM_ECHO_GLOW_COLOR,          /* Custom glow tint color for the echo trail */
+    PARAM_TOPIC_ECHO_END,
+
     DREAMY_NUM_PARAMS
 };
 
@@ -153,7 +165,18 @@ enum {
     ID_CRT_PHOSPHOR_MASK,
     ID_CRT_PHOSPHOR_STRENGTH,
     ID_CRT_CURVATURE,
-    ID_TOPIC_CRT_END
+    ID_TOPIC_CRT_END,
+
+    ID_TOPIC_ECHO_START = 700,
+    ID_ECHO_ENABLE,
+    ID_ECHO_COUNT,
+    ID_ECHO_DELAY,
+    ID_ECHO_OFFSET,
+    ID_ECHO_OPACITY,
+    ID_ECHO_DECAY,
+    ID_ECHO_GLOW,
+    ID_ECHO_GLOW_COLOR,
+    ID_TOPIC_ECHO_END
 };
 
 /* Gradient Preset Modes (1-based popup index in AE) */
@@ -243,6 +266,18 @@ typedef struct {
     A_long      crt_phosphor_mask;
     float       crt_phosphor_strength;
     float       crt_curvature;
+
+    /* Echo Trail (Temporal + Spatial Ghosting & Glow) */
+    A_Boolean   echo_enable;
+    A_long      echo_count;             /* 1 .. 12 copies */
+    float       echo_delay_frames;      /* Frame step between copies */
+    float       echo_offset_px;         /* Spatial cursor-trail offset distance */
+    float       echo_opacity;           /* 0.0 - 1.0 starting trail opacity (user transparency control) */
+    float       echo_decay;             /* 0.0 - 1.0 per-step transparency falloff */
+    float       echo_glow;              /* 0.0 - 2.0 customizable trail glow intensity */
+    FloatRGBA   echo_glow_color;        /* Custom RGB glow tint for the trail */
+    A_long      echo_valid_worlds;      /* Number of checked-out historical frames */
+    const PF_EffectWorld *echo_worlds[12]; /* Historical input layer buffers */
 
     /* Pointer to input buffer for spatial sampling */
     const PF_EffectWorld *input_world;

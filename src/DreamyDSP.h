@@ -286,8 +286,7 @@ inline FloatRGBA SampleGradient(const DreamyRenderParams& rp, float t) {
 /*==================================================================
  * 3. BILINEAR PIXEL SAMPLER (8-BIT & 16-BIT DEEP COLOR)
  *==================================================================*/
-inline FloatRGBA SampleWorldBilinear(const DreamyRenderParams& rp, float x, float y) {
-    const PF_EffectWorld* w = rp.input_world;
+inline FloatRGBA SampleSpecificWorldBilinear(const PF_EffectWorld* w, A_Boolean is_16bit, float x, float y) {
     if (!w || !w->data || w->width <= 0 || w->height <= 0) {
         return { 0.0f, 0.0f, 0.0f, 1.0f };
     }
@@ -312,7 +311,7 @@ inline FloatRGBA SampleWorldBilinear(const DreamyRenderParams& rp, float x, floa
 
     const char* base = reinterpret_cast<const char*>(w->data);
 
-    if (rp.is_16bit) {
+    if (is_16bit) {
         const PF_Pixel16* row0 = reinterpret_cast<const PF_Pixel16*>(base + y0 * w->rowbytes);
         const PF_Pixel16* row1 = reinterpret_cast<const PF_Pixel16*>(base + y1 * w->rowbytes);
 
@@ -355,6 +354,10 @@ inline FloatRGBA SampleWorldBilinear(const DreamyRenderParams& rp, float x, floa
             p00.alpha * w00 + p10.alpha * w10 + p01.alpha * w01 + p11.alpha * w11
         };
     }
+}
+
+inline FloatRGBA SampleWorldBilinear(const DreamyRenderParams& rp, float x, float y) {
+    return SampleSpecificWorldBilinear(rp.input_world, rp.is_16bit, x, y);
 }
 
 /*==================================================================
@@ -572,6 +575,108 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
             base_col.r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(avg_halo.r * highlight_boost * 1.15f));
             base_col.g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(avg_halo.g * highlight_boost * 0.95f));
             base_col.b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(avg_halo.b * highlight_boost * 1.20f));
+        }
+    }
+
+    /*--------------------------------------------------------------
+     * STAGE E2: Dreamy Echo Trail (Windows Cursor-Trail Style
+     * Semi-Transparent Ghosting + Customizable Trail Glow)
+     *--------------------------------------------------------------*/
+    if (rp.echo_enable && rp.echo_count > 0 && rp.echo_opacity > 0.001f) {
+        int num_echoes = (int)std::min<A_long>(rp.echo_count, 12);
+        float audio_trail_boost = 1.0f + (rp.audio_bass * 0.45f + rp.audio_mid * 0.45f);
+        float step_dist = rp.echo_offset_px * audio_trail_boost * rp.downsample_scale;
+        float decay_rate = Clamp01(rp.echo_decay);
+        float glow_strength = rp.echo_glow * (1.0f + rp.audio_mid * 0.5f);
+        float glow_rad = (4.0f + rp.echo_glow * 14.0f) * rp.downsample_scale;
+
+        FloatRGBA trail_accum = { 0.0f, 0.0f, 0.0f, 0.0f };
+        FloatRGBA glow_accum  = { 0.0f, 0.0f, 0.0f, 0.0f };
+        float weight_sum = 0.0f;
+
+        /* Direction of cursor-trail drift slowly orbits with composition time & audio */
+        float base_angle = rp.time_sec * 1.15f + rp.audio_bass * 0.8f;
+        float dir_x = std::cos(base_angle);
+        float dir_y = std::sin(base_angle * 0.75f) * 0.65f;
+
+        for (int i = 0; i < num_echoes; ++i) {
+            const PF_EffectWorld* ew = (i < rp.echo_valid_worlds && rp.echo_worlds[i] && rp.echo_worlds[i]->data)
+                                     ? rp.echo_worlds[i]
+                                     : rp.input_world;
+            A_Boolean ew_deep = PF_WORLD_IS_DEEP(ew) ? TRUE : FALSE;
+
+            float step_idx = (float)(i + 1);
+            /* Successive trail ghosts fade out smoothly according to Trail Decay & Trail Opacity */
+            float step_alpha = rp.echo_opacity * std::pow(1.0f - decay_rate * 0.78f, (float)i);
+            if (step_alpha < 0.005f) break;
+
+            /* Stepping offset gives a classic Windows cursor-trail ribbon behind moving elements */
+            float ox = sample_x - dir_x * step_dist * step_idx;
+            float oy = sample_y - dir_y * step_dist * step_idx * 0.7f;
+
+            /* Subtle Rutt-Etra / FM echo phase lag per ghost copy */
+            if (rp.fm_enable && rp.fm_rutt_etra_z > 0.001f) {
+                oy += step_idx * rp.fm_rutt_etra_z * 6.5f * rp.downsample_scale;
+            }
+
+            FloatRGBA ghost = SampleSpecificWorldBilinear(ew, ew_deep, ox, oy);
+            float ghost_luma = Luminance(ghost);
+            /* Emphasize moving highlights & edges so the trail floats semi-transparently over the background */
+            float presence = SmoothStep(0.05f, 0.75f, ghost_luma) * ghost.a;
+            float w_ghost = step_alpha * (0.35f + 0.65f * presence);
+
+            trail_accum.r += ghost.r * w_ghost;
+            trail_accum.g += ghost.g * w_ghost;
+            trail_accum.b += ghost.b * w_ghost;
+            weight_sum    += w_ghost;
+
+            /* Customizable Echo Trail Glow: 4-tap halo around each ghost copy */
+            if (glow_strength > 0.001f) {
+                float r_i = glow_rad * (0.7f + 0.25f * step_idx);
+                FloatRGBA g1 = SampleSpecificWorldBilinear(ew, ew_deep, ox + r_i, oy);
+                FloatRGBA g2 = SampleSpecificWorldBilinear(ew, ew_deep, ox - r_i, oy);
+                FloatRGBA g3 = SampleSpecificWorldBilinear(ew, ew_deep, ox, oy + r_i);
+                FloatRGBA g4 = SampleSpecificWorldBilinear(ew, ew_deep, ox, oy - r_i);
+
+                FloatRGBA halo = {
+                    (g1.r + g2.r + g3.r + g4.r) * 0.25f,
+                    (g1.g + g2.g + g3.g + g4.g) * 0.25f,
+                    (g1.b + g2.b + g3.b + g4.b) * 0.25f,
+                    1.0f
+                };
+                float halo_luma = Luminance(halo);
+                float g_env = SmoothStep(0.12f, 0.85f, halo_luma) * step_alpha * glow_strength * 0.45f;
+
+                /* Tint the echo glow with the user's chosen Trail Glow Color */
+                glow_accum.r += Lerp(halo.r, halo.r * rp.echo_glow_color.r * 1.4f + rp.echo_glow_color.r * 0.35f, 0.75f) * g_env;
+                glow_accum.g += Lerp(halo.g, halo.g * rp.echo_glow_color.g * 1.4f + rp.echo_glow_color.g * 0.35f, 0.75f) * g_env;
+                glow_accum.b += Lerp(halo.b, halo.b * rp.echo_glow_color.b * 1.4f + rp.echo_glow_color.b * 0.35f, 0.75f) * g_env;
+            }
+        }
+
+        if (weight_sum > 0.001f) {
+            FloatRGBA avg_trail = {
+                trail_accum.r / weight_sum,
+                trail_accum.g / weight_sum,
+                trail_accum.b / weight_sum,
+                1.0f
+            };
+            /* Semi-transparent cursor-trail composite: blend ghosts with translucent screen/alpha mix */
+            float trail_mix = Clamp01(rp.echo_opacity * 0.78f);
+            float screen_r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(avg_trail.r * trail_mix));
+            float screen_g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(avg_trail.g * trail_mix));
+            float screen_b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(avg_trail.b * trail_mix));
+
+            base_col.r = Lerp(Lerp(base_col.r, avg_trail.r, trail_mix * 0.55f), screen_r, 0.65f);
+            base_col.g = Lerp(Lerp(base_col.g, avg_trail.g, trail_mix * 0.55f), screen_g, 0.65f);
+            base_col.b = Lerp(Lerp(base_col.b, avg_trail.b, trail_mix * 0.55f), screen_b, 0.65f);
+        }
+
+        /* Add the customizable Echo Trail Glow aura */
+        if (glow_strength > 0.001f) {
+            base_col.r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(glow_accum.r));
+            base_col.g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(glow_accum.g));
+            base_col.b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(glow_accum.b));
         }
     }
 

@@ -249,6 +249,14 @@ static const char* ParamIndexToFriendlyName(PF_ParamIndex idx) {
         case PARAM_CRT_PHOSPHOR_MASK:    return "Phosphor Subpixel Mask";
         case PARAM_CRT_PHOSPHOR_STRENGTH: return "Phosphor Mask Intensity";
         case PARAM_CRT_CURVATURE:        return "CRT Screen Curvature";
+        case PARAM_ECHO_ENABLE:          return "Enable Echo Trail";
+        case PARAM_ECHO_COUNT:           return "Echo Trail Count";
+        case PARAM_ECHO_DELAY:           return "Echo Time Delay (Frames)";
+        case PARAM_ECHO_OFFSET:          return "Echo Trail Spacing (px)";
+        case PARAM_ECHO_OPACITY:         return "Echo Trail Opacity";
+        case PARAM_ECHO_DECAY:           return "Echo Trail Fade Decay";
+        case PARAM_ECHO_GLOW:            return "Echo Trail Glow";
+        case PARAM_ECHO_GLOW_COLOR:      return "Echo Trail Glow Color";
         default:                         return "Control Parameter";
     }
 }
@@ -688,8 +696,65 @@ ParamsSetup(
     AEFX_CLR_STRUCT(def);
     PF_END_TOPIC(ID_TOPIC_CRT_END);
 
+    /*==============================================================
+     * 7. DREAMY ECHO TRAIL (Windows Cursor-Trail Style Ghosting)
+     *==============================================================*/
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_TOPICX("Dreamy Echo Trail", PF_ParamFlag_START_COLLAPSED, ID_TOPIC_ECHO_START);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_CHECKBOXX("Enable Echo Trail", TRUE, PF_ParamFlag_SUPERVISE, ID_ECHO_ENABLE);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Echo Trail Count",
+        1.0, 12.0, 1.0, 10.0, 4.0,
+        0, PF_ValueDisplayFlag_NONE, PF_ParamFlag_SUPERVISE,
+        ID_ECHO_COUNT);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Echo Time Delay (Frames)",
+        0.2, 8.0, 0.5, 4.0, 1.5,
+        1, PF_ValueDisplayFlag_NONE, 0,
+        ID_ECHO_DELAY);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Echo Trail Spacing (px)",
+        0.0, 120.0, 0.0, 50.0, 12.0,
+        1, PF_ValueDisplayFlag_PIXEL, 0,
+        ID_ECHO_OFFSET);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Echo Trail Opacity",
+        0.0, 100.0, 0.0, 100.0, 55.0,
+        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
+        ID_ECHO_OPACITY);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Echo Trail Fade Decay",
+        0.0, 100.0, 10.0, 95.0, 45.0,
+        1, PF_ValueDisplayFlag_PERCENT, 0,
+        ID_ECHO_DECAY);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Echo Trail Glow",
+        0.0, 200.0, 0.0, 150.0, 65.0,
+        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
+        ID_ECHO_GLOW);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_COLOR("Echo Trail Glow Color", 230, 80, 255, ID_ECHO_GLOW_COLOR);
+
+    AEFX_CLR_STRUCT(def);
+    PF_END_TOPIC(ID_TOPIC_ECHO_END);
+
     out_data->num_params = DREAMY_NUM_PARAMS;
-    DreamyLog("🎛️ [UI SETUP] Registered %d Effect Controls across 6 collapsible groups (All slider ranges verified)",
+    DreamyLog("🎛️ [UI SETUP] Registered %d Effect Controls across 7 collapsible groups (All slider ranges verified)",
               (int)out_data->num_params);
     return PF_Err_NONE;
 }
@@ -861,6 +926,19 @@ Render(
     rp.crt_phosphor_strength  = (float)params[PARAM_CRT_PHOSPHOR_STRENGTH]->u.fs_d.value * 0.01f;
     rp.crt_curvature          = (float)params[PARAM_CRT_CURVATURE]->u.fs_d.value * 0.01f;
 
+    /* 7. Extract Echo Trail Settings */
+    rp.echo_enable            = (A_Boolean)params[PARAM_ECHO_ENABLE]->u.bd.value;
+    rp.echo_count             = (A_long)(params[PARAM_ECHO_COUNT]->u.fs_d.value + 0.5);
+    if (rp.echo_count < 1)  rp.echo_count = 1;
+    if (rp.echo_count > 12) rp.echo_count = 12;
+    rp.echo_delay_frames      = (float)params[PARAM_ECHO_DELAY]->u.fs_d.value;
+    rp.echo_offset_px         = (float)params[PARAM_ECHO_OFFSET]->u.fs_d.value;
+    rp.echo_opacity           = (float)params[PARAM_ECHO_OPACITY]->u.fs_d.value * 0.01f;
+    rp.echo_decay             = (float)params[PARAM_ECHO_DECAY]->u.fs_d.value * 0.01f;
+    rp.echo_glow              = (float)params[PARAM_ECHO_GLOW]->u.fs_d.value * 0.01f;
+    PF_Pixel echo_col         = params[PARAM_ECHO_GLOW_COLOR]->u.cd.value;
+    rp.echo_glow_color        = { echo_col.red / 255.0f, echo_col.green / 255.0f, echo_col.blue / 255.0f, 1.0f };
+
     /* Auto-detect if this layer was saved in an .aep project during the previous
      * clamped-slider build (where Color Phase Shift was clamped to -100%, FM Wave Freq
      * to 10.0, Beam Width to 15.0%, and all 0-based sliders to 0.0%). If so, substitute
@@ -922,12 +1000,45 @@ Render(
 
     rp.gradient_phase = manual_phase + rp.audio_mid * audio_phase;
 
-    /* 7. Dispatch Multi-Threaded Scanline Render via Grand Central Dispatch */
+    /* Checkout past frames for the temporal Echo Trail if enabled */
+    PF_ParamDef echo_checked_out[12];
+    bool echo_is_checked_out[12] = {false};
+    rp.echo_valid_worlds = 0;
+
+    if (rp.echo_enable && rp.echo_count > 0 && rp.echo_opacity > 0.001f &&
+        in_data->inter.checkout_param && in_data->inter.checkin_param && in_data->time_step > 0) {
+        A_long num_to_checkout = rp.echo_count > 12 ? 12 : rp.echo_count;
+        for (A_long i = 0; i < num_to_checkout; ++i) {
+            std::memset(&echo_checked_out[i], 0, sizeof(PF_ParamDef));
+            A_long dt = (A_long)((float)(i + 1) * rp.echo_delay_frames * (float)in_data->time_step + 0.5f);
+            A_long sample_time = in_data->current_time - dt;
+            if (sample_time < 0) sample_time = 0;
+
+            PF_Err co_err = PF_CHECKOUT_PARAM(
+                in_data,
+                DREAMY_INPUT,
+                sample_time,
+                in_data->time_step,
+                in_data->time_scale,
+                &echo_checked_out[i]);
+
+            if (co_err == PF_Err_NONE && echo_checked_out[i].u.ld.data) {
+                echo_is_checked_out[i] = true;
+                rp.echo_worlds[i] = &echo_checked_out[i].u.ld;
+                rp.echo_valid_worlds = i + 1;
+            } else {
+                rp.echo_worlds[i] = input;
+                rp.echo_valid_worlds = i + 1;
+            }
+        }
+    }
+
+    /* 8. Dispatch Multi-Threaded Scanline Render via Grand Central Dispatch */
     g_render_frame_counter++;
     bool should_log_this_frame = (g_render_frame_counter <= 5 || g_log_next_render || (g_render_frame_counter % 15) == 0);
     if (should_log_this_frame) {
         g_log_next_render = false;
-        DreamyLog("🎬 [RENDER #%d] Frame %d (%.2fs) | %dx%d (%s) | Audio[Bass:%.2f Mid:%.2f High:%.2f] | Palette: %s (Mix:%.0f%%) | Modules[FM:%s Bend:%s VHS:%s CRT:%s]",
+        DreamyLog("🎬 [RENDER #%d] Frame %d (%.2fs) | %dx%d (%s) | Audio[Bass:%.2f Mid:%.2f High:%.2f] | Palette: %s (Mix:%.0f%%) | Modules[FM:%s Bend:%s VHS:%s CRT:%s Echo:%s]",
                   g_render_frame_counter,
                   (int)rp.frame_num,
                   rp.time_sec,
@@ -942,7 +1053,8 @@ Render(
                   rp.fm_enable ? "ON" : "off",
                   rp.bend_enable ? "ON" : "off",
                   rp.vhs_enable ? "ON" : "off",
-                  rp.crt_enable ? "ON" : "off");
+                  rp.crt_enable ? "ON" : "off",
+                  rp.echo_enable ? "ON" : "off");
     }
 
 #if defined(__APPLE__)
@@ -967,6 +1079,13 @@ Render(
         }
     }
 #endif
+
+    /* Check in any checked-out temporal Echo Trail frames */
+    for (int i = 0; i < 12; ++i) {
+        if (echo_is_checked_out[i]) {
+            PF_CHECKIN_PARAM(in_data, &echo_checked_out[i]);
+        }
+    }
 
     if (should_log_this_frame) {
         auto render_t1 = std::chrono::steady_clock::now();
@@ -1000,12 +1119,13 @@ Render(
                         rp.audio_raw_bass, rp.audio_raw_mid, rp.audio_raw_high,
                         audio_gain * 100.0f, bass_weight * 100.0f, mid_weight * 100.0f, high_weight * 100.0f,
                         rp.audio_bass, rp.audio_mid, rp.audio_high);
-        DreamyDetailLog("   └─ [MODULE PARAMS] Grad[Mode=%d Mix=%.0f%% Phase=%.2f] | FM[Freq=%.1f Depth=%.0f%% RuttZ=%.0f%% Lines=%.0f Width=%.0f%%] | Bend[Fold=%.0f%% XOR=%.0f%% Tear=%.0f%% RGB=%.0f%%] | VHS[Bloom=%.0f%% Bleed=%.0f%% Wobble=%.0f%% Track=%.0f%% Grain=%.0f%%] | CRT[Pitch=%.1fpx Dark=%.0f%% Mask=%dGrille=%.0f%% Curve=%.0f%%]",
+        DreamyDetailLog("   └─ [MODULE PARAMS] Grad[Mode=%d Mix=%.0f%% Phase=%.2f] | FM[Freq=%.1f Depth=%.0f%% RuttZ=%.0f%% Lines=%.0f Width=%.0f%%] | Bend[Fold=%.0f%% XOR=%.0f%% Tear=%.0f%% RGB=%.0f%%] | VHS[Bloom=%.0f%% Bleed=%.0f%% Wobble=%.0f%% Track=%.0f%% Grain=%.0f%%] | CRT[Pitch=%.1fpx Dark=%.0f%% Mask=%d Grille=%.0f%% Curve=%.0f%%] | Echo[Count=%d Delay=%.1ff Off=%.1fpx Opac=%.0f%% Decay=%.0f%% Glow=%.0f%%]",
                         (int)grad_mode, rp.gradient_mix * 100.0f, rp.gradient_phase,
                         rp.fm_carrier_freq, rp.fm_mod_depth * 100.0f, rp.fm_rutt_etra_z * 100.0f, rp.fm_scanline_density, rp.fm_line_thickness * 100.0f,
                         rp.bend_phase_fold * 100.0f, rp.bend_xor_crush * 100.0f, rp.bend_smear_tear * 100.0f, rp.bend_feedback_shift * 100.0f,
                         rp.vhs_dream_bloom * 100.0f, rp.vhs_chroma_bleed * 100.0f, rp.vhs_tape_wobble * 100.0f, rp.vhs_tracking_noise * 100.0f, rp.vhs_grain * 100.0f,
-                        rp.crt_scanline_pitch, rp.crt_scanline_intensity * 100.0f, (int)rp.crt_phosphor_mask, rp.crt_phosphor_strength * 100.0f, rp.crt_curvature * 100.0f);
+                        rp.crt_scanline_pitch, rp.crt_scanline_intensity * 100.0f, (int)rp.crt_phosphor_mask, rp.crt_phosphor_strength * 100.0f, rp.crt_curvature * 100.0f,
+                        (int)rp.echo_count, rp.echo_delay_frames, rp.echo_offset_px, rp.echo_opacity * 100.0f, rp.echo_decay * 100.0f, rp.echo_glow * 100.0f);
     }
 
     return err;

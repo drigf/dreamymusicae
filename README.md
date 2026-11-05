@@ -2,13 +2,14 @@
 
 An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Music VHS**, match name `ADBE DreamyMusicVHS`) built for **macOS (`arm64` + `x86_64` Universal Binary)**.
 
-**Dreamy Music VHS** fuses six analog video synthesis and tape emulation modules into a single real-time pipeline that reacts dynamically to music:
+**Dreamy Music VHS** fuses seven analog video synthesis and tape emulation modules into a single real-time pipeline that reacts dynamically to music:
 1. **3-Band Music & Audio Reactivity** (Direct Audio Layer DSP + Keyframe Slider fusion)
-2. **Dreamy Color Gradient Synthesizer** (Editable 4-Stop Color Pickers + 6 Curated Presets)
+2. **Dreamy Color Gradient Synthesizer** (Editable 4-Stop Color Pickers + 6 Curated Presets + Original Color Bypass)
 3. **FM & Rutt-Etra 3D Scanline Oscilloscope** (Luminance-driven Z-elevation & phase modulation)
 4. **Circuit Bending Glitch Engine** (Analog wavefolder, bitwise XOR DAC pin-shorting, H-sync tearing, and RGB matrix feedback)
 5. **Dreamy VHS & Halation Bloom** (Multi-tap highlight aura, YIQ/YUV chroma delay bleed, 60 Hz tape edge wobble, scrolling static bar, and magnetic grain)
 6. **CRT Scanlines & RGB Phosphor Subpixel Masks** (Sony Trinitron Aperture Grille, Shadow Mask Delta Triad, Arcade Slot Mask, and CRT glass curvature)
+7. **Dreamy Echo Trail** (Windows cursor-trail style temporal & spatial ghosting with customizable transparency, trail amount, fade decay, and tinted trail glow)
 
 ---
 
@@ -22,6 +23,7 @@ An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Mu
    - [Group 4: Circuit Bending Glitch](#group-4-circuit-bending-glitch-starts-collapsed)
    - [Group 5: Dreamy VHS & Halation](#group-5-dreamy-vhs--halation-starts-collapsed)
    - [Group 6: CRT Scanlines & Phosphor](#group-6-crt-scanlines--phosphor-starts-collapsed)
+   - [Group 7: Dreamy Echo Trail](#group-7-dreamy-echo-trail-starts-collapsed)
 3. [Creative Recipes & Look Guides](#3-creative-recipes--look-guides)
 4. [Building, Editing & Installing (VS Code & Xcode)](#4-building-editing--installing-vs-code--xcode)
 5. [Two-Tier Live Diagnostic Logging System](#5-two-tier-live-diagnostic-logging-system)
@@ -48,7 +50,7 @@ An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Mu
 
 ## 2. Complete Feature & Control Reference
 
-The Effect Controls panel is organized into **6 collapsible topic groups**. The 3 core look groups start expanded for immediate tweaking, while the 3 secondary hardware/tape groups start collapsed to keep the UI tidy.
+The Effect Controls panel is organized into **7 collapsible topic groups**. The 3 core look groups start expanded for immediate tweaking, while the 4 secondary hardware/tape/trail groups start collapsed to keep the UI tidy.
 
 ### Group 1: Music & Audio Reactivity *(Starts Open)*
 
@@ -150,6 +152,23 @@ Simulates a physical cathode-ray tube television monitor with discrete RGB subpi
 | **Phosphor Subpixel Mask** | Popup (4 modes) | `Trinitron Aperture Grille` | Selects the physical RGB phosphor subpixel layout:<br>• **None (Scanlines Only)**<br>• **Trinitron Aperture Grille**: Continuous vertical `R | G | B` stripes<br>• **Shadow Mask Delta Triad**: Brick-staggered RGB triads<br>• **Arcade Slot Mask**: Staggered slot mask with horizontal dark bridges |
 | **Phosphor Mask Intensity** | `0% – 100%` | `40.0%` | Visibility of the individual Red, Green, and Blue phosphor subpixels. Push to `75%–100%` for extreme macro close-up CRT aesthetics. |
 | **CRT Screen Curvature** | `0% – 100%` | `15.0%` | Applies spherical CRT glass barrel distortion and darkened tube-bezel corners. Set to `0%` for a flat-screen framing. |
+
+---
+
+### Group 7: Dreamy Echo Trail *(Starts Collapsed)*
+
+Creates a semi-transparent temporal and spatial ghosting effect—inspired by the classic Windows mouse cursor trail—that samples previous video frames along a stepped drift trajectory and surrounds each ghost copy with a customizable glow aura.
+
+| Control | Range | Default | How It Works & How to Use It |
+| :--- | :--- | :--- | :--- |
+| **Enable Echo Trail** | Checkbox | `On` | Master toggle to turn the Echo Trail effect on or off. |
+| **Echo Trail Count** | `1 – 12` (Slider `1 – 10`) | `4` | Customizes the number of discrete ghost copies in the trail. Higher counts create longer, ribbon-like trails. |
+| **Echo Time Delay (Frames)** | `0.2 – 8.0` | `1.5` | Temporal spacing (in composition frames) between each ghost copy in the trail. |
+| **Echo Trail Spacing (px)** | `0.0 – 120.0 px` | `12.0 px` | Spatial cursor-trail offset distance between each ghost copy, modulated dynamically by Bass and Mid audio energy. |
+| **Echo Trail Opacity** | `0% – 100%` | `55.0%` | Controls the overall transparency/opacity of the echo trail (`0%` = completely transparent, `100%` = solid bright ghost copies). |
+| **Echo Trail Fade Decay** | `0% – 100%` | `45.0%` | Controls how rapidly each successive copy in the trail becomes more transparent from the first echo to the last. |
+| **Echo Trail Glow** | `0% – 200%` | `65.0%` | Customizes the intensity and radius of the dreamy luminous halo surrounding each ghost copy in the trail. |
+| **Echo Trail Glow Color** | RGB Picker | `#E650FF` (Dreamy Violet-Pink) | Customizes the color tint of the glow aura around the echo trail. |
 
 ---
 
