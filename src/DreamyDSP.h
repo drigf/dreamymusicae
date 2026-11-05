@@ -24,21 +24,25 @@
 
 namespace DreamyDSP {
 
-/* Fast deterministic hash for analog noise, tape static & circuit glitch */
+/* Fast deterministic hash for analog noise, tape static & circuit glitch (zero-fmod) */
+inline float FastFract(float x) {
+    return x - std::floor(x);
+}
+
 inline float Hash11(float p) {
-    p = std::fmod(p * 0.1031f, 1.0f);
+    p = FastFract(p * 0.1031f);
     p *= p + 33.33f;
     p *= p + p;
-    return std::fmod(std::fabs(p), 1.0f);
+    return FastFract(std::fabs(p));
 }
 
 inline float Hash21(float x, float y) {
-    float p3x = std::fmod(x * 0.1031f, 1.0f);
-    float p3y = std::fmod(y * 0.1030f, 1.0f);
-    float p3z = std::fmod(x * 0.0973f, 1.0f);
+    float p3x = FastFract(x * 0.1031f);
+    float p3y = FastFract(y * 0.1030f);
+    float p3z = FastFract(x * 0.0973f);
     float dot = p3x * (p3y + 33.33f) + p3y * (p3z + 33.33f) + p3z * (p3x + 33.33f);
     p3x += dot; p3y += dot; p3z += dot;
-    return std::fmod(std::fabs((p3x + p3y) * p3z), 1.0f);
+    return FastFract(std::fabs((p3x + p3y) * p3z));
 }
 
 inline float Clamp01(float v) {
@@ -263,13 +267,14 @@ inline void SetupGradientStops(
 }
 
 /* Sample 4-stop cyclic gradient at normalized position t */
-inline FloatRGBA SampleGradient(const DreamyRenderParams& rp, float t) {
+inline FloatRGBA EvaluateGradientDirect(const DreamyRenderParams& rp, float t) {
     /* Wrap t smoothly into [0, 1] with phase cycling */
     float p = t + rp.gradient_phase;
     p = p - std::floor(p);
     /* Triangle-wave wrap option when cycling so there's never a hard seam */
     if (std::fabs(rp.gradient_phase) > 0.001f) {
-        float tri = std::fmod(std::fabs(t + rp.gradient_phase), 2.0f);
+        float val = std::fabs(t + rp.gradient_phase);
+        float tri = val - 2.0f * std::floor(val * 0.5f);
         p = tri > 1.0f ? (2.0f - tri) : tri;
     }
     p = Clamp01(p);
@@ -280,6 +285,98 @@ inline FloatRGBA SampleGradient(const DreamyRenderParams& rp, float t) {
         return LerpColor(rp.stops[1], rp.stops[2], (p - 0.333333f) * 3.0f);
     } else {
         return LerpColor(rp.stops[2], rp.stops[3], (p - 0.666667f) * 3.0f);
+    }
+}
+
+/* O(1) LUT-accelerated gradient sampler (table populated once per frame) */
+inline FloatRGBA SampleGradient(const DreamyRenderParams& rp, float t) {
+    float ct = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
+    int idx = (int)(ct * 1023.0f + 0.5f);
+    return rp.gradient_lut[idx];
+}
+
+/* Precompute all Frame-Invariant Constants & 1024-entry Gradient LUT */
+inline void PrecomputeFrameConstants(DreamyRenderParams& rp) {
+    rp.inv_width  = rp.width  > 0 ? (1.0f / (float)rp.width)  : 0.0f;
+    rp.inv_height = rp.height > 0 ? (1.0f / (float)rp.height) : 0.0f;
+
+    /* FM & Rutt-Etra constants */
+    rp.fm_audio_mult    = 1.0f + (rp.audio_bass * 1.1f + rp.audio_mid * 0.6f) * rp.fm_audio_react;
+    rp.fm_carrier_rad   = (rp.fm_carrier_freq * 0.5f) * (float)(2.0 * M_PI);
+    rp.fm_mod_index     = rp.fm_mod_depth * rp.fm_audio_mult * 18.0f;
+    rp.fm_x_shift_scale = (rp.fm_mod_depth * 14.0f * rp.fm_audio_mult) * rp.downsample_scale;
+    rp.fm_z_elev        = rp.fm_rutt_etra_z * rp.fm_audio_mult;
+
+    /* Circuit Bending constants */
+    rp.bend_audio_mult = 1.0f + (rp.audio_high * 0.9f + rp.audio_bass * 0.6f) * rp.bend_audio_react;
+    float fb_angle     = (rp.bend_feedback_shift * rp.bend_audio_mult) * (float)M_PI * 1.5f;
+    rp.bend_fb_cos     = std::cos(fb_angle);
+    rp.bend_fb_sin     = std::sin(fb_angle);
+    rp.bend_fold_gain  = 1.0f + rp.bend_phase_fold * rp.bend_audio_mult * 4.5f;
+    rp.bend_crush_amt  = Clamp01(rp.bend_xor_crush * rp.bend_audio_mult);
+    rp.bend_xor_mask   = (uint8_t)((int)(rp.bend_crush_amt * 170.0f) & 0xFC);
+
+    /* VHS constants */
+    rp.vhs_eff_wobble = rp.vhs_tape_wobble * (1.0f + rp.audio_bass * 1.35f);
+    rp.vhs_eff_track  = rp.vhs_tracking_noise * (1.0f + rp.audio_bass * 0.8f);
+    float bpos        = FastFract(0.88f - rp.time_sec * 0.12f);
+    if (bpos < 0.0f) bpos += 1.0f;
+    rp.vhs_bar_pos      = bpos;
+    float eff_bleed     = rp.vhs_chroma_bleed * (1.0f + rp.audio_mid * 0.8f);
+    rp.vhs_eff_bleed_px = eff_bleed > 0.001f ? (eff_bleed * 18.0f * rp.downsample_scale) : 0.0f;
+    rp.vhs_eff_bloom    = rp.vhs_dream_bloom * (1.0f + rp.audio_mid * 0.9f + rp.audio_bass * 0.5f);
+    rp.vhs_bloom_rad1   = (6.0f + rp.vhs_eff_bloom * 12.0f) * rp.downsample_scale;
+    rp.vhs_bloom_rad2   = (14.0f + rp.vhs_eff_bloom * 26.0f) * rp.downsample_scale;
+
+    /* CRT constants */
+    rp.crt_pitch      = std::max(1.5f, rp.crt_scanline_pitch * rp.downsample_scale);
+    rp.crt_inv_pitch  = 1.0f / rp.crt_pitch;
+    rp.crt_cell_w     = std::max(1.0f, rp.crt_pitch * 0.5f);
+    rp.crt_inv_cell_w = 1.0f / rp.crt_cell_w;
+
+    /* Echo Trail precomputed per-step tables */
+    rp.echo_active_count  = 0;
+    rp.echo_glow_strength = rp.echo_glow * (1.0f + rp.audio_mid * 0.5f);
+    rp.echo_trail_mix     = Clamp01(rp.echo_opacity * 0.78f);
+
+    if (rp.echo_enable && rp.echo_count > 0 && rp.echo_opacity > 0.001f) {
+        int max_echoes = (int)std::min<A_long>(rp.echo_count, 12);
+        float audio_trail_boost = 1.0f + (rp.audio_bass * 0.45f + rp.audio_mid * 0.45f);
+        float step_dist = rp.echo_offset_px * audio_trail_boost * rp.downsample_scale;
+        float decay_rate = Clamp01(rp.echo_decay);
+        float glow_rad = (4.0f + rp.echo_glow * 14.0f) * rp.downsample_scale;
+
+        float base_angle = rp.time_sec * 1.15f + rp.audio_bass * 0.8f;
+        float dir_x = std::cos(base_angle);
+        float dir_y = std::sin(base_angle * 0.75f) * 0.65f;
+
+        for (int i = 0; i < max_echoes; ++i) {
+            float step_alpha = rp.echo_opacity * std::pow(1.0f - decay_rate * 0.78f, (float)i);
+            if (step_alpha < 0.005f) break;
+
+            const PF_EffectWorld* ew = (i < rp.echo_valid_worlds && rp.echo_worlds[i] && rp.echo_worlds[i]->data)
+                                     ? rp.echo_worlds[i]
+                                     : rp.input_world;
+            rp.echo_step_deep[i]     = (ew && PF_WORLD_IS_DEEP(ew)) ? TRUE : FALSE;
+            rp.echo_step_alpha[i]    = step_alpha;
+            float step_idx           = (float)(i + 1);
+            rp.echo_step_dx[i]       = -dir_x * step_dist * step_idx;
+            float dy                 = -dir_y * step_dist * step_idx * 0.7f;
+            if (rp.fm_enable && rp.fm_rutt_etra_z > 0.001f) {
+                dy += step_idx * rp.fm_rutt_etra_z * 6.5f * rp.downsample_scale;
+            }
+            rp.echo_step_dy[i]       = dy;
+            rp.echo_step_glow_rad[i] = glow_rad * (0.7f + 0.25f * step_idx);
+            rp.echo_active_count     = i + 1;
+        }
+    }
+
+    /* Populate 1024-entry Gradient Lookup Table */
+    if (rp.gradient_enable && rp.gradient_mode != GRAD_MODE_OFF && rp.gradient_mix > 0.001f) {
+        const float inv1023 = 1.0f / 1023.0f;
+        for (int i = 0; i < 1024; ++i) {
+            rp.gradient_lut[i] = EvaluateGradientDirect(rp, (float)i * inv1023);
+        }
     }
 }
 
@@ -361,86 +458,208 @@ inline FloatRGBA SampleWorldBilinear(const DreamyRenderParams& rp, float x, floa
 }
 
 /*==================================================================
- * 4. FULL PIXEL SYNTHESIS PIPELINE
+ * 4. ROW-INVARIANT PRECOMPUTATION & PIXEL SYNTHESIS PIPELINE
  *==================================================================*/
-inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long py) {
+struct DreamyRowState {
+    A_long    py;
+    float     v0;
+    float     sample_y0;
+    bool      has_curvature;
+    float     cv0;
+    float     cv0_sq;
+    float     crt_k;
+    float     crt_vig_strength;
+
+    /* Fast-path row constants when CRT curvature is 0 */
+    float     flat_dx_offset;
+    float     flat_vhs_bar_env;
+    float     flat_snow_y;
+
+    /* Row-invariant CRT Scanline & Subpixel Phosphor Mask tables */
+    float     crt_scan_wave;
+    float     crt_sqrt_scan_wave;
+    float     crt_mask_r[6];
+    float     crt_mask_g[6];
+    float     crt_mask_b[6];
+};
+
+inline void PrecomputeRowState(const DreamyRenderParams& rp, A_long py, DreamyRowState& rs) {
+    rs.py               = py;
+    rs.sample_y0        = (float)py + 0.5f;
+    rs.v0               = rs.sample_y0 * rp.inv_height;
+    rs.has_curvature    = (rp.crt_enable && rp.crt_curvature > 0.001f);
+    rs.cv0              = rs.v0 * 2.0f - 1.0f;
+    rs.cv0_sq           = rs.cv0 * rs.cv0;
+    rs.crt_k            = rp.crt_curvature * 0.22f;
+    rs.crt_vig_strength = rp.crt_curvature * 0.65f;
+
+    rs.flat_dx_offset   = 0.0f;
+    rs.flat_vhs_bar_env = 0.0f;
+    rs.flat_snow_y      = std::floor(rs.sample_y0) + rp.time_sec * 120.0f;
+
+    /* When CRT curvature is off, v and sample_y are constant across the entire row */
+    if (!rs.has_curvature) {
+        float v = rs.v0;
+        float sample_y = rs.sample_y0;
+
+        if (rp.vhs_enable) {
+            if (rp.vhs_eff_wobble > 0.001f) {
+                float hum        = std::sin(v * 10.0f + rp.time_sec * 9.0f) * 3.5f;
+                float flutter    = std::sin(v * 75.0f - rp.time_sec * 37.0f) * 1.2f;
+                float line_noise = (Hash21(std::floor(sample_y), rp.time_sec * 12.0f) - 0.5f) * 4.0f;
+                rs.flat_dx_offset += (hum + flutter + line_noise) * rp.vhs_eff_wobble * rp.downsample_scale;
+            }
+            if (rp.vhs_eff_track > 0.001f) {
+                float dist    = std::fabs(v - rp.vhs_bar_pos);
+                float bar_env = SmoothStep(0.08f * rp.vhs_eff_track, 0.0f, dist);
+                rs.flat_vhs_bar_env = bar_env;
+                if (bar_env > 0.001f) {
+                    float tear = (Hash21(std::floor(sample_y * 0.5f), rp.time_sec * 60.0f) - 0.5f)
+                               * 45.0f * bar_env * rp.vhs_eff_track;
+                    rs.flat_dx_offset += tear * rp.downsample_scale;
+                }
+            }
+        }
+
+        if (rp.bend_enable && rp.bend_smear_tear > 0.001f) {
+            float eff_tear  = rp.bend_smear_tear * rp.bend_audio_mult;
+            float band_id   = std::floor(v * 28.0f + std::sin(rp.time_sec * 4.0f) * 3.0f);
+            float band_hash = Hash21(band_id, std::floor(rp.time_sec * 15.0f));
+            if (band_hash > (1.0f - std::min(0.85f, eff_tear * 0.65f))) {
+                float tear_offset = (band_hash - 0.5f) * 110.0f * eff_tear * rp.downsample_scale;
+                rs.flat_dx_offset += tear_offset * std::sin(v * 140.0f + rp.time_sec * 20.0f);
+            }
+        }
+    }
+
+    /* Precompute row-invariant CRT scanline wave & 6-state RGB phosphor multipliers */
+    rs.crt_scan_wave      = 1.0f;
+    rs.crt_sqrt_scan_wave = 1.0f;
+    if (rp.crt_enable) {
+        if (rp.crt_scanline_intensity > 0.001f) {
+            float scan_phase      = ((float)py * rp.crt_inv_pitch) * (float)(2.0 * M_PI);
+            rs.crt_scan_wave      = 0.5f + 0.5f * std::cos(scan_phase);
+            rs.crt_sqrt_scan_wave = std::sqrt(rs.crt_scan_wave);
+        }
+
+        if (rp.crt_phosphor_mask != CRT_MASK_NONE && rp.crt_phosphor_strength > 0.001f) {
+            int sub_y = (int)std::floor((float)py * rp.crt_inv_pitch);
+            int stagger = (rp.crt_phosphor_mask == CRT_MASK_SHADOW_TRIAD && (sub_y & 1)) ? 1 : 0;
+            float str = rp.crt_phosphor_strength;
+
+            for (int m = 0; m < 6; ++m) {
+                int sx = m + stagger;
+                int triad_idx = sx % 3;
+                float mr, mg, mb;
+                if (triad_idx == 0) {
+                    mr = 1.48f; mg = 0.15f; mb = 0.12f;
+                } else if (triad_idx == 1) {
+                    mr = 0.15f; mg = 1.48f; mb = 0.15f;
+                } else {
+                    mr = 0.12f; mg = 0.15f; mb = 1.48f;
+                }
+
+                if (rp.crt_phosphor_mask == CRT_MASK_SLOT_MASK) {
+                    float slot_v = FastFract(((float)py + ((sx & 1) ? rp.crt_pitch * 0.5f : 0.0f)) * rp.crt_inv_pitch);
+                    if (slot_v > 0.82f) {
+                        mr *= 0.45f; mg *= 0.45f; mb *= 0.45f;
+                    }
+                }
+
+                rs.crt_mask_r[m] = Lerp(1.0f, mr, str);
+                rs.crt_mask_g[m] = Lerp(1.0f, mg, str);
+                rs.crt_mask_b[m] = Lerp(1.0f, mb, str);
+            }
+        } else {
+            for (int m = 0; m < 6; ++m) {
+                rs.crt_mask_r[m] = 1.0f;
+                rs.crt_mask_g[m] = 1.0f;
+                rs.crt_mask_b[m] = 1.0f;
+            }
+        }
+    }
+}
+
+inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, const DreamyRowState& rs, A_long px, A_long py) {
     const float w = (float)rp.width;
     const float h = (float)rp.height;
-    float u = ((float)px + 0.5f) / w;
-    float v = ((float)py + 0.5f) / h;
+    float u = ((float)px + 0.5f) * rp.inv_width;
+    float v = rs.v0;
 
     /*--------------------------------------------------------------
      * STAGE A: CRT Glass Curvature (Barrel Distortion)
      *--------------------------------------------------------------*/
     float vignette = 1.0f;
-    if (rp.crt_enable && rp.crt_curvature > 0.001f) {
+    if (rs.has_curvature) {
         float cu = u * 2.0f - 1.0f;
-        float cv = v * 2.0f - 1.0f;
-        float r2 = cu * cu + cv * cv;
-        float k  = rp.crt_curvature * 0.22f;
-        cu *= (1.0f + k * r2);
-        cv *= (1.0f + k * r2);
-        u = cu * 0.5f + 0.5f;
-        v = cv * 0.5f + 0.5f;
+        float cv = rs.cv0;
+        float r2 = cu * cu + rs.cv0_sq;
+        float scale = 1.0f + rs.crt_k * r2;
+        cu *= scale;
+        cv *= scale;
 
         /* Soft CRT corner bezel darkening */
-        float edge = std::max(std::fabs(cu), std::fabs(cv));
-        if (edge > 1.0f) {
+        if (std::fabs(cu) > 1.0f || std::fabs(cv) > 1.0f) {
             return { 0.0f, 0.0f, 0.0f, 1.0f };
         }
-        vignette = 1.0f - SmoothStep(0.75f, 1.05f, std::sqrt(r2) * 0.75f) * (rp.crt_curvature * 0.65f);
+        u = cu * 0.5f + 0.5f;
+        v = cv * 0.5f + 0.5f;
+        vignette = 1.0f - SmoothStep(0.75f, 1.05f, std::sqrt(r2) * 0.75f) * rs.crt_vig_strength;
     }
 
     float sample_x = u * w;
-    float sample_y = v * h;
+    float sample_y = rs.has_curvature ? (v * h) : rs.sample_y0;
 
     /*--------------------------------------------------------------
-     * STAGE B: VHS Tape Timebase Wobble & Tracking Static Bar
+     * STAGE B & C: VHS Tape Wobble, Tracking Bar & Circuit Bend Tear
      *--------------------------------------------------------------*/
     float tracking_static_add = 0.0f;
-    if (rp.vhs_enable) {
-        float eff_wobble = rp.vhs_tape_wobble * (1.0f + rp.audio_bass * 1.35f);
-        if (eff_wobble > 0.001f) {
-            /* 60Hz mains hum wave + high-frequency head switching jitter */
-            float hum = std::sin(v * 10.0f + rp.time_sec * 9.0f) * 3.5f;
-            float flutter = std::sin(v * 75.0f - rp.time_sec * 37.0f) * 1.2f;
-            float line_noise = (Hash21(std::floor(sample_y), rp.time_sec * 12.0f) - 0.5f) * 4.0f;
-            sample_x += (hum + flutter + line_noise) * eff_wobble * rp.downsample_scale;
+    if (!rs.has_curvature) {
+        /* Fast row-invariant path */
+        sample_x += rs.flat_dx_offset;
+        if (rs.flat_vhs_bar_env > 0.001f) {
+            float snow = Hash21(std::floor(sample_x * 0.5f), rs.flat_snow_y);
+            if (snow > 0.45f) {
+                tracking_static_add = (snow - 0.45f) * 1.8f * rs.flat_vhs_bar_env * rp.vhs_eff_track;
+            }
         }
+    } else {
+        if (rp.vhs_enable) {
+            if (rp.vhs_eff_wobble > 0.001f) {
+                /* 60Hz mains hum wave + high-frequency head switching jitter */
+                float hum        = std::sin(v * 10.0f + rp.time_sec * 9.0f) * 3.5f;
+                float flutter    = std::sin(v * 75.0f - rp.time_sec * 37.0f) * 1.2f;
+                float line_noise = (Hash21(std::floor(sample_y), rp.time_sec * 12.0f) - 0.5f) * 4.0f;
+                sample_x += (hum + flutter + line_noise) * rp.vhs_eff_wobble * rp.downsample_scale;
+            }
 
-        /* VHS Tracking Noise Bar (scrolls vertically and flares on bass hits) */
-        float eff_track = rp.vhs_tracking_noise * (1.0f + rp.audio_bass * 0.8f);
-        if (eff_track > 0.001f) {
-            float bar_pos = std::fmod(0.88f - rp.time_sec * 0.12f, 1.0f);
-            if (bar_pos < 0.0f) bar_pos += 1.0f;
-            float dist = std::fabs(v - bar_pos);
-            float bar_env = SmoothStep(0.08f * eff_track, 0.0f, dist);
-            if (bar_env > 0.001f) {
-                /* Strong horizontal tear inside the tracking band */
-                float tear = (Hash21(std::floor(sample_y * 0.5f), rp.time_sec * 60.0f) - 0.5f) * 45.0f * bar_env * eff_track;
-                sample_x += tear * rp.downsample_scale;
-                float snow = Hash21(std::floor(sample_x * 0.5f), std::floor(sample_y) + rp.time_sec * 120.0f);
-                if (snow > 0.45f) {
-                    tracking_static_add = (snow - 0.45f) * 1.8f * bar_env * eff_track;
+            /* VHS Tracking Noise Bar (scrolls vertically and flares on bass hits) */
+            if (rp.vhs_eff_track > 0.001f) {
+                float dist    = std::fabs(v - rp.vhs_bar_pos);
+                float bar_env = SmoothStep(0.08f * rp.vhs_eff_track, 0.0f, dist);
+                if (bar_env > 0.001f) {
+                    /* Strong horizontal tear inside the tracking band */
+                    float tear = (Hash21(std::floor(sample_y * 0.5f), rp.time_sec * 60.0f) - 0.5f)
+                               * 45.0f * bar_env * rp.vhs_eff_track;
+                    sample_x += tear * rp.downsample_scale;
+                    float snow = Hash21(std::floor(sample_x * 0.5f), std::floor(sample_y) + rp.time_sec * 120.0f);
+                    if (snow > 0.45f) {
+                        tracking_static_add = (snow - 0.45f) * 1.8f * bar_env * rp.vhs_eff_track;
+                    }
                 }
             }
         }
-    }
 
-    /*--------------------------------------------------------------
-     * STAGE C: Circuit Bending Horizontal Line-Hold Tear & Smear
-     * (Horizontal displacement & color smear)
-     *--------------------------------------------------------------*/
-    float bend_audio_mult = 1.0f + (rp.audio_high * 0.9f + rp.audio_bass * 0.6f) * rp.bend_audio_react;
-    if (rp.bend_enable && rp.bend_smear_tear > 0.001f) {
-        float eff_tear = rp.bend_smear_tear * bend_audio_mult;
-        /* Quantized vertical band hold error */
-        float band_id = std::floor(v * 28.0f + std::sin(rp.time_sec * 4.0f) * 3.0f);
-        float band_hash = Hash21(band_id, std::floor(rp.time_sec * 15.0f));
-        if (band_hash > (1.0f - std::min(0.85f, eff_tear * 0.65f))) {
-            float tear_offset = (band_hash - 0.5f) * 110.0f * eff_tear * rp.downsample_scale;
-            /* Smooth saw wave inside torn scanline band */
-            sample_x += tear_offset * std::sin(v * 140.0f + rp.time_sec * 20.0f);
+        if (rp.bend_enable && rp.bend_smear_tear > 0.001f) {
+            float eff_tear  = rp.bend_smear_tear * rp.bend_audio_mult;
+            /* Quantized vertical band hold error */
+            float band_id   = std::floor(v * 28.0f + std::sin(rp.time_sec * 4.0f) * 3.0f);
+            float band_hash = Hash21(band_id, std::floor(rp.time_sec * 15.0f));
+            if (band_hash > (1.0f - std::min(0.85f, eff_tear * 0.65f))) {
+                float tear_offset = (band_hash - 0.5f) * 110.0f * eff_tear * rp.downsample_scale;
+                /* Smooth saw wave inside torn scanline band */
+                sample_x += tear_offset * std::sin(v * 140.0f + rp.time_sec * 20.0f);
+            }
         }
     }
 
@@ -454,32 +673,26 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
     float fm_carrier_signal = 0.0f;
 
     if (rp.fm_enable) {
-        float fm_audio = 1.0f + (rp.audio_bass * 1.1f + rp.audio_mid * 0.6f) * rp.fm_audio_react;
-
         /* 1. True Phase/Frequency Modulation:
          * Brightness modulates the phase of a high-frequency carrier wave */
-        float carrier_hz = rp.fm_carrier_freq * 0.5f;
-        float mod_index  = rp.fm_mod_depth * fm_audio * 18.0f;
-
-        /* Sample slightly smoothed horizontal luma for organic FM phase derivative */
-        float luma_left  = Luminance(SampleWorldBilinear(rp, sample_x - 3.0f * rp.downsample_scale, sample_y));
-        float luma_right = Luminance(SampleWorldBilinear(rp, sample_x + 3.0f * rp.downsample_scale, sample_y));
+        float dx_tap = 3.0f * rp.downsample_scale;
+        float luma_left   = Luminance(SampleWorldBilinear(rp, sample_x - dx_tap, sample_y));
+        float luma_right  = Luminance(SampleWorldBilinear(rp, sample_x + dx_tap, sample_y));
         float smooth_luma = 0.25f * luma_left + 0.5f * local_luma + 0.25f * luma_right;
 
         /* Horizontal FM displacement + carrier harmonic texture */
-        float fm_phase = u * carrier_hz * (float)(2.0 * M_PI) + smooth_luma * mod_index + rp.time_sec * 6.0f;
+        float fm_phase = u * rp.fm_carrier_rad + smooth_luma * rp.fm_mod_index + rp.time_sec * 6.0f;
         fm_carrier_signal = std::sin(fm_phase);
 
-        float fm_x_shift = fm_carrier_signal * (rp.fm_mod_depth * 14.0f * fm_audio) * rp.downsample_scale;
-        sample_x += fm_x_shift;
+        sample_x += fm_carrier_signal * rp.fm_x_shift_scale;
 
         /* 2. Rutt-Etra 3D Scanline Z-Elevation & Glowing Oscilloscope Ribbons:
          * In a Rutt-Etra video synthesizer, each horizontal scanline is deflected
          * vertically (Y) proportional to image luminance (Z) + FM wave modulation. */
-        float z_elev = rp.fm_rutt_etra_z * fm_audio;
+        float z_elev = rp.fm_z_elev;
         if (z_elev > 0.001f || rp.fm_scanline_density > 0.001f) {
             /* Vertical deflection of sampling coordinate by luminance + subtle FM ripple */
-            float y_deflect = (smooth_luma * z_elev * 55.0f + fm_carrier_signal * z_elev * 4.5f) * rp.downsample_scale;
+            float y_deflect = (smooth_luma * 55.0f + fm_carrier_signal * 4.5f) * z_elev * rp.downsample_scale;
             sample_y += y_deflect;
 
             /* Re-sample at the FM + Rutt-Etra deflected coordinates */
@@ -492,10 +705,10 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
                 /* Deformed scanline coordinate combines vertical position, luminance elevation, and FM wave */
                 float deformed_v = v * num_lines
                                  - (local_luma * z_elev * (num_lines * 0.16f))
-                                 + (fm_carrier_signal * rp.fm_mod_depth * 0.45f * fm_audio);
+                                 + (fm_carrier_signal * rp.fm_mod_depth * 0.45f * rp.fm_audio_mult);
 
                 /* Distance to nearest scanline center (0.0 at center, 0.5 at midpoint between lines) */
-                float frac_line = deformed_v - std::floor(deformed_v);
+                float frac_line = FastFract(deformed_v);
                 float dist_to_line = std::fabs(frac_line - 0.5f) * 2.0f; /* 0 at center, 1 at boundary */
 
                 /* Beam thickness & phosphor bloom around each Rutt-Etra line */
@@ -523,9 +736,8 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
      *--------------------------------------------------------------*/
     if (rp.vhs_enable) {
         /* 1. Analog YIQ/YUV Chroma Delay & Horizontal Color Bleed */
-        float eff_bleed = rp.vhs_chroma_bleed * (1.0f + rp.audio_mid * 0.8f);
-        if (eff_bleed > 0.001f) {
-            float shift_px = eff_bleed * 18.0f * rp.downsample_scale;
+        if (rp.vhs_eff_bleed_px > 0.018f) {
+            float shift_px = rp.vhs_eff_bleed_px;
             FloatRGBA col_left  = SampleWorldBilinear(rp, sample_x - shift_px, sample_y);
             FloatRGBA col_right = SampleWorldBilinear(rp, sample_x + shift_px, sample_y);
             FloatRGBA col_far   = SampleWorldBilinear(rp, sample_x - shift_px * 1.8f, sample_y);
@@ -545,20 +757,19 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
         }
 
         /* 2. Dreamy Halation & Soft Multi-Tap Highlight Bloom */
-        float eff_bloom = rp.vhs_dream_bloom * (1.0f + rp.audio_mid * 0.9f + rp.audio_bass * 0.5f);
-        if (eff_bloom > 0.001f) {
-            float rad1 = (6.0f + eff_bloom * 12.0f) * rp.downsample_scale;
-            float rad2 = (14.0f + eff_bloom * 26.0f) * rp.downsample_scale;
+        if (rp.vhs_eff_bloom > 0.001f) {
+            float rad1 = rp.vhs_bloom_rad1;
+            float rad2_diag = rp.vhs_bloom_rad2 * 0.7f;
 
             /* 8-tap dreamy star/halo kernel around current sample */
             FloatRGBA b1 = SampleWorldBilinear(rp, sample_x + rad1, sample_y);
             FloatRGBA b2 = SampleWorldBilinear(rp, sample_x - rad1, sample_y);
             FloatRGBA b3 = SampleWorldBilinear(rp, sample_x, sample_y + rad1);
             FloatRGBA b4 = SampleWorldBilinear(rp, sample_x, sample_y - rad1);
-            FloatRGBA b5 = SampleWorldBilinear(rp, sample_x + rad2 * 0.7f, sample_y + rad2 * 0.7f);
-            FloatRGBA b6 = SampleWorldBilinear(rp, sample_x - rad2 * 0.7f, sample_y + rad2 * 0.7f);
-            FloatRGBA b7 = SampleWorldBilinear(rp, sample_x + rad2 * 0.7f, sample_y - rad2 * 0.7f);
-            FloatRGBA b8 = SampleWorldBilinear(rp, sample_x - rad2 * 0.7f, sample_y - rad2 * 0.7f);
+            FloatRGBA b5 = SampleWorldBilinear(rp, sample_x + rad2_diag, sample_y + rad2_diag);
+            FloatRGBA b6 = SampleWorldBilinear(rp, sample_x - rad2_diag, sample_y + rad2_diag);
+            FloatRGBA b7 = SampleWorldBilinear(rp, sample_x + rad2_diag, sample_y - rad2_diag);
+            FloatRGBA b8 = SampleWorldBilinear(rp, sample_x - rad2_diag, sample_y - rad2_diag);
 
             FloatRGBA avg_halo = {
                 (b1.r + b2.r + b3.r + b4.r) * 0.15f + (b5.r + b6.r + b7.r + b8.r) * 0.10f,
@@ -569,7 +780,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
             /* Highlight knee extraction + dreamy warm/magenta halation tint */
             float halo_luma = Luminance(avg_halo);
-            float highlight_boost = SmoothStep(0.18f, 0.90f, halo_luma) * eff_bloom * 0.85f;
+            float highlight_boost = SmoothStep(0.18f, 0.90f, halo_luma) * rp.vhs_eff_bloom * 0.85f;
 
             /* Screen-like soft additive blend */
             base_col.r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(avg_halo.r * highlight_boost * 1.15f));
@@ -582,101 +793,83 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
      * STAGE E2: Dreamy Echo Trail (Windows Cursor-Trail Style
      * Semi-Transparent Ghosting + Customizable Trail Glow)
      *--------------------------------------------------------------*/
-    if (rp.echo_enable && rp.echo_count > 0 && rp.echo_opacity > 0.001f) {
-        int num_echoes = (int)std::min<A_long>(rp.echo_count, 12);
-        float audio_trail_boost = 1.0f + (rp.audio_bass * 0.45f + rp.audio_mid * 0.45f);
-        float step_dist = rp.echo_offset_px * audio_trail_boost * rp.downsample_scale;
-        float decay_rate = Clamp01(rp.echo_decay);
-        float glow_strength = rp.echo_glow * (1.0f + rp.audio_mid * 0.5f);
-        float glow_rad = (4.0f + rp.echo_glow * 14.0f) * rp.downsample_scale;
-
+    if (rp.echo_active_count > 0) {
         FloatRGBA trail_accum = { 0.0f, 0.0f, 0.0f, 0.0f };
-        FloatRGBA glow_accum  = { 0.0f, 0.0f, 0.0f, 0.0f };
+        float halo_sum_r = 0.0f, halo_sum_g = 0.0f, halo_sum_b = 0.0f;
+        float g_env_sum  = 0.0f;
         float weight_sum = 0.0f;
+        const float glow_strength = rp.echo_glow_strength;
+        const bool do_glow = (glow_strength > 0.001f);
 
-        /* Direction of cursor-trail drift slowly orbits with composition time & audio */
-        float base_angle = rp.time_sec * 1.15f + rp.audio_bass * 0.8f;
-        float dir_x = std::cos(base_angle);
-        float dir_y = std::sin(base_angle * 0.75f) * 0.65f;
-
-        for (int i = 0; i < num_echoes; ++i) {
+        for (A_long i = 0; i < rp.echo_active_count; ++i) {
             const PF_EffectWorld* ew = (i < rp.echo_valid_worlds && rp.echo_worlds[i] && rp.echo_worlds[i]->data)
                                      ? rp.echo_worlds[i]
                                      : rp.input_world;
-            A_Boolean ew_deep = PF_WORLD_IS_DEEP(ew) ? TRUE : FALSE;
+            A_Boolean ew_deep = rp.echo_step_deep[i];
+            float step_alpha  = rp.echo_step_alpha[i];
 
-            float step_idx = (float)(i + 1);
-            /* Successive trail ghosts fade out smoothly according to Trail Decay & Trail Opacity */
-            float step_alpha = rp.echo_opacity * std::pow(1.0f - decay_rate * 0.78f, (float)i);
-            if (step_alpha < 0.005f) break;
-
-            /* Stepping offset gives a classic Windows cursor-trail ribbon behind moving elements */
-            float ox = sample_x - dir_x * step_dist * step_idx;
-            float oy = sample_y - dir_y * step_dist * step_idx * 0.7f;
-
-            /* Subtle Rutt-Etra / FM echo phase lag per ghost copy */
-            if (rp.fm_enable && rp.fm_rutt_etra_z > 0.001f) {
-                oy += step_idx * rp.fm_rutt_etra_z * 6.5f * rp.downsample_scale;
-            }
+            /* Precomputed stepping offset + Rutt-Etra echo phase lag */
+            float ox = sample_x + rp.echo_step_dx[i];
+            float oy = sample_y + rp.echo_step_dy[i];
 
             FloatRGBA ghost = SampleSpecificWorldBilinear(ew, ew_deep, ox, oy);
             float ghost_luma = Luminance(ghost);
             /* Emphasize moving highlights & edges so the trail floats semi-transparently over the background */
             float presence = SmoothStep(0.05f, 0.75f, ghost_luma) * ghost.a;
-            float w_ghost = step_alpha * (0.35f + 0.65f * presence);
+            float w_ghost  = step_alpha * (0.35f + 0.65f * presence);
 
             trail_accum.r += ghost.r * w_ghost;
             trail_accum.g += ghost.g * w_ghost;
             trail_accum.b += ghost.b * w_ghost;
             weight_sum    += w_ghost;
 
-            /* Customizable Echo Trail Glow: 4-tap halo around each ghost copy */
-            if (glow_strength > 0.001f) {
-                float r_i = glow_rad * (0.7f + 0.25f * step_idx);
+            /* Customizable Echo Trail Glow: 4-tap halo around visible ghost copies */
+            if (do_glow && (step_alpha * glow_strength > 0.012f)) {
+                float r_i = rp.echo_step_glow_rad[i];
                 FloatRGBA g1 = SampleSpecificWorldBilinear(ew, ew_deep, ox + r_i, oy);
                 FloatRGBA g2 = SampleSpecificWorldBilinear(ew, ew_deep, ox - r_i, oy);
                 FloatRGBA g3 = SampleSpecificWorldBilinear(ew, ew_deep, ox, oy + r_i);
                 FloatRGBA g4 = SampleSpecificWorldBilinear(ew, ew_deep, ox, oy - r_i);
 
-                FloatRGBA halo = {
-                    (g1.r + g2.r + g3.r + g4.r) * 0.25f,
-                    (g1.g + g2.g + g3.g + g4.g) * 0.25f,
-                    (g1.b + g2.b + g3.b + g4.b) * 0.25f,
-                    1.0f
-                };
-                float halo_luma = Luminance(halo);
+                float hr = (g1.r + g2.r + g3.r + g4.r) * 0.25f;
+                float hg = (g1.g + g2.g + g3.g + g4.g) * 0.25f;
+                float hb = (g1.b + g2.b + g3.b + g4.b) * 0.25f;
+                float halo_luma = 0.299f * hr + 0.587f * hg + 0.114f * hb;
                 float g_env = SmoothStep(0.12f, 0.85f, halo_luma) * step_alpha * glow_strength * 0.45f;
 
-                /* Tint the echo glow with the user's chosen Trail Glow Color */
-                glow_accum.r += Lerp(halo.r, halo.r * rp.echo_glow_color.r * 1.4f + rp.echo_glow_color.r * 0.35f, 0.75f) * g_env;
-                glow_accum.g += Lerp(halo.g, halo.g * rp.echo_glow_color.g * 1.4f + rp.echo_glow_color.g * 0.35f, 0.75f) * g_env;
-                glow_accum.b += Lerp(halo.b, halo.b * rp.echo_glow_color.b * 1.4f + rp.echo_glow_color.b * 0.35f, 0.75f) * g_env;
+                halo_sum_r += hr * g_env;
+                halo_sum_g += hg * g_env;
+                halo_sum_b += hb * g_env;
+                g_env_sum  += g_env;
             }
         }
 
         if (weight_sum > 0.001f) {
-            FloatRGBA avg_trail = {
-                trail_accum.r / weight_sum,
-                trail_accum.g / weight_sum,
-                trail_accum.b / weight_sum,
-                1.0f
-            };
-            /* Semi-transparent cursor-trail composite: blend ghosts with translucent screen/alpha mix */
-            float trail_mix = Clamp01(rp.echo_opacity * 0.78f);
-            float screen_r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(avg_trail.r * trail_mix));
-            float screen_g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(avg_trail.g * trail_mix));
-            float screen_b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(avg_trail.b * trail_mix));
+            float inv_w = 1.0f / weight_sum;
+            float avg_r = trail_accum.r * inv_w;
+            float avg_g = trail_accum.g * inv_w;
+            float avg_b = trail_accum.b * inv_w;
 
-            base_col.r = Lerp(Lerp(base_col.r, avg_trail.r, trail_mix * 0.55f), screen_r, 0.65f);
-            base_col.g = Lerp(Lerp(base_col.g, avg_trail.g, trail_mix * 0.55f), screen_g, 0.65f);
-            base_col.b = Lerp(Lerp(base_col.b, avg_trail.b, trail_mix * 0.55f), screen_b, 0.65f);
+            /* Semi-transparent cursor-trail composite: blend ghosts with translucent screen/alpha mix */
+            float trail_mix = rp.echo_trail_mix;
+            float screen_r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(avg_r * trail_mix));
+            float screen_g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(avg_g * trail_mix));
+            float screen_b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(avg_b * trail_mix));
+
+            base_col.r = Lerp(Lerp(base_col.r, avg_r, trail_mix * 0.55f), screen_r, 0.65f);
+            base_col.g = Lerp(Lerp(base_col.g, avg_g, trail_mix * 0.55f), screen_g, 0.65f);
+            base_col.b = Lerp(Lerp(base_col.b, avg_b, trail_mix * 0.55f), screen_b, 0.65f);
         }
 
-        /* Add the customizable Echo Trail Glow aura */
-        if (glow_strength > 0.001f) {
-            base_col.r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(glow_accum.r));
-            base_col.g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(glow_accum.g));
-            base_col.b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(glow_accum.b));
+        /* Add the customizable Echo Trail Glow aura (tinted once after accumulating all ghosts) */
+        if (g_env_sum > 0.0001f) {
+            float glow_r = halo_sum_r * (0.25f + 1.05f * rp.echo_glow_color.r) + (0.2625f * rp.echo_glow_color.r) * g_env_sum;
+            float glow_g = halo_sum_g * (0.25f + 1.05f * rp.echo_glow_color.g) + (0.2625f * rp.echo_glow_color.g) * g_env_sum;
+            float glow_b = halo_sum_b * (0.25f + 1.05f * rp.echo_glow_color.b) + (0.2625f * rp.echo_glow_color.b) * g_env_sum;
+
+            base_col.r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(glow_r));
+            base_col.g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(glow_g));
+            base_col.b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(glow_b));
         }
     }
 
@@ -685,15 +878,13 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
      * (Psychedelic color wrapping & glitch)
      *--------------------------------------------------------------*/
     if (rp.bend_enable) {
-        /* 1. Cross-channel RGB feedback matrix rotation */
+        /* 1. Cross-channel RGB feedback matrix rotation (using frame-precomputed sin/cos) */
         if (rp.bend_feedback_shift > 0.001f) {
-            float fb = rp.bend_feedback_shift * bend_audio_mult;
-            float angle = fb * (float)M_PI * 1.5f;
-            float ca = std::cos(angle);
-            float sa = std::sin(angle);
-            float nr = base_col.r * ca - base_col.g * sa * 0.6f + base_col.b * sa * 0.6f;
-            float ng = base_col.g * ca + base_col.r * sa * 0.6f - base_col.b * sa * 0.6f;
-            float nb = base_col.b * ca - base_col.r * sa * 0.6f + base_col.g * sa * 0.6f;
+            float ca = rp.bend_fb_cos;
+            float sa = rp.bend_fb_sin * 0.6f;
+            float nr = base_col.r * ca - base_col.g * sa + base_col.b * sa;
+            float ng = base_col.g * ca + base_col.r * sa - base_col.b * sa;
+            float nb = base_col.b * ca - base_col.r * sa + base_col.g * sa;
             base_col.r = Clamp01(std::fabs(nr));
             base_col.g = Clamp01(std::fabs(ng));
             base_col.b = Clamp01(std::fabs(nb));
@@ -701,7 +892,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
         /* 2. Analog Video Synth Phase Wavefolder / Solarization (Tachyons+ style) */
         if (rp.bend_phase_fold > 0.001f) {
-            float fold_gain = 1.0f + rp.bend_phase_fold * bend_audio_mult * 4.5f;
+            float fold_gain = rp.bend_fold_gain;
             /* Different phase offsets per channel create psychedelic rainbow contours */
             base_col.r = 0.5f + 0.5f * std::sin((base_col.r * fold_gain - 0.25f) * (float)M_PI);
             base_col.g = 0.5f + 0.5f * std::sin((base_col.g * fold_gain * 1.12f - 0.10f) * (float)M_PI);
@@ -710,28 +901,29 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
         /* 3. Digital DAC Pin Short / Bitwise XOR Quantization */
         if (rp.bend_xor_crush > 0.001f) {
-            float crush_amt = Clamp01(rp.bend_xor_crush * bend_audio_mult);
+            float crush_mix = rp.bend_crush_amt * 0.85f;
             uint8_t r8 = (uint8_t)(Clamp01(base_col.r) * 255.0f);
             uint8_t g8 = (uint8_t)(Clamp01(base_col.g) * 255.0f);
             uint8_t b8 = (uint8_t)(Clamp01(base_col.b) * 255.0f);
 
             /* Emulate shorted data pins on an 8-bit video ADC/DAC */
-            uint8_t mask = (uint8_t)((int)(crush_amt * 170.0f) & 0xFC);
+            uint8_t mask = rp.bend_xor_mask;
             uint8_t xr = (r8 ^ ((g8 >> 1) & mask));
             uint8_t xg = (g8 ^ ((b8 >> 1) & mask));
             uint8_t xb = (b8 ^ ((r8 >> 1) & mask));
 
-            base_col.r = Lerp(base_col.r, xr / 255.0f, crush_amt * 0.85f);
-            base_col.g = Lerp(base_col.g, xg / 255.0f, crush_amt * 0.85f);
-            base_col.b = Lerp(base_col.b, xb / 255.0f, crush_amt * 0.85f);
+            const float inv255 = 1.0f / 255.0f;
+            base_col.r = Lerp(base_col.r, xr * inv255, crush_mix);
+            base_col.g = Lerp(base_col.g, xg * inv255, crush_mix);
+            base_col.b = Lerp(base_col.b, xb * inv255, crush_mix);
         }
     }
 
     /*--------------------------------------------------------------
-     * STAGE G: 4-Stop Editable / Preset Gradient Colorizer
+     * STAGE G: 4-Stop Editable / Preset Gradient Colorizer (O(1) LUT)
      *--------------------------------------------------------------*/
     if (rp.gradient_enable && rp.gradient_mode != GRAD_MODE_OFF && rp.gradient_mix > 0.001f) {
-        /* Map pixel luminance + FM wave harmonic + Rutt-Etra ribbon intensity through the 4-stop gradient */
+        /* Map pixel luminance + FM wave harmonic + Rutt-Etra ribbon intensity through the 1024-entry LUT */
         float synth_luma = Luminance(base_col);
         if (rp.fm_enable) {
             synth_luma = Clamp01(synth_luma + rutt_ribbon_glow * 0.28f + fm_carrier_signal * rp.fm_mod_depth * 0.12f);
@@ -785,20 +977,15 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
     /*--------------------------------------------------------------
      * STAGE I: CRT Scanlines & Trinitron RGB Phosphor Subpixel Mask
-     * (Discrete R-G-B vertical phosphor stripes + scanlines)
+     * (Uses precomputed row scanline wave & 6-state RGB phosphor table)
      *--------------------------------------------------------------*/
     if (rp.crt_enable) {
-        float pitch = std::max(1.5f, rp.crt_scanline_pitch * rp.downsample_scale);
-
         /* 1. Horizontal CRT Scanline Beam Profile */
         if (rp.crt_scanline_intensity > 0.001f) {
-            float scan_phase = ((float)py / pitch) * (float)(2.0 * M_PI);
-            /* Raised cosine beam profile with bright phosphor bloom compensation */
-            float scan_wave = 0.5f + 0.5f * std::cos(scan_phase);
             /* Bright pixels bloom wider across scanline gaps on real CRTs */
-            float pix_luma = Luminance(base_col);
-            float bloom_comp = Lerp(scan_wave, std::sqrt(scan_wave), pix_luma * 0.65f);
-            float scan_mult = Lerp(1.0f, bloom_comp * 1.15f, rp.crt_scanline_intensity);
+            float pix_luma   = Luminance(base_col);
+            float bloom_comp = Lerp(rs.crt_scan_wave, rs.crt_sqrt_scan_wave, pix_luma * 0.65f);
+            float scan_mult  = Lerp(1.0f, bloom_comp * 1.15f, rp.crt_scanline_intensity);
 
             base_col.r *= scan_mult;
             base_col.g *= scan_mult;
@@ -807,39 +994,11 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
 
         /* 2. RGB Phosphor Aperture Grille / Shadow Mask / Slot Mask */
         if (rp.crt_phosphor_mask != CRT_MASK_NONE && rp.crt_phosphor_strength > 0.001f) {
-            float cell_w = std::max(1.0f, (pitch * 0.5f));
-            int sub_x = (int)std::floor((float)px / cell_w);
-            int sub_y = (int)std::floor((float)py / pitch);
-
-            if (rp.crt_phosphor_mask == CRT_MASK_SHADOW_TRIAD) {
-                /* Staggered delta triad offsets every other scanline by half a triad */
-                sub_x += (sub_y & 1) ? 1 : 0;
-            }
-
-            int triad_idx = ((sub_x % 3) + 3) % 3;
-            float mask_r = 0.18f, mask_g = 0.18f, mask_b = 0.18f;
-
-            /* Discrete R, G, B phosphor cells with energy-preserving boost */
-            if (triad_idx == 0) {
-                mask_r = 1.48f; mask_g = 0.15f; mask_b = 0.12f;
-            } else if (triad_idx == 1) {
-                mask_r = 0.15f; mask_g = 1.48f; mask_b = 0.15f;
-            } else {
-                mask_r = 0.12f; mask_g = 0.15f; mask_b = 1.48f;
-            }
-
-            /* Slot mask adds dark horizontal slot bridges between vertical phosphor stripes */
-            if (rp.crt_phosphor_mask == CRT_MASK_SLOT_MASK) {
-                float slot_v = std::fmod((float)py + ((sub_x & 1) ? pitch * 0.5f : 0.0f), pitch) / pitch;
-                if (slot_v > 0.82f) {
-                    mask_r *= 0.45f; mask_g *= 0.45f; mask_b *= 0.45f;
-                }
-            }
-
-            float str = rp.crt_phosphor_strength;
-            base_col.r *= Lerp(1.0f, mask_r, str);
-            base_col.g *= Lerp(1.0f, mask_g, str);
-            base_col.b *= Lerp(1.0f, mask_b, str);
+            int sub_x = (int)((float)px * rp.crt_inv_cell_w);
+            int mod6  = sub_x % 6;
+            base_col.r *= rs.crt_mask_r[mod6];
+            base_col.g *= rs.crt_mask_g[mod6];
+            base_col.b *= rs.crt_mask_b[mod6];
         }
 
         /* Apply CRT glass corner vignette */
@@ -853,6 +1012,12 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
     base_col.b = Clamp01(base_col.b);
     base_col.a = Clamp01(base_col.a);
     return base_col;
+}
+
+inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long py) {
+    DreamyRowState rs;
+    PrecomputeRowState(rp, py, rs);
+    return SynthesizePixel(rp, rs, px, py);
 }
 
 } /* namespace DreamyDSP */

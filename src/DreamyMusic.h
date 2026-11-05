@@ -279,6 +279,41 @@ typedef struct {
     A_long      echo_valid_worlds;      /* Number of checked-out historical frames */
     const PF_EffectWorld *echo_worlds[12]; /* Historical input layer buffers */
 
+    /* Precomputed Frame-Invariant Optimization Cache */
+    float       inv_width;
+    float       inv_height;
+    float       fm_audio_mult;
+    float       fm_carrier_rad;
+    float       fm_mod_index;
+    float       fm_x_shift_scale;
+    float       fm_z_elev;
+    float       bend_audio_mult;
+    float       bend_fb_cos;
+    float       bend_fb_sin;
+    float       bend_fold_gain;
+    float       bend_crush_amt;
+    uint8_t     bend_xor_mask;
+    float       vhs_eff_wobble;
+    float       vhs_eff_track;
+    float       vhs_bar_pos;
+    float       vhs_eff_bleed_px;
+    float       vhs_eff_bloom;
+    float       vhs_bloom_rad1;
+    float       vhs_bloom_rad2;
+    float       crt_pitch;
+    float       crt_inv_pitch;
+    float       crt_cell_w;
+    float       crt_inv_cell_w;
+    A_long      echo_active_count;
+    float       echo_glow_strength;
+    float       echo_trail_mix;
+    float       echo_step_alpha[12];
+    float       echo_step_dx[12];
+    float       echo_step_dy[12];
+    float       echo_step_glow_rad[12];
+    A_Boolean   echo_step_deep[12];
+    FloatRGBA   gradient_lut[1024];
+
     /* Pointer to input buffer for spatial sampling */
     const PF_EffectWorld *input_world;
     PF_EffectWorld       *output_world;

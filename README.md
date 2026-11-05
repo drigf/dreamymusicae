@@ -1,6 +1,6 @@
-# Dreamy Music VHS (`DreamyMusic.plugin`)
+# Dreamy Music VHS (`DreamyMusic.plugin` / `DreamyMusic.aex`)
 
-An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Music VHS**, match name `ADBE DreamyMusicVHS`) built for **macOS (`arm64` + `x86_64` Universal Binary)**.
+An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Music VHS**, match name `ADBE DreamyMusicVHS`) built for **macOS (`arm64` + `x86_64` Universal Binary `.plugin`)** and **Windows (`x64` `.aex`)**.
 
 **Dreamy Music VHS** fuses seven analog video synthesis and tape emulation modules into a single real-time pipeline that reacts dynamically to music:
 1. **3-Band Music & Audio Reactivity** (Direct Audio Layer DSP + Keyframe Slider fusion)
@@ -37,11 +37,11 @@ An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Mu
 1. **Apply the Effect**:
    - Select any video layer, solid, or adjustment layer in your After Effects composition and choose **Effect > Stylize > Dreamy Music VHS**.
    - Immediately upon application, the default **Sunset Dream** gradient, soft **FM Rutt-Etra waves**, **Dreamy VHS halation**, and **Trinitron CRT scanlines** are active.
-2. **Connect Your Audio (Two Ways — Use Either or Both!)**:
-   - **Method A — Direct Audio Layer Selection (Recommended, Zero Setup)**:
+2. **Connect Your Audio (Two Ways: Use Either or Both!)**:
+   - **Method A: Direct Audio Layer Selection (Recommended, Zero Setup)**:
      - In the **Music & Audio Reactivity** group, set **Audio Source Layer** to your music `.mp3`/`.wav` layer (or leave it on the current video layer if the video itself contains audio).
      - The plugin checks out the raw 32-bit floating-point audio waveform directly from After Effects and runs a real-time 3-band IIR crossover filter splitting the track into **Bass (< 160 Hz)**, **Mid (160 Hz – 2.5 kHz)**, and **Treble (> 2.5 kHz)** envelopes.
-   - **Method B — Keyframe / Expression Slider**:
+   - **Method B: Keyframe / Expression Slider**:
      - Right-click your audio track and select **Keyframe Assistant > Convert Audio to Keyframes**.
      - Option-click (Alt-click) the stopwatch on **Audio Keyframe Slider** in **Dreamy Music VHS** and pick-whip it to the `Both Channels` slider on the generated `Audio Amplitude` layer.
      - Both methods work simultaneously and fuse smoothly.
@@ -157,7 +157,7 @@ Simulates a physical cathode-ray tube television monitor with discrete RGB subpi
 
 ### Group 7: Dreamy Echo Trail *(Starts Collapsed)*
 
-Creates a semi-transparent temporal and spatial ghosting effect—inspired by the classic Windows mouse cursor trail—that samples previous video frames along a stepped drift trajectory and surrounds each ghost copy with a customizable glow aura.
+Creates a semi-transparent ghosting trail (similar to the classic Windows mouse cursor trail) that pulls in frames from earlier in the timeline, spreads them out in an organic drift, and wraps each ghost in a customizable glow.
 
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
@@ -174,15 +174,15 @@ Creates a semi-transparent temporal and spatial ghosting effect—inspired by th
 
 ## 3. Creative Recipes & Look Guides
 
-* **Look 1 — Glowing Rutt-Etra Vector Oscilloscope**:
+* **Look 1: Glowing Rutt-Etra Vector Oscilloscope**:
   - **Palette Preset**: `Sunset Dream` (`Gradient Blend`: `95%`)
   - **FM & Rutt-Etra Waves**: `FM Wave Frequency`: `110`, `FM Wave Depth`: `35%`, `3D Scanline Elevation`: `75%`, `Oscilloscope Lines`: `85`, `Oscilloscope Beam Width`: `38%`
   - **Dreamy VHS & Halation**: `Dreamy Halation Glow`: `80%`
-* **Look 2 — Psychedelic Circuit-Bent TV Broadcast**:
+* **Look 2: Psychedelic Circuit-Bent TV Broadcast**:
   - **Palette Preset**: `Acid Circuit Synth` (`Gradient Blend`: `90%`)
   - **Circuit Bending Glitch**: `Psychedelic Wavefolder`: `65%`, `Horizontal Sync Tear`: `45%`, `RGB Matrix Shift`: `35%`, `Digital Pin-Short (XOR)`: `15%`
   - **Dreamy VHS & Halation**: `VHS Color Bleed`: `75%`, `Tape Edge Wobble`: `40%`
-* **Look 3 — Macro Sony Trinitron CRT Monitor**:
+* **Look 3: Macro Sony Trinitron CRT Monitor**:
   - **CRT Scanlines & Phosphor**: `Scanline Size (px)`: `6.0 px`, `Scanline Contrast`: `75%`, `Phosphor Subpixel Mask`: `Trinitron Aperture Grille`, `Phosphor Mask Intensity`: `85%`, `CRT Screen Curvature`: `20%`
   - **Dreamy VHS & Halation**: `Dreamy Halation Glow`: `45%`, `VHS Color Bleed`: `35%`
 
@@ -227,12 +227,46 @@ open DreamyMusic.xcodeproj
 ```
 Select the **DreamyMusic** scheme and press **`Cmd + B`** to build.
 
-### Installing into Adobe After Effects
+### Installing into Adobe After Effects (macOS)
 Copy the built `.plugin` bundle into Adobe's shared **MediaCore** directory (or your version-specific After Effects `Plug-ins` folder) so After Effects loads it automatically:
 ```bash
 cp -R "build/Release/DreamyMusic.plugin" "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/"
 ```
 *(If `/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/` requires administrator permissions on your machine, prefix with `sudo` and set ownership with `sudo chown -R $(whoami):admin "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/DreamyMusic.plugin"` so future builds can overwrite it without `sudo`.)*
+
+---
+
+### Building & Installing on Windows (`DreamyMusic.aex`)
+
+A prebuilt 64-bit Windows binary is generated at `build/Windows/Release/DreamyMusic.aex`. You can also build it from source on Windows or cross-compile it from macOS:
+
+#### Option 1: Build on Windows with Visual Studio 2022
+1. Open [`Win/DreamyMusic.sln`](Win/DreamyMusic.sln) in Visual Studio 2022.
+2. Select the **Release | x64** configuration and choose **Build > Build Solution** (`Ctrl + Shift + B`), or run [`Win/build_windows.bat`](Win/build_windows.bat) from an **x64 Native Tools Command Prompt for VS**.
+3. The compiled plugin is output to `build\Windows\Release\DreamyMusic.aex`.
+
+#### Option 2: Build with CMake (Windows or macOS)
+```bash
+cmake -B build/Windows/cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build build/Windows/cmake --config Release
+```
+
+#### Option 3: Cross-Compile Windows `.aex` from macOS (MinGW-w64)
+```bash
+mkdir -p build/Windows/Release
+x86_64-w64-mingw32-windres -i Win/DreamyMusicPiPL.rc -o build/Windows/Release/DreamyMusicPiPL.o
+x86_64-w64-mingw32-g++ -std=c++17 -O3 -ffast-math -fno-finite-math-only -mavx2 -mfma -shared \
+    -DAE_OS_WIN=1 -DAE_PROC_INTELx64=1 -D_CRT_SECURE_NO_WARNINGS=1 -DNDEBUG=1 -D_WIN32_WINNT=0x0601 \
+    -Isrc -Iinclude/AE_SDK src/DreamyMusic.cpp build/Windows/Release/DreamyMusicPiPL.o Win/DreamyMusic.def \
+    -o build/Windows/Release/DreamyMusic.aex -static -static-libgcc -static-libstdc++ -Wl,--kill-at
+```
+
+#### Installing into Adobe After Effects (Windows)
+Copy `DreamyMusic.aex` into Adobe's shared Windows **MediaCore** plug-ins directory:
+```cmd
+copy /Y "build\Windows\Release\DreamyMusic.aex" "C:\Program Files\Adobe\Common\Plug-ins\7.0\MediaCore\"
+```
+On Windows, session logs are automatically written to `%LOCALAPPDATA%\DreamyMusicVHS\logs\` and `%TEMP%\dreamymusic_logs\`.
 
 ---
 
@@ -254,7 +288,7 @@ To make both casual monitoring and deep low-level debugging effortless, the plug
 * **Locations**:
   - Project Folder: [`logs/`](logs/) (`dreamymusic_YYYY-MM-DD_HH-MM-SS.log` & `latest.log`)
   - Temp Mirror: `/tmp/dreamymusic_logs/`
-* **Purpose**: Clean, human-readable real-time status updates with icons—never floods your terminal during playback.
+* **Purpose**: Clean, easily readable real-time status updates with icons that won't flood your terminal during playback.
 * **What It Logs**:
   - `✨ Dreamy Music VHS v1.0 Loaded`: Mach-O load, `PluginDataEntryFunction2` host registration, and active session log file paths.
   - `✅ [INIT]`: `PF_Cmd_GLOBAL_SETUP` version check (`0x80001 == 524289`), Deep Color (8/16-bit), and Multi-Frame Rendering flags.
@@ -322,6 +356,6 @@ dreamymusic/
   - After Effects serializes parameter values inside `.aep` project files when an effect is first added. While [`Render()`](src/DreamyMusic.cpp) includes automatic recovery for layers saved with legacy clamped values, simply click the blue **`Reset`** link next to **Dreamy Music VHS** in the Effect Controls panel to snap all UI slider readouts to their factory defaults.
 * **The effect doesn't react to my music layer**:
   1. Ensure **Audio Source Layer** in **Music & Audio Reactivity** is set to the layer that actually contains audio (e.g. your `.mp3`/`.wav` track or video layer with audio), not a silent layer.
-  2. Check [`logs/latest_detailed.log`](logs/latest_detailed.log) for the `[AUDIO DSP]` line—if `Peak=0.0000`, verify the selected layer's audio isn't muted or trimmed out at the current composition time.
+  2. Check [`logs/latest_detailed.log`](logs/latest_detailed.log) for the `[AUDIO DSP]` line-if `Peak=0.0000`, verify that the selected layer's audio isn't muted or trimmed out at the current composition time.
 * **After Effects doesn't show recent code changes after rebuilding**:
   - Make sure you copied `build/Release/DreamyMusic.plugin` to `/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/DreamyMusic.plugin` and restarted After Effects. You can verify the exact session log at the top of `logs/latest.log` (`✨ Dreamy Music VHS v1.0 Loaded into Adobe After Effects`).

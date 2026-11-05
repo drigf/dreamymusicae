@@ -1,0 +1,5 @@
+LIBRARY "DreamyMusic.aex"
+EXPORTS
+    EffectMain
+    PluginDataEntryFunction2
+

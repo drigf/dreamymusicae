@@ -15,9 +15,20 @@ static void DreamyDetailLog(const char* fmt, ...);
 #include <cstdarg>
 #include <ctime>
 #include <chrono>
+#include <cstdlib>
+#if defined(_WIN32)
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#include <direct.h>
+#else
 #include <sys/stat.h>
 #include <unistd.h>
-#include <cstdlib>
+#endif
 #if defined(__APPLE__)
 #include <dispatch/dispatch.h>
 #endif
@@ -27,7 +38,21 @@ static void DreamyDetailLog(const char* fmt, ...);
 #else
 #define DREAMY_DEFAULT_LOG_DIR ""
 #endif
+#if defined(_WIN32)
+#define DREAMY_PATH_SEP "\\"
+#else
+#define DREAMY_PATH_SEP "/"
+#endif
 #define DREAMY_TMP_LOG_DIR "/tmp/dreamymusic_logs"
+
+static void MakeDirectoryCrossPlatform(const char* path) {
+    if (!path || path[0] == '\0') return;
+#if defined(_WIN32)
+    ::_mkdir(path);
+#else
+    ::mkdir(path, 0777);
+#endif
+}
 
 static int g_render_frame_counter = 0;
 static bool g_log_next_render = true;
@@ -55,16 +80,38 @@ static void EnsureLogSessionPaths() {
     } else if (DREAMY_DEFAULT_LOG_DIR[0] != '\0') {
         std::snprintf(g_workspace_log_dir, sizeof(g_workspace_log_dir), "%s", DREAMY_DEFAULT_LOG_DIR);
     } else {
+#if defined(_WIN32)
+        const char* local_appdata = std::getenv("LOCALAPPDATA");
+        if (local_appdata && local_appdata[0] != '\0') {
+            char parent_dir[512] = {0};
+            std::snprintf(parent_dir, sizeof(parent_dir), "%s\\DreamyMusicVHS", local_appdata);
+            MakeDirectoryCrossPlatform(parent_dir);
+            std::snprintf(g_workspace_log_dir, sizeof(g_workspace_log_dir), "%s\\logs", parent_dir);
+        }
+#else
         const char* home = std::getenv("HOME");
         if (home && home[0] != '\0') {
             std::snprintf(g_workspace_log_dir, sizeof(g_workspace_log_dir), "%s/Library/Logs/DreamyMusicVHS", home);
         }
+#endif
     }
 
     if (g_workspace_log_dir[0] != '\0') {
-        ::mkdir(g_workspace_log_dir, 0777);
+        MakeDirectoryCrossPlatform(g_workspace_log_dir);
     }
-    ::mkdir(DREAMY_TMP_LOG_DIR, 0777);
+
+    char tmp_log_dir[512] = {0};
+#if defined(_WIN32)
+    const char* win_temp = std::getenv("TEMP");
+    if (!win_temp || win_temp[0] == '\0') win_temp = std::getenv("TMP");
+    if (win_temp && win_temp[0] != '\0') {
+        std::snprintf(tmp_log_dir, sizeof(tmp_log_dir), "%s\\dreamymusic_logs", win_temp);
+        MakeDirectoryCrossPlatform(tmp_log_dir);
+    }
+#else
+    std::snprintf(tmp_log_dir, sizeof(tmp_log_dir), "%s", DREAMY_TMP_LOG_DIR);
+    MakeDirectoryCrossPlatform(tmp_log_dir);
+#endif
 
     char stamp[32] = {0};
     std::time_t now = std::time(nullptr);
@@ -79,10 +126,11 @@ static void EnsureLogSessionPaths() {
 
     if (g_workspace_log_dir[0] != '\0') {
         std::snprintf(g_workspace_log_path, sizeof(g_workspace_log_path),
-                      "%s/dreamymusic_%s.log", g_workspace_log_dir, stamp);
+                      "%s" DREAMY_PATH_SEP "dreamymusic_%s.log", g_workspace_log_dir, stamp);
         std::snprintf(g_workspace_detail_log_path, sizeof(g_workspace_detail_log_path),
-                      "%s/dreamymusic_detailed_%s.log", g_workspace_log_dir, stamp);
+                      "%s" DREAMY_PATH_SEP "dreamymusic_detailed_%s.log", g_workspace_log_dir, stamp);
 
+#if !defined(_WIN32)
         // Maintain 'latest.log' and 'latest_detailed.log' symlinks inside logs/ for easy tailing
         char ws_latest[512] = {0};
         char ws_latest_detail[512] = {0};
@@ -92,19 +140,24 @@ static void EnsureLogSessionPaths() {
         ::unlink(ws_latest_detail);
         ::symlink(g_workspace_log_path, ws_latest);
         ::symlink(g_workspace_detail_log_path, ws_latest_detail);
+#endif
     }
 
-    std::snprintf(g_tmp_log_path, sizeof(g_tmp_log_path),
-                  "%s/dreamymusic_%s.log", DREAMY_TMP_LOG_DIR, stamp);
-    std::snprintf(g_tmp_detail_log_path, sizeof(g_tmp_detail_log_path),
-                  "%s/dreamymusic_detailed_%s.log", DREAMY_TMP_LOG_DIR, stamp);
+    if (tmp_log_dir[0] != '\0') {
+        std::snprintf(g_tmp_log_path, sizeof(g_tmp_log_path),
+                      "%s" DREAMY_PATH_SEP "dreamymusic_%s.log", tmp_log_dir, stamp);
+        std::snprintf(g_tmp_detail_log_path, sizeof(g_tmp_detail_log_path),
+                      "%s" DREAMY_PATH_SEP "dreamymusic_detailed_%s.log", tmp_log_dir, stamp);
 
-    const char* tmp_latest = DREAMY_TMP_LOG_DIR "/latest.log";
-    const char* tmp_latest_detail = DREAMY_TMP_LOG_DIR "/latest_detailed.log";
-    ::unlink(tmp_latest);
-    ::unlink(tmp_latest_detail);
-    ::symlink(g_tmp_log_path, tmp_latest);
-    ::symlink(g_tmp_detail_log_path, tmp_latest_detail);
+#if !defined(_WIN32)
+        const char* tmp_latest = DREAMY_TMP_LOG_DIR "/latest.log";
+        const char* tmp_latest_detail = DREAMY_TMP_LOG_DIR "/latest_detailed.log";
+        ::unlink(tmp_latest);
+        ::unlink(tmp_latest_detail);
+        ::symlink(g_tmp_log_path, tmp_latest);
+        ::symlink(g_tmp_detail_log_path, tmp_latest_detail);
+#endif
+    }
 }
 
 static void WriteLogToFile(const char* path, const char* time_buf, const char* msg_buf) {
@@ -161,7 +214,9 @@ static void DreamyLog(const char* fmt, ...) {
     WriteLogToFile(g_workspace_detail_log_path, time_buf, msg_buf);
 }
 
+#if defined(__GNUC__) || defined(__clang__)
 __attribute__((constructor))
+#endif
 static void OnDreamyPluginLoaded() {
     EnsureLogSessionPaths();
     DreamyLog("====================================================================");
@@ -170,6 +225,17 @@ static void OnDreamyPluginLoaded() {
     DreamyLog("📂 Detailed Log: %s", g_workspace_detail_log_path);
     DreamyLog("====================================================================");
 }
+
+#if defined(_WIN32) && defined(_MSC_VER)
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
+    (void)hinstDLL;
+    (void)lpvReserved;
+    if (fdwReason == DLL_PROCESS_ATTACH) {
+        OnDreamyPluginLoaded();
+    }
+    return TRUE;
+}
+#endif
 
 static const char* CmdToFriendlyName(PF_Cmd cmd) {
     switch (cmd) {
@@ -774,12 +840,15 @@ RenderRowTask(
         return PF_Err_INTERNAL_STRUCT_DAMAGED;
     }
 
+    DreamyDSP::DreamyRowState rs;
+    DreamyDSP::PrecomputeRowState(*rp, y, rs);
+
     char* dst_base = reinterpret_cast<char*>(rp->output_world->data);
 
     if (rp->is_16bit) {
         PF_Pixel16* out_row = reinterpret_cast<PF_Pixel16*>(dst_base + y * rp->output_world->rowbytes);
         for (A_long x = 0; x < rp->width; ++x) {
-            FloatRGBA c = DreamyDSP::SynthesizePixel(*rp, x, y);
+            FloatRGBA c = DreamyDSP::SynthesizePixel(*rp, rs, x, y);
             out_row[x].red   = (A_u_short)(c.r * 32768.0f + 0.5f);
             out_row[x].green = (A_u_short)(c.g * 32768.0f + 0.5f);
             out_row[x].blue  = (A_u_short)(c.b * 32768.0f + 0.5f);
@@ -788,7 +857,7 @@ RenderRowTask(
     } else {
         PF_Pixel8* out_row = reinterpret_cast<PF_Pixel8*>(dst_base + y * rp->output_world->rowbytes);
         for (A_long x = 0; x < rp->width; ++x) {
-            FloatRGBA c = DreamyDSP::SynthesizePixel(*rp, x, y);
+            FloatRGBA c = DreamyDSP::SynthesizePixel(*rp, rs, x, y);
             out_row[x].red   = (A_u_char)(c.r * 255.0f + 0.5f);
             out_row[x].green = (A_u_char)(c.g * 255.0f + 0.5f);
             out_row[x].blue  = (A_u_char)(c.b * 255.0f + 0.5f);
@@ -800,16 +869,45 @@ RenderRowTask(
 }
 
 #if defined(__APPLE__)
+static constexpr A_long kRowsPerGCDChunk = 8;
+
 static void
-RenderStripGCD(void *context, size_t strip_idx)
+RenderStripGCD(void *context, size_t chunk_idx)
 {
     DreamyRenderParams* rp = reinterpret_cast<DreamyRenderParams*>(context);
     if (!rp || rp->height <= 0) return;
-    const A_long num_strips = 8;
-    A_long y_start = ((A_long)strip_idx * rp->height) / num_strips;
-    A_long y_end   = (((A_long)strip_idx + 1) * rp->height) / num_strips;
+    A_long y_start = (A_long)chunk_idx * kRowsPerGCDChunk;
+    A_long y_end   = y_start + kRowsPerGCDChunk;
+    if (y_end > rp->height) y_end = rp->height;
     for (A_long y = y_start; y < y_end; ++y) {
-        RenderRowTask(context, (A_long)strip_idx, y, rp->height);
+        RenderRowTask(context, (A_long)chunk_idx, y, rp->height);
+    }
+}
+#elif defined(_WIN32)
+static constexpr A_long kRowsPerWinChunk = 8;
+
+struct Win32RenderDispatchContext {
+    DreamyRenderParams* rp;
+    A_long              num_chunks;
+    volatile LONG       next_chunk;
+};
+
+static VOID CALLBACK
+RenderChunkWin32Callback(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
+{
+    (void)instance;
+    (void)work;
+    Win32RenderDispatchContext* ctx = reinterpret_cast<Win32RenderDispatchContext*>(context);
+    if (!ctx || !ctx->rp) return;
+    for (;;) {
+        LONG chunk_idx = InterlockedIncrement(&ctx->next_chunk) - 1;
+        if (chunk_idx >= ctx->num_chunks) break;
+        A_long y_start = (A_long)chunk_idx * kRowsPerWinChunk;
+        A_long y_end   = y_start + kRowsPerWinChunk;
+        if (y_end > ctx->rp->height) y_end = ctx->rp->height;
+        for (A_long y = y_start; y < y_end; ++y) {
+            RenderRowTask(ctx->rp, (A_long)chunk_idx, y, ctx->rp->height);
+        }
     }
 }
 #endif
@@ -1033,6 +1131,9 @@ Render(
         }
     }
 
+    /* Precompute frame-invariant math constants and 1024-entry Gradient LUT */
+    DreamyDSP::PrecomputeFrameConstants(rp);
+
     /* 8. Dispatch Multi-Threaded Scanline Render via Grand Central Dispatch */
     g_render_frame_counter++;
     bool should_log_this_frame = (g_render_frame_counter <= 5 || g_log_next_render || (g_render_frame_counter % 15) == 0);
@@ -1059,11 +1160,45 @@ Render(
 
 #if defined(__APPLE__)
     if (rp.height >= 16) {
+        size_t num_chunks = (size_t)((rp.height + kRowsPerGCDChunk - 1) / kRowsPerGCDChunk);
         dispatch_apply_f(
-            8,
+            num_chunks,
             dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0),
             &rp,
             RenderStripGCD);
+    } else {
+        for (A_long y = 0; y < rp.height; ++y) {
+            RenderRowTask(&rp, 0, y, rp.height);
+        }
+    }
+#elif defined(_WIN32)
+    if (rp.height >= 16) {
+        Win32RenderDispatchContext ctx;
+        ctx.rp         = &rp;
+        ctx.num_chunks = (rp.height + kRowsPerWinChunk - 1) / kRowsPerWinChunk;
+        ctx.next_chunk = 0;
+
+        SYSTEM_INFO sysinfo;
+        GetSystemInfo(&sysinfo);
+        A_long num_workers = (A_long)(sysinfo.dwNumberOfProcessors > 0 ? sysinfo.dwNumberOfProcessors : 8);
+        if (num_workers > ctx.num_chunks) num_workers = ctx.num_chunks;
+        if (num_workers > 32) num_workers = 32;
+
+        PTP_WORK work = CreateThreadpoolWork(RenderChunkWin32Callback, &ctx, NULL);
+        if (work) {
+            for (A_long w = 0; w < num_workers - 1; ++w) {
+                SubmitThreadpoolWork(work);
+            }
+            RenderChunkWin32Callback(NULL, &ctx, work);
+            WaitForThreadpoolWorkCallbacks(work, FALSE);
+            CloseThreadpoolWork(work);
+        } else if (in_data->utils && in_data->utils->iterate_generic) {
+            err = PF_ITERATE_GENERIC(rp.height, &rp, RenderRowTask);
+        } else {
+            for (A_long y = 0; y < rp.height; ++y) {
+                RenderRowTask(&rp, 0, y, rp.height);
+            }
+        }
     } else {
         for (A_long y = 0; y < rp.height; ++y) {
             RenderRowTask(&rp, 0, y, rp.height);

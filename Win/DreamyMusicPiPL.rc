@@ -1,0 +1,104 @@
+/*******************************************************************/
+/*  DreamyMusicPiPL.rc                                             */
+/*  Windows Resource Script (PiPL) for Adobe After Effects (x64)   */
+/*  Compatible with both Microsoft rc.exe (MSVC) and windres       */
+/*******************************************************************/
+
+16000 PiPL DISCARDABLE
+BEGIN
+    0x0001,                     /* Windows PiPL marker (short = 1) */
+    0x0000, 0x0000,             /* kCurrentPiPLVersion = 0L */
+    0x000D, 0x0000,             /* Property count = 13L */
+
+    /* [1] Kind { AEEffect ('eFKT') } */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x6E64, 0x6B69,             /* 'kind' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x4B54, 0x6546,             /* 'eFKT' */
+
+    /* [2] Name { "Dreamy Music VHS" } (Pascal string, 20 bytes aligned) */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x6D65, 0x6E61,             /* 'name' */
+    0x0000, 0x0000,             /* 0L */
+    0x0014, 0x0000,             /* 20L */
+    0x4410, 0x6572, 0x6D61, 0x2079, 0x754D, 0x6973, 0x2063, 0x4856, 0x0053, 0x0000,
+
+    /* [3] Category { "Stylize" } (Pascal string, 8 bytes aligned) */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x7467, 0x6361,             /* 'catg' */
+    0x0000, 0x0000,             /* 0L */
+    0x0008, 0x0000,             /* 8L */
+    0x5307, 0x7974, 0x696C, 0x657A,
+
+    /* [4] CodeWin64X86 { "EffectMain" } (C string, 12 bytes aligned) */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x3634, 0x3836,             /* '8664' */
+    0x0000, 0x0000,             /* 0L */
+    0x000C, 0x0000,             /* 12L */
+    0x6645, 0x6566, 0x7463, 0x614D, 0x6E69, 0x0000,
+
+    /* [5] AE_PiPL_Version { 2, 0 } */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x5652, 0x6550,             /* 'ePVR' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x0000, 0x0002,
+
+    /* [6] AE_Effect_Spec_Version { 13, 29 } */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x5652, 0x6553,             /* 'eSVR' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x001D, 0x000D,
+
+    /* [7] AE_Effect_Version { 524289 } (0x00080001) */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x4552, 0x6556,             /* 'eVER' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x0001, 0x0008,
+
+    /* [8] AE_Effect_Info_Flags { 0 } */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x4E46, 0x6549,             /* 'eINF' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x0000, 0x0000,
+
+    /* [9] AE_Effect_Global_OutFlags { 0x06000404 } */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x4C4F, 0x6547,             /* 'eGLO' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x0404, 0x0600,
+
+    /* [10] AE_Effect_Global_OutFlags_2 { 0x08000008 } */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x4C32, 0x6547,             /* 'eGL2' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x0008, 0x0800,
+
+    /* [11] AE_Effect_Match_Name { "ADBE DreamyMusicVHS" } (Pascal string, 20 bytes) */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x4E41, 0x654D,             /* 'eMNA' */
+    0x0000, 0x0000,             /* 0L */
+    0x0014, 0x0000,             /* 20L */
+    0x4113, 0x4244, 0x2045, 0x7244, 0x6165, 0x796D, 0x754D, 0x6973, 0x5663, 0x5348,
+
+    /* [12] AE_Reserved_Info { 8 } */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x464C, 0x6165,             /* 'aeFL' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x0008, 0x0000,
+
+    /* [13] AE_Effect_Support_URL { "" } */
+    0x494D, 0x3842,             /* '8BIM' */
+    0x524C, 0x6555,             /* 'eURL' */
+    0x0000, 0x0000,             /* 0L */
+    0x0004, 0x0000,             /* 4L */
+    0x0000, 0x0000
+END
+
