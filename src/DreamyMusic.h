@@ -39,7 +39,8 @@ enum {
 
     /* 2. Gradient Color Palette */
     PARAM_TOPIC_GRADIENT_START,
-    PARAM_GRADIENT_MODE,            /* Popup: Custom 4-Stop, Sunset Dream, Neon Oscilloscope, Acid Circuit, Cyberpunk VHS, Thermal CRT, Pastel Vaporwave */
+    PARAM_GRADIENT_ENABLE,          /* Enable / Disable Gradient Colorizer (keep original colors when off) */
+    PARAM_GRADIENT_MODE,            /* Popup: Custom 4-Stop, Sunset Dream, Neon Oscilloscope, Acid Circuit, Cyberpunk VHS, Thermal CRT, Pastel Vaporwave, Off */
     PARAM_COLOR_SHADOW,             /* Stop 1: Deep Shadows */
     PARAM_COLOR_MID_LOW,            /* Stop 2: Low Midtones */
     PARAM_COLOR_MID_HIGH,           /* Stop 3: High Midtones */
@@ -115,6 +116,7 @@ enum {
     ID_GRADIENT_CYCLE,
     ID_GRADIENT_AUDIO_SHIFT,
     ID_TOPIC_GRADIENT_END,
+    ID_GRADIENT_ENABLE = 220,
 
     ID_TOPIC_FM_START = 300,
     ID_FM_ENABLE,
@@ -162,7 +164,8 @@ enum {
     GRAD_MODE_NEON_OSCILLOSCOPE,    /* Amber gold -> hot pink -> electric violet -> laser cyan */
     GRAD_MODE_CYBERPUNK_VHS,        /* Midnight blue -> neon magenta -> cyan -> warm cream */
     GRAD_MODE_THERMAL_CRT,          /* Void black -> crimson -> solar gold -> incandescent white */
-    GRAD_MODE_PASTEL_VAPORWAVE      /* Twilight plum -> dreamy rose -> mint aqua -> soft lavender */
+    GRAD_MODE_PASTEL_VAPORWAVE,     /* Twilight plum -> dreamy rose -> mint aqua -> soft lavender */
+    GRAD_MODE_OFF                   /* Off: Preserve 100% original footage colors */
 };
 
 /* CRT Phosphor Mask Modes (1-based popup index in AE) */
@@ -202,6 +205,7 @@ typedef struct {
     float       audio_peak_sample;
 
     /* Gradient Settings */
+    A_Boolean   gradient_enable;
     A_long      gradient_mode;
     FloatRGBA   stops[4];           /* 4-stop active palette */
     float       gradient_mix;       /* 0.0 - 1.0 */

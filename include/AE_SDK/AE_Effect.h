@@ -38,6 +38,7 @@ typedef uint8_t         A_Boolean;
 typedef double          A_FpLong;
 typedef float           A_FpShort;
 typedef int32_t         A_Fixed;
+typedef uint32_t        PF_UFixed;
 typedef int64_t         A_int64;
 typedef uint64_t        A_u_int64;
 typedef void*           A_Handle;

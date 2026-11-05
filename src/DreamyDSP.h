@@ -625,7 +625,7 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
     /*--------------------------------------------------------------
      * STAGE G: 4-Stop Editable / Preset Gradient Colorizer
      *--------------------------------------------------------------*/
-    if (rp.gradient_mix > 0.001f) {
+    if (rp.gradient_enable && rp.gradient_mode != GRAD_MODE_OFF && rp.gradient_mix > 0.001f) {
         /* Map pixel luminance + FM wave harmonic + Rutt-Etra ribbon intensity through the 4-stop gradient */
         float synth_luma = Luminance(base_col);
         if (rp.fm_enable) {
@@ -653,6 +653,12 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, A_long px, A_long
         base_col.r = Lerp(base_col.r, grad_col.r, rp.gradient_mix);
         base_col.g = Lerp(base_col.g, grad_col.g, rp.gradient_mix);
         base_col.b = Lerp(base_col.b, grad_col.b, rp.gradient_mix);
+    } else if (rp.fm_enable && rutt_ribbon_glow > 0.01f) {
+        /* When gradient colors are turned off, preserve original footage colors while keeping subtle Rutt-Etra beam glow */
+        float boost = 1.0f + rutt_ribbon_glow * 0.22f;
+        base_col.r = Clamp01(base_col.r * boost);
+        base_col.g = Clamp01(base_col.g * boost);
+        base_col.b = Clamp01(base_col.b * boost);
     }
 
     /*--------------------------------------------------------------

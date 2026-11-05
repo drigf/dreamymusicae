@@ -6,7 +6,7 @@
 	<integer>13</integer>
 	<key>logs</key>
 	<dict>
-		<key>AB9B4118-A655-4500-9078-9B285525D7E5</key>
+		<key>70D49C9E-B45E-4F92-800F-7AF5E3D03F96</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>AB9B4118-A655-4500-9078-9B285525D7E5.xcactivitylog</string>
+			<string>70D49C9E-B45E-4F92-800F-7AF5E3D03F96.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -40,15 +40,15 @@
 			<key>signature</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>timeStartedRecording</key>
-			<real>815598340.31185997</real>
+			<real>815607492.95143199</real>
 			<key>timeStoppedRecording</key>
-			<real>815598341.93041003</real>
+			<real>815607494.00884998</real>
 			<key>title</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>uniqueIdentifier</key>
-			<string>AB9B4118-A655-4500-9078-9B285525D7E5</string>
+			<string>70D49C9E-B45E-4F92-800F-7AF5E3D03F96</string>
 		</dict>
-		<key>BE818F93-B661-4C0C-9ED3-3CB16AB5387E</key>
+		<key>A7036628-F8FE-4CB9-A242-C83297B2600F</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -57,7 +57,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>BE818F93-B661-4C0C-9ED3-3CB16AB5387E.xcactivitylog</string>
+			<string>A7036628-F8FE-4CB9-A242-C83297B2600F.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -82,13 +82,13 @@
 			<key>signature</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>timeStartedRecording</key>
-			<real>815597180.35734105</real>
+			<real>815607148.14865506</real>
 			<key>timeStoppedRecording</key>
-			<real>815597181.84056103</real>
+			<real>815607150.07176602</real>
 			<key>title</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>uniqueIdentifier</key>
-			<string>BE818F93-B661-4C0C-9ED3-3CB16AB5387E</string>
+			<string>A7036628-F8FE-4CB9-A242-C83297B2600F</string>
 		</dict>
 	</dict>
 </dict>

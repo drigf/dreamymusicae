@@ -15,25 +15,75 @@ static void DreamyDetailLog(const char* fmt, ...);
 #include <cstdarg>
 #include <ctime>
 #include <chrono>
+#include <sys/stat.h>
+#include <unistd.h>
 #if defined(__APPLE__)
 #include <dispatch/dispatch.h>
 #endif
 
-#define DREAMY_LOG_PATH "/tmp/dreamymusic.log"
-#define DREAMY_WORKSPACE_LOG_PATH "/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic.log"
-#define DREAMY_DETAIL_LOG_PATH "/tmp/dreamymusic_detailed.log"
-#define DREAMY_WORKSPACE_DETAIL_LOG_PATH "/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic_detailed.log"
+#define DREAMY_WORKSPACE_LOG_DIR "/Users/niall/Developer/AE Plugins/dreamymusic/logs"
+#define DREAMY_TMP_LOG_DIR "/tmp/dreamymusic_logs"
 
 static int g_render_frame_counter = 0;
 static bool g_log_next_render = true;
 static bool g_logged_legacy_recovery = false;
 
+static bool g_log_paths_initialized = false;
+static char g_workspace_log_path[512] = {0};
+static char g_workspace_detail_log_path[512] = {0};
+static char g_tmp_log_path[512] = {0};
+static char g_tmp_detail_log_path[512] = {0};
+
 /*------------------------------------------------------------------
- * Two-Tier Diagnostic Logging System:
- *   1. DreamyLog       -> Friendly Live Monitor (dreamymusic.log)
- *   2. DreamyDetailLog -> In-Depth Technical Log (dreamymusic_detailed.log)
+ * Two-Tier Diagnostic Logging System (Session-Timestamped in /logs):
+ *   1. DreamyLog       -> Friendly Live Monitor (dreamymusic_YYYY-MM-DD_HH-MM-SS.log)
+ *   2. DreamyDetailLog -> In-Depth Technical Log (dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log)
  *------------------------------------------------------------------*/
+static void EnsureLogSessionPaths() {
+    if (g_log_paths_initialized) return;
+    g_log_paths_initialized = true;
+
+    ::mkdir(DREAMY_WORKSPACE_LOG_DIR, 0777);
+    ::mkdir(DREAMY_TMP_LOG_DIR, 0777);
+
+    char stamp[32] = {0};
+    std::time_t now = std::time(nullptr);
+    struct std::tm* t = std::localtime(&now);
+    if (t) {
+        std::snprintf(stamp, sizeof(stamp), "%04d-%02d-%02d_%02d-%02d-%02d",
+                      t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
+                      t->tm_hour, t->tm_min, t->tm_sec);
+    } else {
+        std::snprintf(stamp, sizeof(stamp), "session");
+    }
+
+    std::snprintf(g_workspace_log_path, sizeof(g_workspace_log_path),
+                  "%s/dreamymusic_%s.log", DREAMY_WORKSPACE_LOG_DIR, stamp);
+    std::snprintf(g_workspace_detail_log_path, sizeof(g_workspace_detail_log_path),
+                  "%s/dreamymusic_detailed_%s.log", DREAMY_WORKSPACE_LOG_DIR, stamp);
+    std::snprintf(g_tmp_log_path, sizeof(g_tmp_log_path),
+                  "%s/dreamymusic_%s.log", DREAMY_TMP_LOG_DIR, stamp);
+    std::snprintf(g_tmp_detail_log_path, sizeof(g_tmp_detail_log_path),
+                  "%s/dreamymusic_detailed_%s.log", DREAMY_TMP_LOG_DIR, stamp);
+
+    // Maintain a 'latest.log' and 'latest_detailed.log' symlink inside logs/ for easy tailing
+    const char* ws_latest = DREAMY_WORKSPACE_LOG_DIR "/latest.log";
+    const char* ws_latest_detail = DREAMY_WORKSPACE_LOG_DIR "/latest_detailed.log";
+    ::unlink(ws_latest);
+    ::unlink(ws_latest_detail);
+    ::symlink(g_workspace_log_path, ws_latest);
+    ::symlink(g_workspace_detail_log_path, ws_latest_detail);
+
+    const char* tmp_latest = DREAMY_TMP_LOG_DIR "/latest.log";
+    const char* tmp_latest_detail = DREAMY_TMP_LOG_DIR "/latest_detailed.log";
+    ::unlink(tmp_latest);
+    ::unlink(tmp_latest_detail);
+    ::symlink(g_tmp_log_path, tmp_latest);
+    ::symlink(g_tmp_detail_log_path, tmp_latest_detail);
+}
+
 static void WriteLogToFile(const char* path, const char* time_buf, const char* msg_buf) {
+    if (!path || path[0] == '\0') return;
     FILE* fp = std::fopen(path, "a");
     if (!fp) return;
     if (time_buf[0] != '\0') {
@@ -45,6 +95,8 @@ static void WriteLogToFile(const char* path, const char* time_buf, const char* m
 }
 
 static void DreamyDetailLog(const char* fmt, ...) {
+    EnsureLogSessionPaths();
+
     char time_buf[32] = {0};
     std::time_t now = std::time(nullptr);
     struct std::tm* t = std::localtime(&now);
@@ -58,11 +110,13 @@ static void DreamyDetailLog(const char* fmt, ...) {
     std::vsnprintf(msg_buf, sizeof(msg_buf), fmt, args);
     va_end(args);
 
-    WriteLogToFile(DREAMY_DETAIL_LOG_PATH, time_buf, msg_buf);
-    WriteLogToFile(DREAMY_WORKSPACE_DETAIL_LOG_PATH, time_buf, msg_buf);
+    WriteLogToFile(g_tmp_detail_log_path, time_buf, msg_buf);
+    WriteLogToFile(g_workspace_detail_log_path, time_buf, msg_buf);
 }
 
 static void DreamyLog(const char* fmt, ...) {
+    EnsureLogSessionPaths();
+
     char time_buf[32] = {0};
     std::time_t now = std::time(nullptr);
     struct std::tm* t = std::localtime(&now);
@@ -76,16 +130,19 @@ static void DreamyLog(const char* fmt, ...) {
     std::vsnprintf(msg_buf, sizeof(msg_buf), fmt, args);
     va_end(args);
 
-    WriteLogToFile(DREAMY_LOG_PATH, time_buf, msg_buf);
-    WriteLogToFile(DREAMY_WORKSPACE_LOG_PATH, time_buf, msg_buf);
-    WriteLogToFile(DREAMY_DETAIL_LOG_PATH, time_buf, msg_buf);
-    WriteLogToFile(DREAMY_WORKSPACE_DETAIL_LOG_PATH, time_buf, msg_buf);
+    WriteLogToFile(g_tmp_log_path, time_buf, msg_buf);
+    WriteLogToFile(g_workspace_log_path, time_buf, msg_buf);
+    WriteLogToFile(g_tmp_detail_log_path, time_buf, msg_buf);
+    WriteLogToFile(g_workspace_detail_log_path, time_buf, msg_buf);
 }
 
 __attribute__((constructor))
 static void OnDreamyPluginLoaded() {
+    EnsureLogSessionPaths();
     DreamyLog("====================================================================");
     DreamyLog("✨ Dreamy Music VHS v%d.%d Loaded into Adobe After Effects", MAJOR_VERSION, MINOR_VERSION);
+    DreamyLog("📂 Session Log: %s", g_workspace_log_path);
+    DreamyLog("📂 Detailed Log: %s", g_workspace_detail_log_path);
     DreamyLog("====================================================================");
 }
 
@@ -119,6 +176,7 @@ static const char* GradientModeToString(A_long mode) {
         case GRAD_MODE_CYBERPUNK_VHS:     return "Cyberpunk VHS";
         case GRAD_MODE_THERMAL_CRT:       return "Thermal Phosphor CRT";
         case GRAD_MODE_PASTEL_VAPORWAVE:  return "Pastel Vaporwave";
+        case GRAD_MODE_OFF:               return "Off (Original Colors)";
         default:                          return "Unknown Preset";
     }
 }
@@ -132,6 +190,7 @@ static const char* ParamIndexToFriendlyName(PF_ParamIndex idx) {
         case PARAM_AUDIO_MID_WEIGHT:     return "Mid Reactivity (Bloom & Color)";
         case PARAM_AUDIO_HIGH_WEIGHT:    return "High Reactivity (Circuit Bend)";
         case PARAM_AUDIO_SMOOTHING:      return "Audio Smoothing (ms)";
+        case PARAM_GRADIENT_ENABLE:      return "Enable Color Gradient";
         case PARAM_GRADIENT_MODE:        return "Palette Preset";
         case PARAM_COLOR_SHADOW:         return "Shadow Color (Stop 1)";
         case PARAM_COLOR_MID_LOW:        return "Low Midtone (Stop 2)";
@@ -349,9 +408,12 @@ ParamsSetup(
     PF_ADD_TOPIC("Dreamy Color Gradient", ID_TOPIC_GRADIENT_START);
 
     AEFX_CLR_STRUCT(def);
+    PF_ADD_CHECKBOXX("Enable Color Gradient", TRUE, PF_ParamFlag_SUPERVISE, ID_GRADIENT_ENABLE);
+
+    AEFX_CLR_STRUCT(def);
     PF_ADD_POPUPX(
         "Palette Preset",
-        7,
+        8,
         GRAD_MODE_SUNSET_DREAM,
         "Custom 4-Stop Gradient|"
         "Sunset Dream (Ref 1 FM)|"
@@ -359,7 +421,8 @@ ParamsSetup(
         "Neon Oscilloscope|"
         "Cyberpunk VHS|"
         "Thermal Phosphor CRT|"
-        "Pastel Vaporwave",
+        "Pastel Vaporwave|"
+        "Off (Original Footage Colors)",
         PF_ParamFlag_SUPERVISE,
         ID_GRADIENT_MODE);
 
@@ -723,7 +786,8 @@ Render(
     float smooth_ms      = (float)params[PARAM_AUDIO_SMOOTHING]->u.fs_d.value;
 
     /* 2. Extract Gradient Palette Settings */
-    A_long grad_mode = params[PARAM_GRADIENT_MODE]->u.pd.value;
+    rp.gradient_enable = (A_Boolean)params[PARAM_GRADIENT_ENABLE]->u.bd.value;
+    A_long grad_mode   = params[PARAM_GRADIENT_MODE]->u.pd.value;
     DreamyDSP::SetupGradientStops(
         rp,
         grad_mode,
@@ -733,6 +797,9 @@ Render(
         params[PARAM_COLOR_HIGHLIGHT]->u.cd.value);
 
     rp.gradient_mix = (float)params[PARAM_GRADIENT_MIX]->u.fs_d.value * 0.01f;
+    if (!rp.gradient_enable || grad_mode == GRAD_MODE_OFF) {
+        rp.gradient_mix = 0.0f;
+    }
     float manual_phase = (float)params[PARAM_GRADIENT_CYCLE]->u.fs_d.value * 0.01f;
     float audio_phase  = (float)params[PARAM_GRADIENT_AUDIO_SHIFT]->u.fs_d.value * 0.01f;
 
@@ -793,7 +860,7 @@ Render(
         mid_weight                = 1.00f;
         high_weight               = 1.20f;
         smooth_ms                 = 75.0f;
-        rp.gradient_mix           = 0.85f;
+        rp.gradient_mix           = (rp.gradient_enable && grad_mode != GRAD_MODE_OFF) ? 0.85f : 0.0f;
         manual_phase              = 0.0f;
         audio_phase               = 0.35f;
         rp.fm_carrier_freq        = 85.0f;
@@ -845,7 +912,7 @@ Render(
                   rp.audio_bass,
                   rp.audio_mid,
                   rp.audio_high,
-                  GradientModeToString(grad_mode),
+                  (rp.gradient_enable && grad_mode != GRAD_MODE_OFF) ? GradientModeToString(grad_mode) : "OFF (Original Colors)",
                   rp.gradient_mix * 100.0f,
                   rp.fm_enable ? "ON" : "off",
                   rp.bend_enable ? "ON" : "off",

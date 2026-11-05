@@ -1,6 +1,6 @@
 # Dreamy Music VHS (`DreamyMusic.plugin`)
 
-An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Music VHS**, match name `ADBE DreamyMusicVHS`) built for **macOS (`arm64` + `x86_64` Universal Binary)**, editable in **VS Code**, and compiled with **Xcode**.
+An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Music VHS**, match name `ADBE DreamyMusicVHS`) built for **macOS (`arm64` + `x86_64` Universal Binary)**.
 
 **Dreamy Music VHS** fuses six analog video synthesis and tape emulation modules into a single real-time pipeline that reacts dynamically to music:
 1. **3-Band Music & Audio Reactivity** (Direct Audio Layer DSP + Keyframe Slider fusion)
@@ -66,11 +66,12 @@ The Effect Controls panel is organized into **6 collapsible topic groups**. The 
 
 ### Group 2: Dreamy Color Gradient *(Starts Open)*
 
-Maps image luminance (plus FM wave ridges and circuit-bent phase contours) through a smooth hermite-interpolated 4-stop color palette while preserving natural highlight roll-off.
+Maps image luminance (plus FM wave ridges and circuit-bent phase contours) through a smooth hermite-interpolated 4-stop color palette while preserving natural highlight roll-off. You can turn off the gradient colors at any time to keep 100% of your original footage colors while keeping FM/Rutt-Etra, VHS, Circuit Bending, and CRT scanlines active.
 
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
-| **Palette Preset** | Popup (7 modes) | `Sunset Dream (Ref 1 FM)` | Choose **Custom 4-Stop Gradient** to use your own color pickers below, or pick one of the 6 built-in curated palettes (listed below). |
+| **Enable Color Gradient** | Checkbox | `On` | Master toggle for the color gradient synthesizer. Uncheck this to turn off the gradient colors and keep 100% of your original video colors. |
+| **Palette Preset** | Popup (8 modes) | `Sunset Dream (Ref 1 FM)` | Choose **Custom 4-Stop Gradient** to use your own color pickers below, pick one of the 6 built-in curated palettes, or choose **Off (Original Footage Colors)** to bypass gradient colorization. |
 | **Shadow Color (Stop 1)** | RGB Picker | `#140524` (Deep Violet) | Color mapped to dark shadows (`Luma 0.00 – 0.33`) when **Palette Preset** is set to `Custom 4-Stop Gradient`. |
 | **Low Midtone (Stop 2)** | RGB Picker | `#E026A6` (Electric Magenta) | Color mapped to lower midtones (`Luma 0.33 – 0.66`) in Custom mode. |
 | **High Midtone (Stop 3)** | RGB Picker | `#FF8F1A` (Fiery Orange-Gold) | Color mapped to upper midtones (`Luma 0.66 – 1.00`) in Custom mode. |
@@ -87,6 +88,7 @@ Maps image luminance (plus FM wave ridges and circuit-bent phase contours) throu
 5. **Cyberpunk VHS**: Midnight blue $\rightarrow$ hot pink $\rightarrow$ electric cyan $\rightarrow$ warm cream.
 6. **Thermal Phosphor CRT**: Void black $\rightarrow$ deep crimson $\rightarrow$ amber gold $\rightarrow$ incandescent white.
 7. **Pastel Vaporwave**: Twilight plum $\rightarrow$ dreamy rose $\rightarrow$ mint aqua $\rightarrow$ soft lavender white.
+8. **Off (Original Footage Colors)**: Turns off the gradient colorizer so all effects render using the layer's original colors.
 
 ---
 
@@ -217,28 +219,35 @@ cp -R "build/Release/DreamyMusic.plugin" "/Library/Application Support/Adobe/Com
 
 ## 5. Two-Tier Live Diagnostic Logging System
 
-To make both casual monitoring and deep low-level debugging effortless, the plugin writes **two separate log files simultaneously** (implemented in [`include/AE_SDK/AE_Macros.h`](include/AE_SDK/AE_Macros.h) and [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp)):
+To make both casual monitoring and deep low-level debugging effortless, the plugin writes **two separate timestamped log files simultaneously** inside the dedicated [`logs/`](logs/) folder every time After Effects loads the plugin (implemented in [`include/AE_SDK/AE_Macros.h`](include/AE_SDK/AE_Macros.h) and [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp)):
 
-### Tier 1: Friendly Live Monitor Log (`dreamymusic.log`)
+* **Timestamped Filename Format**:
+  - Friendly Live Log: `logs/dreamymusic_YYYY-MM-DD_HH-MM-SS.log`
+  - Detailed Technical Log: `logs/dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log`
+* **Automatic Latest Symlinks**:
+  - `logs/latest.log` always points to the newest session's friendly log.
+  - `logs/latest_detailed.log` always points to the newest session's detailed technical log.
+
+### Tier 1: Friendly Live Monitor Log (`logs/dreamymusic_YYYY-MM-DD_HH-MM-SS.log`)
 * **Locations**:
-  - Workspace: [`/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic.log`](dreamymusic.log)
-  - Temp Mirror: `/tmp/dreamymusic.log`
+  - Workspace Folder: [`/Users/niall/Developer/AE Plugins/dreamymusic/logs/`](logs/) (`dreamymusic_YYYY-MM-DD_HH-MM-SS.log` & `latest.log`)
+  - Temp Mirror: `/tmp/dreamymusic_logs/`
 * **Purpose**: Clean, human-readable real-time status updates with icons—never floods your terminal during playback.
 * **What It Logs**:
-  - `✨ Dreamy Music VHS v1.0 Loaded`: Mach-O load & `PluginDataEntryFunction2` host registration.
+  - `✨ Dreamy Music VHS v1.0 Loaded`: Mach-O load, `PluginDataEntryFunction2` host registration, and active session log file paths.
   - `✅ [INIT]`: `PF_Cmd_GLOBAL_SETUP` version check (`0x80001 == 524289`), Deep Color (8/16-bit), and Multi-Frame Rendering flags.
-  - `🎛️ [UI SETUP]`: Confirmation of all 49 registered Effect Controls across the 6 collapsible topic groups.
+  - `🎛️ [UI SETUP]`: Confirmation of all registered Effect Controls across the 6 collapsible topic groups.
   - `🎚️ [CONTROL CHANGED]` / `🎨 [PRESET CHANGED]` / `☑️ [TOGGLE CHANGED]`: Immediate feedback whenever you drag a slider, switch a palette/CRT preset, pick a color stop, or toggle a module in After Effects.
   - `🎬 [RENDER #N]`: Periodic render heartbeats (frames 1–5 and every 30th frame thereafter) summarizing resolution, bit depth, composition timestamp, live 3-band audio levels (`Audio[Bass, Mid, High]`), active gradient preset, and enabled visual modules.
 * **Watch Live in Terminal**:
   ```bash
-  tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic.log"
+  tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/logs/latest.log"
   ```
 
-### Tier 2: In-Depth Technical Diagnostic Log (`dreamymusic_detailed.log`)
+### Tier 2: In-Depth Technical Diagnostic Log (`logs/dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log`)
 * **Locations**:
-  - Workspace: [`/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic_detailed.log`](dreamymusic_detailed.log)
-  - Temp Mirror: `/tmp/dreamymusic_detailed.log`
+  - Workspace Folder: [`/Users/niall/Developer/AE Plugins/dreamymusic/logs/`](logs/) (`dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log` & `latest_detailed.log`)
+  - Temp Mirror: `/tmp/dreamymusic_logs/`
 * **Purpose**: Granular engineering telemetry for verifying ABI struct alignment, DSP audio checkout math, render performance, and pixel buffer changes.
 * **What It Logs**:
   - `[PARAM_DEF]`: Logs every parameter index, display name, `[valid_min .. valid_max]`, `slider=[slider_min .. slider_max]`, and `default` during `PF_Cmd_PARAMS_SETUP`.
@@ -248,7 +257,7 @@ To make both casual monitoring and deep low-level debugging effortless, the plug
   - `[UI_EVENT]`: Raw parameter index, type code, and internal floating-point/integer values on every `PF_Cmd_USER_CHANGED_PARAM`.
 * **Watch Live in Terminal**:
   ```bash
-  tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic_detailed.log"
+  tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/logs/latest_detailed.log"
   ```
 
 ---
@@ -271,8 +280,11 @@ dreamymusic/
 │   ├── DreamyMusic.cpp          # Entry points, GlobalSetup, ParamsSetup, Audio checkout & Render
 │   ├── DreamyMusicPiPL.r        # PiPL resource definition compiled via Apple Rez
 │   └── Info.plist               # macOS bundle metadata (CFBundlePackageType = eFKT)
-├── dreamymusic.log              # Tier 1 Friendly Live Monitor log
-└── dreamymusic_detailed.log     # Tier 2 In-Depth Technical Diagnostic log
+└── logs/                        # Session-timestamped diagnostic logs
+    ├── dreamymusic_YYYY-MM-DD_HH-MM-SS.log          # Tier 1 Friendly Live Monitor log
+    ├── dreamymusic_detailed_YYYY-MM-DD_HH-MM-SS.log # Tier 2 In-Depth Technical log
+    ├── latest.log                                   # Symlink to newest Tier 1 log
+    └── latest_detailed.log                          # Symlink to newest Tier 2 log
 ```
 
 ### Key Engineering Highlights
@@ -288,6 +300,6 @@ dreamymusic/
   - After Effects serializes parameter values inside `.aep` project files when an effect is first added. While [`Render()`](src/DreamyMusic.cpp) includes automatic recovery for layers saved with legacy clamped values, simply click the blue **`Reset`** link next to **Dreamy Music VHS** in the Effect Controls panel to snap all UI slider readouts to their factory defaults.
 * **The effect doesn't react to my music layer**:
   1. Ensure **Audio Source Layer** in **Music & Audio Reactivity** is set to the layer that actually contains audio (e.g. your `.mp3`/`.wav` track or video layer with audio), not a silent layer.
-  2. Check [`dreamymusic_detailed.log`](dreamymusic_detailed.log) for the `[AUDIO DSP]` line—if `peak=0.0000`, verify the selected layer's audio isn't muted or trimmed out at the current composition time.
+  2. Check [`logs/latest_detailed.log`](logs/latest_detailed.log) for the `[AUDIO DSP]` line—if `Peak=0.0000`, verify the selected layer's audio isn't muted or trimmed out at the current composition time.
 * **After Effects doesn't show recent code changes after rebuilding**:
-  - Make sure you copied `build/Release/DreamyMusic.plugin` to `/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/DreamyMusic.plugin` and restarted After Effects. You can verify the exact compile timestamp at the top of `dreamymusic.log` (`✨ Dreamy Music VHS v1.0 Loaded (Built ...)`).
+  - Make sure you copied `build/Release/DreamyMusic.plugin` to `/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/DreamyMusic.plugin` and restarted After Effects. You can verify the exact session log at the top of `logs/latest.log` (`✨ Dreamy Music VHS v1.0 Loaded into Adobe After Effects`).
