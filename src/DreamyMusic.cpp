@@ -15,28 +15,43 @@ static void DreamyLog(const char* fmt, ...);
 #include <ctime>
 
 #define DREAMY_LOG_PATH "/tmp/dreamymusic.log"
+#define DREAMY_WORKSPACE_LOG_PATH "/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic.log"
 
 /*------------------------------------------------------------------
- * Diagnostic File Logger (/tmp/dreamymusic.log)
+ * Diagnostic File Logger (/tmp/dreamymusic.log & workspace log)
  *------------------------------------------------------------------*/
-static void DreamyLog(const char* fmt, ...) {
-    FILE* fp = std::fopen(DREAMY_LOG_PATH, "a");
+static void WriteLogToFile(const char* path, const char* time_buf, const char* msg_buf) {
+    FILE* fp = std::fopen(path, "a");
     if (!fp) return;
+    if (time_buf[0] != '\0') {
+        std::fprintf(fp, "%s", time_buf);
+    }
+    std::fprintf(fp, "%s\n", msg_buf);
+    std::fflush(fp);
+    std::fclose(fp);
+}
 
+static void DreamyLog(const char* fmt, ...) {
+    char time_buf[32] = {0};
     std::time_t now = std::time(nullptr);
     struct std::tm* t = std::localtime(&now);
     if (t) {
-        std::fprintf(fp, "[%02d:%02d:%02d] ", t->tm_hour, t->tm_min, t->tm_sec);
+        std::snprintf(time_buf, sizeof(time_buf), "[%02d:%02d:%02d] ", t->tm_hour, t->tm_min, t->tm_sec);
     }
 
+    char msg_buf[1024] = {0};
     va_list args;
     va_start(args, fmt);
-    std::vfprintf(fp, fmt, args);
+    std::vsnprintf(msg_buf, sizeof(msg_buf), fmt, args);
     va_end(args);
 
-    std::fprintf(fp, "\n");
-    std::fflush(fp);
-    std::fclose(fp);
+    WriteLogToFile(DREAMY_LOG_PATH, time_buf, msg_buf);
+    WriteLogToFile(DREAMY_WORKSPACE_LOG_PATH, time_buf, msg_buf);
+}
+
+__attribute__((constructor))
+static void OnDreamyPluginLoaded() {
+    DreamyLog("=== DreamyMusic.plugin Mach-O binary loaded into process ===");
 }
 
 static const char* CmdToString(PF_Cmd cmd) {

@@ -57,14 +57,15 @@ It fuses **Dreamy VHS & Halation Bloom**, **Frequency Modulation (FM) & Rutt-Etr
 ### Project Layout
 * [`src/DreamyMusic.h`](src/DreamyMusic.h) — Parameter IDs, data structures, and plugin metadata.
 * [`src/DreamyDSP.h`](src/DreamyDSP.h) — 3-band audio analyzer, FM/Rutt-Etra synthesizer, circuit bending, VHS bloom, gradient mapper, and CRT phosphor mask DSP engine.
-* [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp) — After Effects `EffectMain` entry point, parameter registration, and multi-threaded 8-bit/16-bit renderer.
-* [`src/DreamyMusicPiPL.r`](src/DreamyMusicPiPL.r) — Adobe PiPL resource definition compiled via Apple's `Rez` tool.
-* [`include/AE_SDK/`](include/AE_SDK/) — Self-contained After Effects SDK header subset so the project builds out-of-the-box without external dependencies (also pre-configured to search `../AfterEffectsSDK/Examples/Headers` if present).
+* [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp) — After Effects `PluginDataEntryFunction2` & `EffectMain` entry points, parameter registration, diagnostic file logger, and multi-threaded 8-bit/16-bit renderer.
+* [`src/DreamyMusicPiPL.r`](src/DreamyMusicPiPL.r) — Adobe PiPL resource definition (`ma64` / `mi64`) compiled via Apple's `Rez` tool.
+* [`include/AE_SDK/`](include/AE_SDK/) — Self-contained 64-bit After Effects SDK header subset so the project builds out-of-the-box without external dependencies (also pre-configured to search `../AfterEffectsSDK/Examples/Headers` if present).
+* [`dreamymusic.log`](dreamymusic.log) — Live diagnostic log written inside the project root (and mirrored to `/tmp/dreamymusic.log`).
 * [`DreamyMusic.xcodeproj`](DreamyMusic.xcodeproj) — Xcode project configured to build a Universal (`arm64` + `x86_64`) `.plugin` bundle.
 * [`.vscode/`](.vscode/) — VS Code IntelliSense (`c_cpp_properties.json`), build tasks (`tasks.json`), and LLDB debugger attachment (`launch.json`).
 
 ### Build from VS Code
-Press **`Cmd + Shift + B`** in VS Code to run the default build task (`Build DreamyMusic.plugin (Release)`), or open the Command Palette (`Cmd + Shift + P` $\rightarrow$ `Tasks: Run Task`) to choose:
+Press **`Cmd + Shift + B`** in VS Code to run the default build task (`Build DreamyMusic.plugin (Release)`), or open the Command Palette (`Cmd + Shift + P` -> `Tasks: Run Task`) to choose:
 * **Build DreamyMusic.plugin (Release)**
 * **Build DreamyMusic.plugin (Debug)**
 * **Install Plugin to Adobe After Effects MediaCore**
@@ -80,8 +81,34 @@ build/Release/DreamyMusic.plugin
 ```
 
 ### Install into Adobe After Effects
-Copy `build/Release/DreamyMusic.plugin` into Adobe's shared MediaCore plug-ins folder (or your After Effects Plug-ins folder):
+Copy `build/Release/DreamyMusic.plugin` into Adobe's shared MediaCore plug-ins folder (and set ownership so subsequent rebuilds can overwrite it cleanly):
 ```bash
-sudo cp -R "build/Release/DreamyMusic.plugin" "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/"
+sudo rm -rf "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/DreamyMusic.plugin" && \
+sudo cp -R "build/Release/DreamyMusic.plugin" "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/" && \
+sudo chown -R $(whoami):admin "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/DreamyMusic.plugin"
 ```
-Restart After Effects, apply **Effect > Stylize > Dreamy Music VHS** to any footage or solid/adjustment layer, and select your audio track in **Audio Source Layer** (or link **Audio Keyframe Slider** to audio keyframes).
+Restart After Effects (hold **`Shift + Option`** on launch if After Effects previously cached an older plugin scan), apply **Effect > Stylize > Dreamy Music VHS** to any footage or solid/adjustment layer, and select your audio track in **Audio Source Layer** (or link **Audio Keyframe Slider** to audio keyframes).
+
+---
+
+## Diagnostic Logging & Troubleshooting
+
+The plugin includes a built-in diagnostic logger (`DreamyLog` in [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp)) that automatically records:
+* Mach-O binary load events (`OnDreamyPluginLoaded`)
+* `PluginDataEntryFunction2` host handshake and version verification
+* `PF_Cmd_GLOBAL_SETUP` flags and struct ABI verification (`sizeof(PF_InData)`, `sizeof(PF_OutData)`, `sizeof(PF_ParamDef)`)
+* `PF_Cmd_PARAMS_SETUP` parameter registration and any `PF_ADD_PARAM` error codes
+* Any runtime or `PF_Cmd_RENDER` errors
+
+### Where to View the Logs
+Logs are written simultaneously to two locations so they are always accessible:
+1. **In your VS Code Workspace**: Open [`dreamymusic.log`](dreamymusic.log) directly in the VS Code editor.
+2. **In Terminal (`/tmp/dreamymusic.log`)**: Stream live events in real time with:
+   ```bash
+   tail -f /tmp/dreamymusic.log
+   ```
+   Or stream the workspace log:
+   ```bash
+   tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic.log"
+   ```
+
