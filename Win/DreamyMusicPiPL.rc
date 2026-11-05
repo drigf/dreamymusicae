@@ -38,19 +38,19 @@ BEGIN
     0x000C, 0x0000,             /* 12L */
     0x6645, 0x6566, 0x7463, 0x614D, 0x6E69, 0x0000,
 
-    /* [5] AE_PiPL_Version { 2, 0 } */
+    /* [5] AE_PiPL_Version { 2, 0 } (two 16-bit shorts: major=2, minor=0) */
     0x494D, 0x3842,             /* '8BIM' */
     0x5652, 0x6550,             /* 'ePVR' */
     0x0000, 0x0000,             /* 0L */
     0x0004, 0x0000,             /* 4L */
-    0x0000, 0x0002,
+    0x0002, 0x0000,
 
-    /* [6] AE_Effect_Spec_Version { 13, 29 } */
+    /* [6] AE_Effect_Spec_Version { 13, 29 } (two 16-bit shorts: major=13, minor=29) */
     0x494D, 0x3842,             /* '8BIM' */
     0x5652, 0x6553,             /* 'eSVR' */
     0x0000, 0x0000,             /* 0L */
     0x0004, 0x0000,             /* 4L */
-    0x001D, 0x000D,
+    0x000D, 0x001D,
 
     /* [7] AE_Effect_Version { 524289 } (0x00080001) */
     0x494D, 0x3842,             /* '8BIM' */
