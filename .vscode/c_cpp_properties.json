@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "macOS - After Effects Plugin",
+            "includePath": [
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/include/AE_SDK",
+                "${workspaceFolder}/../AfterEffectsSDK/Examples/Headers",
+                "${workspaceFolder}/../AfterEffectsSDK/Examples/Headers/SP",
+                "${workspaceFolder}/../AfterEffectsSDK/Examples/Util"
+            ],
+            "defines": [
+                "AE_OS_MAC=1"
+            ],
+            "macFrameworkPath": [
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64"
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,296 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000012400000100000001 /* DreamyMusic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A10000022400000100000001 /* DreamyMusic.cpp */; };
+		A10000092400000100000001 /* PkgInfo in Resources */ = {isa = PBXBuildFile; fileRef = A10000082400000100000001 /* PkgInfo */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000022400000100000001 /* DreamyMusic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DreamyMusic.cpp; path = src/DreamyMusic.cpp; sourceTree = "<group>"; };
+		A10000032400000100000001 /* DreamyMusic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DreamyMusic.h; path = src/DreamyMusic.h; sourceTree = "<group>"; };
+		A10000042400000100000001 /* DreamyDSP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = DreamyDSP.h; path = src/DreamyDSP.h; sourceTree = "<group>"; };
+		A10000052400000100000001 /* DreamyMusicPiPL.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; name = DreamyMusicPiPL.r; path = src/DreamyMusicPiPL.r; sourceTree = "<group>"; };
+		A10000062400000100000001 /* AE_Effect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AE_Effect.h; path = include/AE_SDK/AE_Effect.h; sourceTree = "<group>"; };
+		A10000072400000100000001 /* AE_Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AE_Macros.h; path = include/AE_SDK/AE_Macros.h; sourceTree = "<group>"; };
+		A10000082400000100000001 /* PkgInfo */ = {isa = PBXFileReference; lastKnownFileType = text; name = PkgInfo; path = Mac/PkgInfo; sourceTree = "<group>"; };
+		A100000A2400000100000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Mac/Info.plist; sourceTree = "<group>"; };
+		A100000B2400000100000001 /* DreamyMusic.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DreamyMusic.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000102400000100000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10000202400000100000001 = {
+			isa = PBXGroup;
+			children = (
+				A10000212400000100000001 /* Source */,
+				A10000222400000100000001 /* AE_SDK */,
+				A10000232400000100000001 /* Resources */,
+				A10000242400000100000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10000212400000100000001 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				A10000022400000100000001 /* DreamyMusic.cpp */,
+				A10000032400000100000001 /* DreamyMusic.h */,
+				A10000042400000100000001 /* DreamyDSP.h */,
+				A10000052400000100000001 /* DreamyMusicPiPL.r */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		A10000222400000100000001 /* AE_SDK */ = {
+			isa = PBXGroup;
+			children = (
+				A10000062400000100000001 /* AE_Effect.h */,
+				A10000072400000100000001 /* AE_Macros.h */,
+			);
+			name = AE_SDK;
+			sourceTree = "<group>";
+		};
+		A10000232400000100000001 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A100000A2400000100000001 /* Info.plist */,
+				A10000082400000100000001 /* PkgInfo */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		A10000242400000100000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A100000B2400000100000001 /* DreamyMusic.plugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000302400000100000001 /* DreamyMusic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000402400000100000001 /* Build configuration list for PBXNativeTarget "DreamyMusic" */;
+			buildPhases = (
+				A10000312400000100000001 /* Sources */,
+				A10000102400000100000001 /* Frameworks */,
+				A10000322400000100000001 /* Resources */,
+				A10000332400000100000001 /* Compile PiPL Resource (.rsrc) */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DreamyMusic;
+			productName = DreamyMusic;
+			productReference = A100000B2400000100000001 /* DreamyMusic.plugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000502400000100000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = A10000512400000100000001 /* Build configuration list for PBXProject "DreamyMusic" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A10000202400000100000001;
+			productRefGroup = A10000242400000100000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000302400000100000001 /* DreamyMusic */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000322400000100000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000092400000100000001 /* PkgInfo in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A10000332400000100000001 /* Compile PiPL Resource (.rsrc) */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/src/DreamyMusicPiPL.r",
+			);
+			name = "Compile PiPL Resource (.rsrc)";
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/DreamyMusic.rsrc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir -p \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nxcrun Rez -d AE_OS_MAC -i \"${SRCROOT}/include/AE_SDK\" -o \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DreamyMusic.rsrc\" -useDF \"${SRCROOT}/src/DreamyMusicPiPL.r\"\ncp -f \"${SRCROOT}/Mac/PkgInfo\" \"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/PkgInfo\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000312400000100000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000012400000100000001 /* DreamyMusic.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10000412400000100000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/build/Debug";
+				EXECUTABLE_NAME = DreamyMusic;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"AE_OS_MAC=1",
+					"DEBUG=1",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/src",
+					"$(SRCROOT)/include/AE_SDK",
+					"$(SRCROOT)/../AfterEffectsSDK/Examples/Headers",
+					"$(SRCROOT)/../AfterEffectsSDK/Examples/Headers/SP",
+					"$(SRCROOT)/../AfterEffectsSDK/Examples/Util",
+				);
+				INFOPLIST_FILE = Mac/Info.plist;
+				INSTALL_PATH = "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.AfterEffects.DreamyMusicVHS;
+				PRODUCT_NAME = DreamyMusic;
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Debug;
+		};
+		A10000422400000100000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/build/Release";
+				EXECUTABLE_NAME = DreamyMusic;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"AE_OS_MAC=1",
+					"NDEBUG=1",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/src",
+					"$(SRCROOT)/include/AE_SDK",
+					"$(SRCROOT)/../AfterEffectsSDK/Examples/Headers",
+					"$(SRCROOT)/../AfterEffectsSDK/Examples/Headers/SP",
+					"$(SRCROOT)/../AfterEffectsSDK/Examples/Util",
+				);
+				INFOPLIST_FILE = Mac/Info.plist;
+				INSTALL_PATH = "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.AfterEffects.DreamyMusicVHS;
+				PRODUCT_NAME = DreamyMusic;
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Release;
+		};
+		A10000522400000100000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A10000532400000100000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000402400000100000001 /* Build configuration list for PBXNativeTarget "DreamyMusic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000412400000100000001 /* Debug */,
+				A10000422400000100000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000512400000100000001 /* Build configuration list for PBXProject "DreamyMusic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000522400000100000001 /* Debug */,
+				A10000532400000100000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000502400000100000001 /* Project object */;
+}

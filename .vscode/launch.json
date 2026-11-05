@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to Adobe After Effects (LLDB)",
+            "type": "lldb",
+            "request": "attach",
+            "program": "/Applications/Adobe After Effects 2025/Adobe After Effects 2025.app/Contents/MacOS/After Effects",
+            "waitFor": true
+        }
+    ]
+}

@@ -1,0 +1,62 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build DreamyMusic.plugin (Release)",
+            "type": "shell",
+            "command": "xcodebuild",
+            "args": [
+                "-project",
+                "${workspaceFolder}/DreamyMusic.xcodeproj",
+                "-scheme",
+                "DreamyMusic",
+                "-configuration",
+                "Release",
+                "-derivedDataPath",
+                "${workspaceFolder}/build/DerivedData",
+                "build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc",
+            "detail": "Compiles Universal (arm64 + x86_64) After Effects plugin bundle via Xcode"
+        },
+        {
+            "label": "Build DreamyMusic.plugin (Debug)",
+            "type": "shell",
+            "command": "xcodebuild",
+            "args": [
+                "-project",
+                "${workspaceFolder}/DreamyMusic.xcodeproj",
+                "-scheme",
+                "DreamyMusic",
+                "-configuration",
+                "Debug",
+                "-derivedDataPath",
+                "${workspaceFolder}/build/DerivedData",
+                "build"
+            ],
+            "group": "build",
+            "problemMatcher": "$gcc",
+            "detail": "Compiles Debug After Effects plugin bundle via Xcode"
+        },
+        {
+            "label": "Install Plugin to Adobe After Effects MediaCore",
+            "type": "shell",
+            "command": "sudo cp -R \"${workspaceFolder}/build/Release/DreamyMusic.plugin\" \"/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/\"",
+            "dependsOn": [
+                "Build DreamyMusic.plugin (Release)"
+            ],
+            "problemMatcher": [],
+            "detail": "Copies built DreamyMusic.plugin to Adobe MediaCore shared Plug-ins directory"
+        },
+        {
+            "label": "Open Project in Xcode",
+            "type": "shell",
+            "command": "open \"${workspaceFolder}/DreamyMusic.xcodeproj\"",
+            "problemMatcher": []
+        }
+    ]
+}
