@@ -476,3 +476,646 @@
 [19:18:16]    ├─ [PERF & BUFFER] RenderTime=91.47ms | In=0x7a0ec00100 (1920x1080, rb=7680) -> Out=0x7a12c00100 (1920x1080, rb=7680) | CenterPixel RGB(230,197,161) -> RGB(178,78,104)
 [19:18:16]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5674 | Raw[B:0.556 M:0.448 H:0.210] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.904 M:0.560 H:0.315]
 [19:18:16]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:18] 🎬 [RENDER #1050] Frame 826 (34.45s) | 1920x1080 (8-bit) | Audio[Bass:0.68 Mid:0.29 High:0.14] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:18]    ├─ [PERF & BUFFER] RenderTime=95.87ms | In=0x7a36400100 (1920x1080, rb=7680) -> Out=0x7a3a400100 (1920x1080, rb=7680) | CenterPixel RGB(92,46,27) -> RGB(255,171,158)
+[19:18:18]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.2833 | Raw[B:0.417 M:0.236 H:0.095] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.678 M:0.295 H:0.143]
+[19:18:18]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.10] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:20] 🎬 [RENDER #1065] Frame 841 (35.08s) | 1920x1080 (8-bit) | Audio[Bass:0.69 Mid:0.36 High:0.19] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:20]    ├─ [PERF & BUFFER] RenderTime=88.71ms | In=0x7a46c00100 (1920x1080, rb=7680) -> Out=0x7a46400100 (1920x1080, rb=7680) | CenterPixel RGB(87,43,26) -> RGB(212,169,151)
+[19:18:20]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4211 | Raw[B:0.425 M:0.287 H:0.125] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.690 M:0.359 H:0.187]
+[19:18:20]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.13] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:21] 🎬 [RENDER #1080] Frame 856 (35.70s) | 1920x1080 (8-bit) | Audio[Bass:0.80 Mid:0.62 High:0.42] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:21]    ├─ [PERF & BUFFER] RenderTime=94.12ms | In=0x7a5bc00100 (1920x1080, rb=7680) -> Out=0x793fc00100 (1920x1080, rb=7680) | CenterPixel RGB(123,93,72) -> RGB(255,172,157)
+[19:18:21]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5584 | Raw[B:0.492 M:0.499 H:0.283] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.800 M:0.624 H:0.424]
+[19:18:21]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.22] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:23] 🎬 [RENDER #1095] Frame 871 (36.33s) | 1920x1080 (8-bit) | Audio[Bass:0.25 Mid:0.55 High:0.49] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:23]    ├─ [PERF & BUFFER] RenderTime=88.42ms | In=0x7a69400100 (1920x1080, rb=7680) -> Out=0x7959c00100 (1920x1080, rb=7680) | CenterPixel RGB(255,222,179) -> RGB(187,10,67)
+[19:18:23]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4159 | Raw[B:0.155 M:0.440 H:0.328] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.253 M:0.550 H:0.492]
+[19:18:23]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.19] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:24] 🎬 [RENDER #1110] Frame 886 (36.95s) | 1920x1080 (8-bit) | Audio[Bass:0.59 Mid:0.44 High:0.34] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:24]    ├─ [PERF & BUFFER] RenderTime=93.75ms | In=0x7a7cc00100 (1920x1080, rb=7680) -> Out=0x7a7e400100 (1920x1080, rb=7680) | CenterPixel RGB(242,203,164) -> RGB(207,112,105)
+[19:18:24]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4542 | Raw[B:0.362 M:0.349 H:0.224] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.588 M:0.436 H:0.336]
+[19:18:24]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.15] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:26] 🎬 [RENDER #1125] Frame 901 (37.58s) | 1920x1080 (8-bit) | Audio[Bass:0.12 Mid:0.20 High:0.18] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:26]    ├─ [PERF & BUFFER] RenderTime=85.66ms | In=0x7a89400100 (1920x1080, rb=7680) -> Out=0x7a88400100 (1920x1080, rb=7680) | CenterPixel RGB(117,91,72) -> RGB(217,161,146)
+[19:18:26]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.2224 | Raw[B:0.072 M:0.162 H:0.118] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.117 M:0.203 H:0.177]
+[19:18:26]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.07] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:27] 🎬 [RENDER #1140] Frame 916 (38.20s) | 1920x1080 (8-bit) | Audio[Bass:0.88 Mid:0.64 High:0.43] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:28]    ├─ [PERF & BUFFER] RenderTime=98.46ms | In=0x7a3ec00100 (1920x1080, rb=7680) -> Out=0x7a41c00100 (1920x1080, rb=7680) | CenterPixel RGB(251,209,169) -> RGB(135,61,133)
+[19:18:28]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5358 | Raw[B:0.545 M:0.515 H:0.284] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.885 M:0.643 H:0.425]
+[19:18:28]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.23] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:29] 🎬 [RENDER #1155] Frame 931 (38.83s) | 1920x1080 (8-bit) | Audio[Bass:0.71 Mid:0.55 High:0.48] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:29]    ├─ [PERF & BUFFER] RenderTime=93.31ms | In=0x7aa0400100 (1920x1080, rb=7680) -> Out=0x7a9fc00100 (1920x1080, rb=7680) | CenterPixel RGB(248,206,163) -> RGB(153,83,101)
+[19:18:29]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5348 | Raw[B:0.437 M:0.437 H:0.317] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.710 M:0.546 H:0.476]
+[19:18:29]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.19] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:31] 🎬 [RENDER #1170] Frame 946 (39.46s) | 1920x1080 (8-bit) | Audio[Bass:0.22 Mid:0.34 High:0.24] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:31]    ├─ [PERF & BUFFER] RenderTime=96.39ms | In=0x79bb400100 (1920x1080, rb=7680) -> Out=0x7aa9400100 (1920x1080, rb=7680) | CenterPixel RGB(205,106,38) -> RGB(247,159,159)
+[19:18:31]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3299 | Raw[B:0.135 M:0.272 H:0.159] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.219 M:0.340 H:0.239]
+[19:18:31]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.12] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:32] 🎬 [RENDER #1185] Frame 961 (40.08s) | 1920x1080 (8-bit) | Audio[Bass:0.84 Mid:0.64 High:0.52] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:32]    ├─ [PERF & BUFFER] RenderTime=100.99ms | In=0x7ac0c00100 (1920x1080, rb=7680) -> Out=0x79cf400100 (1920x1080, rb=7680) | CenterPixel RGB(51,25,8) -> RGB(242,171,161)
+[19:18:32]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5575 | Raw[B:0.514 M:0.508 H:0.347] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.836 M:0.636 H:0.521]
+[19:18:32]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.22] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:34] 🎬 [RENDER #1200] Frame 976 (40.71s) | 1920x1080 (8-bit) | Audio[Bass:0.23 Mid:0.44 High:0.39] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:34]    ├─ [PERF & BUFFER] RenderTime=93.81ms | In=0x7ac5400100 (1920x1080, rb=7680) -> Out=0x7ac1400100 (1920x1080, rb=7680) | CenterPixel RGB(228,198,173) -> RGB(202,13,65)
+[19:18:34]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3443 | Raw[B:0.144 M:0.352 H:0.261] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.234 M:0.440 H:0.391]
+[19:18:34]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.15] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:35] 🎬 [RENDER #1215] Frame 991 (41.33s) | 1920x1080 (8-bit) | Audio[Bass:0.61 Mid:0.50 High:0.48] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:35]    ├─ [PERF & BUFFER] RenderTime=88.44ms | In=0x728e800100 (1920x1080, rb=7680) -> Out=0x7aef400100 (1920x1080, rb=7680) | CenterPixel RGB(66,31,14) -> RGB(246,160,159)
+[19:18:35]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5406 | Raw[B:0.373 M:0.399 H:0.317] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.606 M:0.498 H:0.476]
+[19:18:35]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.17] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:37] 🎬 [RENDER #1230] Frame 1006 (41.96s) | 1920x1080 (8-bit) | Audio[Bass:0.19 Mid:0.43 High:0.44] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:37]    ├─ [PERF & BUFFER] RenderTime=94.61ms | In=0x7b02c00100 (1920x1080, rb=7680) -> Out=0x7afe400100 (1920x1080, rb=7680) | CenterPixel RGB(255,225,184) -> RGB(208,11,63)
+[19:18:37]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3447 | Raw[B:0.118 M:0.348 H:0.292] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.191 M:0.435 H:0.438]
+[19:18:37]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.15] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:39] 🎬 [RENDER #1245] Frame 1021 (42.58s) | 1920x1080 (8-bit) | Audio[Bass:0.84 Mid:0.54 High:0.60] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:39]    ├─ [PERF & BUFFER] RenderTime=92.02ms | In=0x7ae7c00100 (1920x1080, rb=7680) -> Out=0x7af0400100 (1920x1080, rb=7680) | CenterPixel RGB(251,210,167) -> RGB(155,105,159)
+[19:18:39]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5373 | Raw[B:0.518 M:0.431 H:0.402] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.841 M:0.539 H:0.603]
+[19:18:39]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.19] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:40] 🎬 [RENDER #1260] Frame 1036 (43.21s) | 1920x1080 (8-bit) | Audio[Bass:0.70 Mid:0.46 High:0.52] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:40]    ├─ [PERF & BUFFER] RenderTime=93.49ms | In=0x7287c00100 (1920x1080, rb=7680) -> Out=0x728d800100 (1920x1080, rb=7680) | CenterPixel RGB(245,206,162) -> RGB(192,60,117)
+[19:18:40]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5966 | Raw[B:0.428 M:0.370 H:0.344] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.696 M:0.462 H:0.516]
+[19:18:40]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.16] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:42] 🎬 [RENDER #1275] Frame 1051 (43.84s) | 1920x1080 (8-bit) | Audio[Bass:0.22 Mid:0.44 High:0.32] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:42]    ├─ [PERF & BUFFER] RenderTime=85.39ms | In=0x72c2000100 (1920x1080, rb=7680) -> Out=0x72a9800100 (1920x1080, rb=7680) | CenterPixel RGB(245,201,156) -> RGB(142,33,105)
+[19:18:42]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3396 | Raw[B:0.136 M:0.356 H:0.216] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.221 M:0.445 H:0.324]
+[19:18:42]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.16] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:44] 🎬 [RENDER #1290] Frame 1066 (44.46s) | 1920x1080 (8-bit) | Audio[Bass:0.87 Mid:0.63 High:0.25] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:44]    ├─ [PERF & BUFFER] RenderTime=104.30ms | In=0x72ce000100 (1920x1080, rb=7680) -> Out=0x72d0800100 (1920x1080, rb=7680) | CenterPixel RGB(247,205,162) -> RGB(172,21,92)
+[19:18:44]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5083 | Raw[B:0.532 M:0.501 H:0.169] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.865 M:0.626 H:0.253]
+[19:18:44]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.22] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:45] 🎬 [RENDER #1305] Frame 1081 (45.09s) | 1920x1080 (8-bit) | Audio[Bass:0.23 Mid:0.48 High:0.50] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:45]    ├─ [PERF & BUFFER] RenderTime=89.29ms | In=0x78fe800100 (1920x1080, rb=7680) -> Out=0x78fc000100 (1920x1080, rb=7680) | CenterPixel RGB(255,221,176) -> RGB(185,80,104)
+[19:18:45]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3849 | Raw[B:0.140 M:0.380 H:0.333] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.228 M:0.476 H:0.499]
+[19:18:45]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.17] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:47] 🎬 [RENDER #1320] Frame 1096 (45.71s) | 1920x1080 (8-bit) | Audio[Bass:0.98 Mid:0.39 High:0.28] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:47]    ├─ [PERF & BUFFER] RenderTime=101.79ms | In=0x792d400100 (1920x1080, rb=7680) -> Out=0x792b400100 (1920x1080, rb=7680) | CenterPixel RGB(255,218,174) -> RGB(150,65,107)
+[19:18:47]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4536 | Raw[B:0.604 M:0.313 H:0.190] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.981 M:0.391 H:0.284]
+[19:18:47]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.14] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:49] 🎬 [RENDER #1335] Frame 1111 (46.34s) | 1920x1080 (8-bit) | Audio[Bass:0.16 Mid:0.34 High:0.34] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:49]    ├─ [PERF & BUFFER] RenderTime=103.98ms | In=0x795cc00100 (1920x1080, rb=7680) -> Out=0x7956400100 (1920x1080, rb=7680) | CenterPixel RGB(254,217,171) -> RGB(239,26,68)
+[19:18:49]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4004 | Raw[B:0.098 M:0.272 H:0.229] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.159 M:0.339 H:0.344]
+[19:18:49]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.12] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:50] 🎬 [RENDER #1350] Frame 1126 (46.96s) | 1920x1080 (8-bit) | Audio[Bass:0.85 Mid:0.54 High:0.53] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:50]    ├─ [PERF & BUFFER] RenderTime=103.20ms | In=0x7981c00100 (1920x1080, rb=7680) -> Out=0x7984c00100 (1920x1080, rb=7680) | CenterPixel RGB(88,40,17) -> RGB(255,156,162)
+[19:18:50]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5518 | Raw[B:0.520 M:0.432 H:0.353] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.846 M:0.540 H:0.529]
+[19:18:50]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.19] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:52] 🎬 [RENDER #1365] Frame 1141 (47.59s) | 1920x1080 (8-bit) | Audio[Bass:0.71 Mid:0.45 High:0.37] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:52]    ├─ [PERF & BUFFER] RenderTime=91.03ms | In=0x7996400100 (1920x1080, rb=7680) -> Out=0x7999c00100 (1920x1080, rb=7680) | CenterPixel RGB(248,206,161) -> RGB(173,11,78)
+[19:18:52]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4596 | Raw[B:0.435 M:0.359 H:0.245] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.707 M:0.449 H:0.367]
+[19:18:52]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.16] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:53] 🎬 [RENDER #1380] Frame 1156 (48.21s) | 1920x1080 (8-bit) | Audio[Bass:0.18 Mid:0.42 High:0.45] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:18:53]    ├─ [PERF & BUFFER] RenderTime=99.55ms | In=0x79b6c00100 (1920x1080, rb=7680) -> Out=0x79b6400100 (1920x1080, rb=7680) | CenterPixel RGB(254,219,177) -> RGB(210,14,67)
+[19:18:53]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4618 | Raw[B:0.108 M:0.339 H:0.302] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.175 M:0.424 H:0.453]
+[19:18:53]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.15] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:55] ☑️ [TOGGLE CHANGED] Enable Circuit Bending -> DISABLED
+[19:18:55] 🎬 [RENDER #1394] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:ON Bend:off VHS:ON CRT:ON]
+[19:18:55]    ├─ [PERF & BUFFER] RenderTime=81.75ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7968400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(194,166,156)
+[19:18:55]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:18:55]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:18:56] ☑️ [TOGGLE CHANGED] Enable FM & Rutt-Etra -> DISABLED
+[19:18:56] 🎬 [RENDER #1395] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:off Bend:off VHS:ON CRT:ON]
+[19:18:56]    ├─ [PERF & BUFFER] RenderTime=55.79ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79da400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(187,168,159)
+[19:18:56]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:18:56]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:01] ☑️ [TOGGLE CHANGED] Enable CRT Scanlines -> DISABLED
+[19:19:01] 🎬 [RENDER #1396] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:off Bend:off VHS:ON CRT:off]
+[19:19:01]    ├─ [PERF & BUFFER] RenderTime=56.60ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x78f4000100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(147,238,230)
+[19:19:01]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:01]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:02] ☑️ [TOGGLE CHANGED] Enable Dreamy VHS -> DISABLED
+[19:19:02] 🎬 [RENDER #1397] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:85%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:02]    ├─ [PERF & BUFFER] RenderTime=11.07ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79e0c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(218,237,215)
+[19:19:02]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:02]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=85% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 83.00
+[19:19:05] 🎬 [RENDER #1398] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:83%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=13.34ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79d6400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(219,236,214)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=83% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 73.00
+[19:19:05] 🎬 [RENDER #1399] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:73%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 66.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=11.33ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79ddc00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(223,233,208)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=73% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 63.00
+[19:19:05] 🎬 [RENDER #1400] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:63%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 58.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=9.61ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79d8c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(227,230,202)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=63% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1401] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:58%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 55.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=9.26ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79e2400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(229,229,200)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=58% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 53.00
+[19:19:05] 🎬 [RENDER #1402] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:53%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 50.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=9.61ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79db400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(231,227,197)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=53% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 48.00
+[19:19:05] 🎬 [RENDER #1403] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:48%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.54ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x78f2000100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(233,226,194)
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 45.00
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=48% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 42.00
+[19:19:05] 🎬 [RENDER #1404] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:42%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 40.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.72ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79e8400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(235,224,190)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=42% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1405] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:40%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 35.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.91ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x78f5800100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(236,223,189)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=40% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 32.00
+[19:19:05] 🎬 [RENDER #1406] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:32%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 30.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.89ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79e7c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(239,221,184)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=32% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1407] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:30%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 25.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=9.15ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79e7400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(240,220,183)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=30% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 23.00
+[19:19:05] 🎬 [RENDER #1408] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:23%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 21.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.70ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79dc400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(243,218,179)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=23% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 19.00
+[19:19:05] 🎬 [RENDER #1409] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:19%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.87ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x78f1800100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(245,217,177)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 18.00
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=19% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1410] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:18%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 16.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=9.31ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79bdc00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(245,216,176)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=18% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1411] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:16%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 15.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.40ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x78fa800100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(246,216,175)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=16% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 14.00
+[19:19:05] 🎬 [RENDER #1412] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:14%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.92ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79cd400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(246,215,174)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=14% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 13.00
+[19:19:05] 🎬 [RENDER #1413] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:13%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.78ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79a9c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(247,215,174)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=13% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 12.00
+[19:19:05] 🎬 [RENDER #1414] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:12%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.86ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7914c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(247,215,173)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=12% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 11.00
+[19:19:05] 🎬 [RENDER #1415] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:11%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.59ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7917c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(248,214,172)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=11% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 10.00
+[19:19:05] 🎬 [RENDER #1416] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:10%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.27ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79eec00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(248,214,172)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=10% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 9.00
+[19:19:05] 🎬 [RENDER #1417] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:9%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.44ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79ec400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(248,214,171)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=9% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 8.00
+[19:19:05] 🎬 [RENDER #1418] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:8%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.05ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79e3c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(249,213,171)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=8% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 9.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 10.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 11.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 12.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 13.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 14.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 16.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 18.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 21.00
+[19:19:05] 🎬 [RENDER #1419] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:21%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 23.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.93ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79ecc00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(244,217,178)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=21% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 27.00
+[19:19:05] 🎬 [RENDER #1420] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:27%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 30.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.00ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79f8c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(241,219,182)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=27% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 34.00
+[19:19:05] 🎬 [RENDER #1421] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:34%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 38.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.80ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79eac00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(239,221,186)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=34% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1422] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:38%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 41.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.37ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79ed400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(237,222,188)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=38% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 44.00
+[19:19:05] 🎬 [RENDER #1423] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:44%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 46.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 52.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 56.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=32.15ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79e1c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(235,224,191)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=44% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 60.00
+[19:19:05] 🎬 [RENDER #1424] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:60%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 68.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 72.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=14.09ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7900000100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(228,229,201)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=60% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1425] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:72%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 77.00
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 82.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=11.13ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79f4400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(224,233,208)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=72% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1426] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:82%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.88ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7902800100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(220,236,213)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=82% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 88.00
+[19:19:05] 🎬 [RENDER #1427] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:88%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 94.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=8.51ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79f6400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(217,238,217)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=88% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1428] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:94%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05] 🎚️ [CONTROL CHANGED] Gradient Blend -> 100.00
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.89ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79f9c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(215,239,220)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=94% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:05] 🎬 [RENDER #1429] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:100%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:05]    ├─ [PERF & BUFFER] RenderTime=7.81ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79f7400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(213,241,224)
+[19:19:05]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:05]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=100% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 99.00
+[19:19:06] 🎬 [RENDER #1430] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:99%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 98.00
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 97.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=15.71ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a00400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(213,241,223)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=99% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎬 [RENDER #1431] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:97%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 96.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=12.04ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79fdc00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(214,240,222)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=97% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 94.00
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 91.00
+[19:19:06] 🎬 [RENDER #1432] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:91%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 85.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=8.46ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a0a400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(216,239,219)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=91% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 81.00
+[19:19:06] 🎬 [RENDER #1433] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:81%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=8.47ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a02c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(220,235,213)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=81% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 74.00
+[19:19:06] 🎬 [RENDER #1434] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:74%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 60.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=8.93ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79fe400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(223,233,209)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=74% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 52.00
+[19:19:06] 🎬 [RENDER #1435] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:52%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 43.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=8.72ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79fb400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(231,227,196)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=52% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 33.00
+[19:19:06] 🎬 [RENDER #1436] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:33%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 23.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=8.89ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a04400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(239,221,185)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=33% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 14.00
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 5.00
+[19:19:06] 🎬 [RENDER #1437] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:5%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 0.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=8.50ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79f9400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(250,213,169)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=5% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎬 [RENDER #1438] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:0%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=5.84ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79f6c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(252,211,166)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=0% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 1.00
+[19:19:06] 🎬 [RENDER #1439] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:1%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 2.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=11.45ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a08c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(252,211,167)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=1% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎬 [RENDER #1440] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:2%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 3.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=10.69ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a0b400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(251,212,167)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=2% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 4.00
+[19:19:06] 🎬 [RENDER #1441] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:4%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=8.58ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a0bc00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(250,212,168)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=4% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 5.00
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 7.00
+[19:19:06] 🎬 [RENDER #1442] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:7%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 8.00
+[19:19:06]    ├─ [PERF & BUFFER] RenderTime=7.99ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a0ac00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(249,213,170)
+[19:19:06]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:06]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=7% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 9.00
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 11.00
+[19:19:06] 🎚️ [CONTROL CHANGED] Gradient Blend -> 13.00
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 14.00
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 15.00
+[19:19:07] 🎬 [RENDER #1443] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:15%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:07]    ├─ [PERF & BUFFER] RenderTime=7.47ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a18400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(246,216,175)
+[19:19:07]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:07]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=15% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 16.00
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 17.00
+[19:19:07] 🎬 [RENDER #1444] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:17%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 18.00
+[19:19:07]    ├─ [PERF & BUFFER] RenderTime=7.84ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a13c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(245,216,176)
+[19:19:07]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:07]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=17% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 19.00
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 20.00
+[19:19:07] 🎬 [RENDER #1445] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:20%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 21.00
+[19:19:07]    ├─ [PERF & BUFFER] RenderTime=8.04ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x79f3c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(244,217,178)
+[19:19:07]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:07]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=20% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 22.00
+[19:19:07] 🎬 [RENDER #1446] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:22%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 23.00
+[19:19:07]    ├─ [PERF & BUFFER] RenderTime=7.55ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a10400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(243,218,179)
+[19:19:07]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:07]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=22% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 24.00
+[19:19:07] 🎬 [RENDER #1447] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:24%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:07]    ├─ [PERF & BUFFER] RenderTime=7.73ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a10c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(243,218,180)
+[19:19:07]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:07]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=24% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:07] 🎚️ [CONTROL CHANGED] Gradient Blend -> 25.00
+[19:19:07] 🎬 [RENDER #1448] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:07]    ├─ [PERF & BUFFER] RenderTime=7.65ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a03400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(242,219,180)
+[19:19:07]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:07]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.20] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:08] 🎬 [RENDER #1455] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:08]    ├─ [PERF & BUFFER] RenderTime=8.68ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a29c00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(226,183,168)
+[19:19:08]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:08]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.68] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:08] 🎬 [RENDER #1470] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:08]    ├─ [PERF & BUFFER] RenderTime=9.03ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a36400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(238,172,163)
+[19:19:08]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:08]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.75] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:08] 🎬 [RENDER #1485] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:08]    ├─ [PERF & BUFFER] RenderTime=8.24ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a41400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(203,204,180)
+[19:19:08]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:08]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.54] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:09] 🎬 [RENDER #1500] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:09]    ├─ [PERF & BUFFER] RenderTime=17.40ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a4b400100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(247,163,158)
+[19:19:09]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:09]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.81] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:10] 🎬 [RENDER #1515] Frame 321 (13.39s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.58 High:0.39] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:10]    ├─ [PERF & BUFFER] RenderTime=7.70ms | In=0x7974400100 (1920x1080, rb=7680) -> Out=0x7a5fc00100 (1920x1080, rb=7680) | CenterPixel RGB(252,211,166) -> RGB(219,190,172)
+[19:19:10]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.574 M:0.464 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.932 M:0.580 H:0.390]
+[19:19:10]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.64] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:12] 🎬 [RENDER #1530] Frame 324 (13.51s) | 1920x1080 (8-bit) | Audio[Bass:0.84 Mid:0.74 High:0.49] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:12]    ├─ [PERF & BUFFER] RenderTime=9.28ms | In=0x794e400100 (1920x1080, rb=7680) -> Out=0x7a6ac00100 (1920x1080, rb=7680) | CenterPixel RGB(251,210,165) -> RGB(208,198,176)
+[19:19:12]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5871 | Raw[B:0.518 M:0.593 H:0.327] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.842 M:0.741 H:0.490]
+[19:19:12]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.58] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:12] 🎬 [RENDER #1545] Frame 338 (14.10s) | 1920x1080 (8-bit) | Audio[Bass:0.67 Mid:0.54 High:0.43] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:12]    ├─ [PERF & BUFFER] RenderTime=16.03ms | In=0x7a2f400100 (1920x1080, rb=7680) -> Out=0x7a44400100 (1920x1080, rb=7680) | CenterPixel RGB(57,28,17) -> RGB(50,73,71)
+[19:19:12]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4668 | Raw[B:0.413 M:0.431 H:0.286] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.672 M:0.539 H:0.428]
+[19:19:12]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.50] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:12] 🎬 [RENDER #1560] Frame 354 (14.76s) | 1920x1080 (8-bit) | Audio[Bass:0.95 Mid:0.73 High:0.41] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:12]    ├─ [PERF & BUFFER] RenderTime=18.29ms | In=0x723f030100 (1920x1080, rb=7680) -> Out=0x7a76c00100 (1920x1080, rb=7680) | CenterPixel RGB(241,199,156) -> RGB(194,197,174)
+[19:19:12]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.6053 | Raw[B:0.585 M:0.581 H:0.272] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.950 M:0.726 H:0.408]
+[19:19:12]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.58] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:12] 🎬 [RENDER #1575] Frame 369 (15.39s) | 1920x1080 (8-bit) | Audio[Bass:0.83 Mid:0.50 High:0.61] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:13]    ├─ [PERF & BUFFER] RenderTime=35.69ms | In=0x7a87c00100 (1920x1080, rb=7680) -> Out=0x7a8ac00100 (1920x1080, rb=7680) | CenterPixel RGB(236,196,155) -> RGB(190,204,176)
+[19:19:13]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5136 | Raw[B:0.512 M:0.397 H:0.410] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.832 M:0.496 H:0.615]
+[19:19:13]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.48] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:13] 🎬 [RENDER #1590] Frame 384 (16.02s) | 1920x1080 (8-bit) | Audio[Bass:0.47 Mid:0.65 High:0.49] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:13]    ├─ [PERF & BUFFER] RenderTime=16.91ms | In=0x7a80c00100 (1920x1080, rb=7680) -> Out=0x7939400100 (1920x1080, rb=7680) | CenterPixel RGB(234,194,158) -> RGB(180,201,179)
+[19:19:13]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5025 | Raw[B:0.287 M:0.521 H:0.325] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.466 M:0.651 H:0.488]
+[19:19:13]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.55] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:13] 🎬 [RENDER #1605] Frame 399 (16.64s) | 1920x1080 (8-bit) | Audio[Bass:0.30 Mid:0.50 High:0.42] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:13]    ├─ [PERF & BUFFER] RenderTime=12.30ms | In=0x7998c00100 (1920x1080, rb=7680) -> Out=0x7a98400100 (1920x1080, rb=7680) | CenterPixel RGB(251,211,168) -> RGB(193,213,187)
+[19:19:13]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3992 | Raw[B:0.183 M:0.402 H:0.282] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.297 M:0.503 H:0.424]
+[19:19:13]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.49] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:13] 🎬 [RENDER #1620] Frame 415 (17.31s) | 1920x1080 (8-bit) | Audio[Bass:0.47 Mid:0.56 High:0.46] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:13]    ├─ [PERF & BUFFER] RenderTime=17.14ms | In=0x79af400100 (1920x1080, rb=7680) -> Out=0x7903800100 (1920x1080, rb=7680) | CenterPixel RGB(254,219,175) -> RGB(203,212,188)
+[19:19:13]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4709 | Raw[B:0.290 M:0.450 H:0.306] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.471 M:0.562 H:0.459]
+[19:19:13]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.51] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:13] 🎬 [RENDER #1635] Frame 429 (17.89s) | 1920x1080 (8-bit) | Audio[Bass:0.62 Mid:0.32 High:0.18] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:13]    ├─ [PERF & BUFFER] RenderTime=11.50ms | In=0x7990400100 (1920x1080, rb=7680) -> Out=0x791bc00100 (1920x1080, rb=7680) | CenterPixel RGB(230,192,162) -> RGB(201,202,180)
+[19:19:13]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.2851 | Raw[B:0.381 M:0.255 H:0.119] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.620 M:0.319 H:0.179]
+[19:19:13]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.41] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:13] 🎬 [RENDER #1650] Frame 445 (18.56s) | 1920x1080 (8-bit) | Audio[Bass:0.27 Mid:0.48 High:0.36] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:13]    ├─ [PERF & BUFFER] RenderTime=13.85ms | In=0x7ac3400100 (1920x1080, rb=7680) -> Out=0x7ac9c00100 (1920x1080, rb=7680) | CenterPixel RGB(255,218,174) -> RGB(198,216,190)
+[19:19:13]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4881 | Raw[B:0.164 M:0.386 H:0.241] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.267 M:0.482 H:0.362]
+[19:19:13]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.48] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:13] 🎬 [RENDER #1665] Frame 459 (19.14s) | 1920x1080 (8-bit) | Audio[Bass:0.94 Mid:0.76 High:0.46] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:13]    ├─ [PERF & BUFFER] RenderTime=18.33ms | In=0x7aedc00100 (1920x1080, rb=7680) -> Out=0x728f800100 (1920x1080, rb=7680) | CenterPixel RGB(242,204,165) -> RGB(199,196,177)
+[19:19:13]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5440 | Raw[B:0.581 M:0.611 H:0.310] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.944 M:0.764 H:0.465]
+[19:19:13]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.59] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:14] 🎬 [RENDER #1680] Frame 473 (19.73s) | 1920x1080 (8-bit) | Audio[Bass:0.93 Mid:0.63 High:0.46] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:14]    ├─ [PERF & BUFFER] RenderTime=16.47ms | In=0x79f1c00100 (1920x1080, rb=7680) -> Out=0x79f0c00100 (1920x1080, rb=7680) | CenterPixel RGB(238,199,153) -> RGB(183,204,175)
+[19:19:14]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5892 | Raw[B:0.573 M:0.502 H:0.305] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.931 M:0.627 H:0.458]
+[19:19:14]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.54] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:14] 🎬 [RENDER #1695] Frame 489 (20.40s) | 1920x1080 (8-bit) | Audio[Bass:0.37 Mid:0.56 High:0.39] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:14]    ├─ [PERF & BUFFER] RenderTime=12.45ms | In=0x7ae4c00100 (1920x1080, rb=7680) -> Out=0x7affc00100 (1920x1080, rb=7680) | CenterPixel RGB(255,222,182) -> RGB(206,212,192)
+[19:19:14]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3949 | Raw[B:0.229 M:0.447 H:0.260] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.372 M:0.558 H:0.390]
+[19:19:14]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.51] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:14] 🎬 [RENDER #1710] Frame 504 (21.02s) | 1920x1080 (8-bit) | Audio[Bass:0.49 Mid:0.68 High:0.33] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:14]    ├─ [PERF & BUFFER] RenderTime=16.87ms | In=0x7ae5400100 (1920x1080, rb=7680) -> Out=0x7b11000100 (1920x1080, rb=7680) | CenterPixel RGB(248,211,169) -> RGB(202,202,181)
+[19:19:14]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4809 | Raw[B:0.299 M:0.546 H:0.220] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.485 M:0.683 H:0.330]
+[19:19:14]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.56] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:14] 🎬 [RENDER #1725] Frame 520 (21.69s) | 1920x1080 (8-bit) | Audio[Bass:0.45 Mid:0.48 High:0.42] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:14]    ├─ [PERF & BUFFER] RenderTime=28.44ms | In=0x72c1800100 (1920x1080, rb=7680) -> Out=0x72c4000100 (1920x1080, rb=7680) | CenterPixel RGB(229,192,152) -> RGB(189,202,175)
+[19:19:14]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3706 | Raw[B:0.278 M:0.382 H:0.277] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.452 M:0.478 H:0.416]
+[19:19:14]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.48] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:14] 🎬 [RENDER #1740] Frame 376 (15.68s) | 1920x1080 (8-bit) | Audio[Bass:0.25 Mid:0.28 High:0.50] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:14]    ├─ [PERF & BUFFER] RenderTime=9.92ms | In=0x797fc00100 (1920x1080, rb=7680) -> Out=0x72cd000100 (1920x1080, rb=7680) | CenterPixel RGB(190,94,29) -> RGB(178,129,80)
+[19:19:14]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3566 | Raw[B:0.154 M:0.226 H:0.336] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.251 M:0.282 H:0.504]
+[19:19:14]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.39] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:15] 🎬 [RENDER #1755] Frame 381 (15.89s) | 1920x1080 (8-bit) | Audio[Bass:0.49 Mid:0.51 High:0.45] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:15]    ├─ [PERF & BUFFER] RenderTime=10.70ms | In=0x7952c00100 (1920x1080, rb=7680) -> Out=0x78eb000100 (1920x1080, rb=7680) | CenterPixel RGB(255,217,174) -> RGB(200,219,191)
+[19:19:15]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5094 | Raw[B:0.302 M:0.412 H:0.297] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.491 M:0.514 H:0.446]
+[19:19:15]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.42] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:15] 🎬 [RENDER #1770] Frame 394 (16.43s) | 1920x1080 (8-bit) | Audio[Bass:0.65 Mid:0.56 High:0.53] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:15]    ├─ [PERF & BUFFER] RenderTime=30.04ms | In=0x799c400100 (1920x1080, rb=7680) -> Out=0x72d5800100 (1920x1080, rb=7680) | CenterPixel RGB(226,179,142) -> RGB(201,193,165)
+[19:19:15]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.6083 | Raw[B:0.397 M:0.451 H:0.353] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.646 M:0.563 H:0.529]
+[19:19:15]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.44] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:15] 🎬 [RENDER #1785] Frame 407 (16.98s) | 1920x1080 (8-bit) | Audio[Bass:0.64 Mid:0.59 High:0.49] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:15]    ├─ [PERF & BUFFER] RenderTime=49.34ms | In=0x7ab2400100 (1920x1080, rb=7680) -> Out=0x7933400100 (1920x1080, rb=7680) | CenterPixel RGB(250,208,168) -> RGB(198,213,186)
+[19:19:15]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5252 | Raw[B:0.397 M:0.474 H:0.325] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.644 M:0.593 H:0.487]
+[19:19:15]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.45] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:15] 🎬 [RENDER #1800] Frame 424 (17.68s) | 1920x1080 (8-bit) | Audio[Bass:0.92 Mid:0.53 High:0.25] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:15]    ├─ [PERF & BUFFER] RenderTime=20.81ms | In=0x790a400100 (1920x1080, rb=7680) -> Out=0x790dc00100 (1920x1080, rb=7680) | CenterPixel RGB(231,194,155) -> RGB(198,203,175)
+[19:19:15]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4573 | Raw[B:0.567 M:0.424 H:0.165] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.921 M:0.530 H:0.248]
+[19:19:15]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.43] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:15] 🎬 [RENDER #1815] Frame 441 (18.39s) | 1920x1080 (8-bit) | Audio[Bass:0.63 Mid:0.63 High:0.42] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:15]    ├─ [PERF & BUFFER] RenderTime=11.31ms | In=0x79ee400100 (1920x1080, rb=7680) -> Out=0x795ac00100 (1920x1080, rb=7680) | CenterPixel RGB(249,210,167) -> RGB(195,214,186)
+[19:19:15]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5169 | Raw[B:0.388 M:0.504 H:0.277] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.630 M:0.630 H:0.416]
+[19:19:15]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.46] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:15] ☑️ [TOGGLE CHANGED] Enable FM & Rutt-Etra -> ENABLED
+[19:19:15] 🎬 [RENDER #1829] Frame 455 (18.98s) | 1920x1080 (8-bit) | Audio[Bass:0.44 Mid:0.63 High:0.41] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:15] 🎬 [RENDER #1830] Frame 456 (19.02s) | 1920x1080 (8-bit) | Audio[Bass:0.39 Mid:0.41 High:0.23] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:off Bend:off VHS:off CRT:off]
+[19:19:15]    ├─ [PERF & BUFFER] RenderTime=14.55ms | In=0x7aef400100 (1920x1080, rb=7680) -> Out=0x7946400100 (1920x1080, rb=7680) | CenterPixel RGB(233,194,171) -> RGB(193,205,188)
+[19:19:15]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4865 | Raw[B:0.273 M:0.502 H:0.274] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.444 M:0.627 H:0.411]
+[19:19:15]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.46] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:15]    ├─ [PERF & BUFFER] RenderTime=14.94ms | In=0x7293800100 (1920x1080, rb=7680) -> Out=0x7943400100 (1920x1080, rb=7680) | CenterPixel RGB(235,196,169) -> RGB(204,207,186)
+[19:19:15]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3825 | Raw[B:0.239 M:0.324 H:0.152] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.388 M:0.406 H:0.228]
+[19:19:15]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.39] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:16] 🎬 [RENDER #1845] Frame 401 (16.73s) | 1920x1080 (8-bit) | Audio[Bass:1.00 Mid:0.69 High:0.37] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:off VHS:off CRT:off]
+[19:19:16]    ├─ [PERF & BUFFER] RenderTime=72.34ms | In=0x79c1c00100 (1920x1080, rb=7680) -> Out=0x7990c00100 (1920x1080, rb=7680) | CenterPixel RGB(246,207,163) -> RGB(173,184,162)
+[19:19:16]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5497 | Raw[B:0.615 M:0.549 H:0.247] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:1.000 M:0.686 H:0.370]
+[19:19:16]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.47] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:16] 🎬 [RENDER #1860] Frame 418 (17.43s) | 1920x1080 (8-bit) | Audio[Bass:0.41 Mid:0.55 High:0.43] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:off VHS:off CRT:off]
+[19:19:16]    ├─ [PERF & BUFFER] RenderTime=37.85ms | In=0x7ab2c00100 (1920x1080, rb=7680) -> Out=0x7983400100 (1920x1080, rb=7680) | CenterPixel RGB(251,214,170) -> RGB(161,152,128)
+[19:19:16]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4155 | Raw[B:0.255 M:0.436 H:0.284] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.414 M:0.545 H:0.425]
+[19:19:16]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.43] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:16] 🎬 [RENDER #1875] Frame 433 (18.06s) | 1920x1080 (8-bit) | Audio[Bass:0.40 Mid:0.65 High:0.53] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:off VHS:off CRT:off]
+[19:19:17]    ├─ [PERF & BUFFER] RenderTime=144.32ms | In=0x79d1400100 (1920x1080, rb=7680) -> Out=0x7931400100 (1920x1080, rb=7680) | CenterPixel RGB(241,199,157) -> RGB(139,139,119)
+[19:19:17]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5025 | Raw[B:0.246 M:0.523 H:0.353] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.400 M:0.654 H:0.530]
+[19:19:17]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.46] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:17] 🎬 [RENDER #1890] Frame 448 (18.69s) | 1920x1080 (8-bit) | Audio[Bass:0.25 Mid:0.39 High:0.38] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:off VHS:off CRT:off]
+[19:19:17]    ├─ [PERF & BUFFER] RenderTime=50.73ms | In=0x7abb400100 (1920x1080, rb=7680) -> Out=0x79d1c00100 (1920x1080, rb=7680) | CenterPixel RGB(249,210,169) -> RGB(215,212,186)
+[19:19:17]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3579 | Raw[B:0.153 M:0.314 H:0.254] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.249 M:0.393 H:0.382]
+[19:19:17]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.39] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:17] ☑️ [TOGGLE CHANGED] Enable Circuit Bending -> ENABLED
+[19:19:17] 🎬 [RENDER #1904] Frame 435 (18.14s) | 1920x1080 (8-bit) | Audio[Bass:0.71 Mid:0.68 High:0.42] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:off CRT:off]
+[19:19:17] 🎬 [RENDER #1905] Frame 436 (18.18s) | 1920x1080 (8-bit) | Audio[Bass:1.06 Mid:0.70 High:0.31] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:off CRT:off]
+[19:19:17]    ├─ [PERF & BUFFER] RenderTime=83.53ms | In=0x7accc00100 (1920x1080, rb=7680) -> Out=0x7900000100 (1920x1080, rb=7680) | CenterPixel RGB(235,193,151) -> RGB(160,234,245)
+[19:19:17]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5209 | Raw[B:0.435 M:0.544 H:0.280] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.707 M:0.680 H:0.419]
+[19:19:17]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.47] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:17]    ├─ [PERF & BUFFER] RenderTime=93.06ms | In=0x7280000100 (1920x1080, rb=7680) -> Out=0x7a00c00100 (1920x1080, rb=7680) | CenterPixel RGB(233,191,151) -> RGB(143,236,241)
+[19:19:17]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5202 | Raw[B:0.652 M:0.556 H:0.207] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:1.059 M:0.695 H:0.311]
+[19:19:17]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.47] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:18] 🎬 [RENDER #1920] Frame 451 (18.81s) | 1920x1080 (8-bit) | Audio[Bass:0.55 Mid:0.66 High:0.43] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:off CRT:off]
+[19:19:18]    ├─ [PERF & BUFFER] RenderTime=66.88ms | In=0x79d3400100 (1920x1080, rb=7680) -> Out=0x791c400100 (1920x1080, rb=7680) | CenterPixel RGB(243,205,173) -> RGB(186,219,242)
+[19:19:18]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4848 | Raw[B:0.339 M:0.528 H:0.285] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.551 M:0.660 H:0.427]
+[19:19:18]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.46] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:19] ☑️ [TOGGLE CHANGED] Enable CRT Scanlines -> ENABLED
+[19:19:19] 🎬 [RENDER #1931] Frame 462 (19.27s) | 1920x1080 (8-bit) | Audio[Bass:0.68 Mid:0.59 High:0.51] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:off CRT:off]
+[19:19:19]    ├─ [PERF & BUFFER] RenderTime=53.55ms | In=0x7ae6c00100 (1920x1080, rb=7680) -> Out=0x7a29c00100 (1920x1080, rb=7680) | CenterPixel RGB(254,224,183) -> RGB(168,229,247)
+[19:19:19]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5338 | Raw[B:0.418 M:0.471 H:0.339] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.679 M:0.588 H:0.508]
+[19:19:19]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.44] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:19] 🎬 [RENDER #1935] Frame 465 (19.39s) | 1920x1080 (8-bit) | Audio[Bass:0.61 Mid:0.47 High:0.47] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:off CRT:ON]
+[19:19:19]    ├─ [PERF & BUFFER] RenderTime=106.25ms | In=0x7adb400100 (1920x1080, rb=7680) -> Out=0x7a19c00100 (1920x1080, rb=7680) | CenterPixel RGB(253,214,168) -> RGB(239,146,171)
+[19:19:19]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4149 | Raw[B:0.374 M:0.380 H:0.317] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.607 M:0.474 H:0.475]
+[19:19:19]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.41] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:20] 🎬 [RENDER #1950] Frame 480 (20.02s) | 1920x1080 (8-bit) | Audio[Bass:0.39 Mid:0.49 High:0.41] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:off CRT:ON]
+[19:19:20]    ├─ [PERF & BUFFER] RenderTime=58.57ms | In=0x7b06c00100 (1920x1080, rb=7680) -> Out=0x7a2e400100 (1920x1080, rb=7680) | CenterPixel RGB(241,198,153) -> RGB(255,37,119)
+[19:19:20]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4845 | Raw[B:0.240 M:0.393 H:0.274] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.390 M:0.491 H:0.411]
+[19:19:20]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.42] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:20] ☑️ [TOGGLE CHANGED] Enable Dreamy VHS -> ENABLED
+[19:19:20] 🎬 [RENDER #1953] Frame 483 (20.15s) | 1920x1080 (8-bit) | Audio[Bass:0.37 Mid:0.47 High:0.57] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:off CRT:ON]
+[19:19:20]    ├─ [PERF & BUFFER] RenderTime=52.97ms | In=0x7afe400100 (1920x1080, rb=7680) -> Out=0x7a30c00100 (1920x1080, rb=7680) | CenterPixel RGB(236,192,147) -> RGB(255,35,133)
+[19:19:20]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4504 | Raw[B:0.228 M:0.375 H:0.381] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.371 M:0.469 H:0.572]
+[19:19:20]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.41] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:21] 🎬 [RENDER #1965] Frame 492 (20.52s) | 1920x1080 (8-bit) | Audio[Bass:0.76 Mid:0.60 High:0.20] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:21]    ├─ [PERF & BUFFER] RenderTime=382.01ms | In=0x72b2000100 (1920x1080, rb=7680) -> Out=0x7a40400100 (1920x1080, rb=7680) | CenterPixel RGB(239,204,164) -> RGB(182,32,33)
+[19:19:21]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4560 | Raw[B:0.468 M:0.476 H:0.132] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.760 M:0.595 H:0.198]
+[19:19:21]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.45] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:22] 🎬 [RENDER #1980] Frame 507 (21.15s) | 1920x1080 (8-bit) | Audio[Bass:1.01 Mid:0.72 High:0.28] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:22]    ├─ [PERF & BUFFER] RenderTime=108.44ms | In=0x7ae7400100 (1920x1080, rb=7680) -> Out=0x7a58400100 (1920x1080, rb=7680) | CenterPixel RGB(254,226,185) -> RGB(208,48,39)
+[19:19:22]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5274 | Raw[B:0.623 M:0.575 H:0.188] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:1.013 M:0.719 H:0.282]
+[19:19:22]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.48] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:23] 🎬 [RENDER #1995] Frame 522 (21.77s) | 1920x1080 (8-bit) | Audio[Bass:0.45 Mid:0.47 High:0.23] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:24]    ├─ [PERF & BUFFER] RenderTime=291.25ms | In=0x72c6000100 (1920x1080, rb=7680) -> Out=0x7a4cc00100 (1920x1080, rb=7680) | CenterPixel RGB(252,215,174) -> RGB(98,28,33)
+[19:19:24]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4185 | Raw[B:0.280 M:0.379 H:0.155] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.455 M:0.473 H:0.233]
+[19:19:24]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.41] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:25] 🎬 [RENDER #2010] Frame 537 (22.40s) | 1920x1080 (8-bit) | Audio[Bass:0.32 Mid:0.52 High:0.45] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:25]    ├─ [PERF & BUFFER] RenderTime=175.61ms | In=0x7a68400100 (1920x1080, rb=7680) -> Out=0x7a72c00100 (1920x1080, rb=7680) | CenterPixel RGB(244,205,159) -> RGB(154,36,66)
+[19:19:25]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3604 | Raw[B:0.196 M:0.420 H:0.301] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.318 M:0.525 H:0.452]
+[19:19:25]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.43] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:26] 🎬 [RENDER #2025] Frame 270 (11.26s) | 1920x1080 (8-bit) | Audio[Bass:0.44 Mid:0.48 High:0.35] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:26]    ├─ [PERF & BUFFER] RenderTime=102.12ms | In=0x796a400100 (1920x1080, rb=7680) -> Out=0x7a68c00100 (1920x1080, rb=7680) | CenterPixel RGB(235,198,156) -> RGB(118,27,32)
+[19:19:26]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3082 | Raw[B:0.268 M:0.383 H:0.231] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.436 M:0.479 H:0.347]
+[19:19:26]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.41] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:28] 🎬 [RENDER #2040] Frame 285 (11.89s) | 1920x1080 (8-bit) | Audio[Bass:0.85 Mid:0.40 High:0.24] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:28]    ├─ [PERF & BUFFER] RenderTime=163.34ms | In=0x7a8ac00100 (1920x1080, rb=7680) -> Out=0x7989c00100 (1920x1080, rb=7680) | CenterPixel RGB(237,197,156) -> RGB(172,32,39)
+[19:19:28]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3879 | Raw[B:0.525 M:0.316 H:0.160] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.853 M:0.396 H:0.240]
+[19:19:28]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.39] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:29] 🎬 [RENDER #2055] Frame 299 (12.47s) | 1920x1080 (8-bit) | Audio[Bass:0.73 Mid:0.46 High:0.19] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:29]    ├─ [PERF & BUFFER] RenderTime=166.52ms | In=0x7a93400100 (1920x1080, rb=7680) -> Out=0x7a37c00100 (1920x1080, rb=7680) | CenterPixel RGB(119,82,59) -> RGB(244,36,162)
+[19:19:29]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3555 | Raw[B:0.447 M:0.372 H:0.126] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.726 M:0.465 H:0.188]
+[19:19:29]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.41] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:30] 🎬 [RENDER #2070] Frame 316 (13.18s) | 1920x1080 (8-bit) | Audio[Bass:0.32 Mid:0.40 High:0.20] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:30]    ├─ [PERF & BUFFER] RenderTime=188.08ms | In=0x7958400100 (1920x1080, rb=7680) -> Out=0x79a4400100 (1920x1080, rb=7680) | CenterPixel RGB(234,194,158) -> RGB(99,29,36)
+[19:19:30]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.2894 | Raw[B:0.199 M:0.320 H:0.132] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.324 M:0.399 H:0.198]
+[19:19:30]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.39] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:31] 🎬 [RENDER #2085] Frame 331 (13.81s) | 1920x1080 (8-bit) | Audio[Bass:0.96 Mid:0.74 High:0.48] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:32]    ├─ [PERF & BUFFER] RenderTime=98.01ms | In=0x79efc00100 (1920x1080, rb=7680) -> Out=0x7ae9c00100 (1920x1080, rb=7680) | CenterPixel RGB(249,212,168) -> RGB(255,106,53)
+[19:19:32]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.6060 | Raw[B:0.588 M:0.594 H:0.317] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.956 M:0.742 H:0.475]
+[19:19:32]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.49] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:33] 🎬 [RENDER #2100] Frame 346 (14.43s) | 1920x1080 (8-bit) | Audio[Bass:1.05 Mid:0.82 High:0.41] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:33]    ├─ [PERF & BUFFER] RenderTime=207.51ms | In=0x72e0800100 (1920x1080, rb=7680) -> Out=0x7283c00100 (1920x1080, rb=7680) | CenterPixel RGB(247,209,168) -> RGB(199,74,97)
+[19:19:33]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5641 | Raw[B:0.649 M:0.655 H:0.271] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:1.055 M:0.818 H:0.406]
+[19:19:33]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.51] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:34] 🎬 [RENDER #2115] Frame 363 (15.14s) | 1920x1080 (8-bit) | Audio[Bass:0.37 Mid:0.57 High:0.53] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:34]    ├─ [PERF & BUFFER] RenderTime=218.64ms | In=0x72b5000100 (1920x1080, rb=7680) -> Out=0x72bc000100 (1920x1080, rb=7680) | CenterPixel RGB(144,101,77) -> RGB(255,159,167)
+[19:19:34]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4794 | Raw[B:0.225 M:0.452 H:0.353] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.365 M:0.565 H:0.530]
+[19:19:34]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.44] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:35] 🎬 [RENDER #2130] Frame 377 (15.72s) | 1920x1080 (8-bit) | Audio[Bass:0.29 Mid:0.37 High:0.76] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:35]    ├─ [PERF & BUFFER] RenderTime=381.91ms | In=0x7a62400100 (1920x1080, rb=7680) -> Out=0x7276c00100 (1920x1080, rb=7680) | CenterPixel RGB(91,70,54) -> RGB(155,157,162)
+[19:19:35]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4252 | Raw[B:0.178 M:0.296 H:0.506] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.289 M:0.370 H:0.758]
+[19:19:35]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.38] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:36] 🎬 [RENDER #2145] Frame 391 (16.31s) | 1920x1080 (8-bit) | Audio[Bass:0.64 Mid:0.65 High:0.53] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:36]    ├─ [PERF & BUFFER] RenderTime=132.52ms | In=0x7a94c00100 (1920x1080, rb=7680) -> Out=0x7b04400100 (1920x1080, rb=7680) | CenterPixel RGB(255,217,174) -> RGB(202,45,84)
+[19:19:36]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5602 | Raw[B:0.396 M:0.523 H:0.353] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.644 M:0.653 H:0.530]
+[19:19:36]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.46] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:38] 🎬 [RENDER #2160] Frame 230 (9.59s) | 1920x1080 (8-bit) | Audio[Bass:0.78 Mid:0.47 High:0.24] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:38]    ├─ [PERF & BUFFER] RenderTime=173.22ms | In=0x7adc400100 (1920x1080, rb=7680) -> Out=0x7aba400100 (1920x1080, rb=7680) | CenterPixel RGB(250,209,161) -> RGB(147,28,32)
+[19:19:38]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3695 | Raw[B:0.482 M:0.376 H:0.160] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.783 M:0.470 H:0.240]
+[19:19:38]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.41] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:39] 🎬 [RENDER #2175] Frame 389 (16.22s) | 1920x1080 (8-bit) | Audio[Bass:1.16 Mid:0.75 High:0.50] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:40]    ├─ [PERF & BUFFER] RenderTime=467.56ms | In=0x7a9dc00100 (1920x1080, rb=7680) -> Out=0x790b400100 (1920x1080, rb=7680) | CenterPixel RGB(249,207,164) -> RGB(255,92,144)
+[19:19:40]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5531 | Raw[B:0.711 M:0.599 H:0.331] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:1.156 M:0.749 H:0.497]
+[19:19:40]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.49] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:47] 🎬 [RENDER #2190] Frame 403 (16.81s) | 1920x1080 (8-bit) | Audio[Bass:0.87 Mid:0.69 High:0.52] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:48]    ├─ [PERF & BUFFER] RenderTime=603.58ms | In=0x7ab3400100 (1920x1080, rb=7680) -> Out=0x79cfc00100 (1920x1080, rb=7680) | CenterPixel RGB(254,210,168) -> RGB(255,133,164)
+[19:19:48]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5799 | Raw[B:0.533 M:0.555 H:0.349] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.865 M:0.694 H:0.524]
+[19:19:48]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.47] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:48] 🎬 [RENDER #2205] Frame 418 (17.43s) | 1920x1080 (8-bit) | Audio[Bass:0.41 Mid:0.55 High:0.43] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:49]    ├─ [PERF & BUFFER] RenderTime=232.01ms | In=0x7ab2c00100 (1920x1080, rb=7680) -> Out=0x797cc00100 (1920x1080, rb=7680) | CenterPixel RGB(251,214,170) -> RGB(135,33,56)
+[19:19:49]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.4155 | Raw[B:0.255 M:0.436 H:0.284] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.414 M:0.545 H:0.425]
+[19:19:49]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.43] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:50] 🎬 [RENDER #2220] Frame 435 (18.14s) | 1920x1080 (8-bit) | Audio[Bass:0.71 Mid:0.68 High:0.42] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:50]    ├─ [PERF & BUFFER] RenderTime=306.23ms | In=0x7accc00100 (1920x1080, rb=7680) -> Out=0x72dc000100 (1920x1080, rb=7680) | CenterPixel RGB(235,193,151) -> RGB(154,49,92)
+[19:19:50]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.5209 | Raw[B:0.435 M:0.544 H:0.280] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.707 M:0.680 H:0.419]
+[19:19:50]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.47] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
+[19:19:59] 🎬 [RENDER #2235] Frame 448 (18.69s) | 1920x1080 (8-bit) | Audio[Bass:0.25 Mid:0.39 High:0.38] | Palette: Cyberpunk VHS (Mix:25%) | Modules[FM:ON Bend:ON VHS:ON CRT:ON]
+[19:19:59]    ├─ [PERF & BUFFER] RenderTime=109.01ms | In=0x7abb400100 (1920x1080, rb=7680) -> Out=0x793a400100 (1920x1080, rb=7680) | CenterPixel RGB(249,210,169) -> RGB(94,31,40)
+[19:19:59]    ├─ [AUDIO DSP] CheckoutErr=0 | Samples=3307 | Peak=0.3579 | Raw[B:0.153 M:0.314 H:0.254] * Gains[Master:125% B:130% M:100% H:120%] -> Active[B:0.249 M:0.393 H:0.382]
+[19:19:59]    └─ [MODULE PARAMS] Grad[Mode=5 Mix=25% Phase=0.39] | FM[Freq=85.0 Depth=25% RuttZ=35% Lines=90 Width=62%] | Bend[Fold=18% XOR=0% Tear=15% RGB=12%] | VHS[Bloom=55% Bleed=42% Wobble=24% Track=20% Grain=18%] | CRT[Pitch=4.0px Dark=45% Mask=2Grille=40% Curve=15%]
