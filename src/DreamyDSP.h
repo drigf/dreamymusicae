@@ -83,16 +83,23 @@ inline void AnalyzeAudioReactivity(
     float raw_bass = 0.0f;
     float raw_mid  = 0.0f;
     float raw_high = 0.0f;
+    float peak_abs = 0.0f;
+    rp.audio_checkout_err = PF_Err_NONE;
+    rp.audio_num_samples  = 0;
 
     /* 1. Attempt direct audio checkout from PARAM_AUDIO_LAYER */
     if (in_data->inter.checkout_layer_audio && in_data->inter.get_audio_data && in_data->time_scale > 0) {
         void* audio_handle = nullptr;
-        A_FpLong sample_rate = 44100.0;
-        A_long window_time = (A_long)((window_ms / 1000.0f) * in_data->time_scale);
+        PF_UFixed sample_rate = (PF_UFixed)(44100UL << 16); /* 0xAC440000 (PF_UFixed 44100.0 Hz) */
+        A_long window_time = (A_long)((window_ms / 1000.0f) * (float)in_data->time_scale);
         if (window_time < (A_long)in_data->time_step) {
             window_time = in_data->time_step;
         }
-        A_long start_time = in_data->current_time - (window_time / 2);
+        if (window_time <= 0) {
+            window_time = (A_long)(in_data->time_scale / 30);
+            if (window_time <= 0) window_time = 1;
+        }
+        A_long start_time = in_data->current_time;
         if (start_time < 0) start_time = 0;
 
         PF_Err audio_err = PF_CHECKOUT_LAYER_AUDIO(
@@ -103,28 +110,26 @@ inline void AnalyzeAudioReactivity(
             in_data->time_scale,
             sample_rate,
             PF_SSS_4,
-            PF_Channels_STEREO,
+            PF_Channels_MONO,
             PF_SIGNED_FLOAT,
             &audio_handle);
+        rp.audio_checkout_err = audio_err;
 
         if (audio_err == PF_Err_NONE && audio_handle != nullptr) {
             PF_SoundSampleFloat* samples = nullptr;
             A_long num_samples = 0;
-            A_FpLong actual_rate = 44100.0;
-            A_long bytes_per_samp = 4;
-            A_long num_chans = 2;
-            A_long fmt_signed = PF_SIGNED_FLOAT;
 
             if (PF_GET_AUDIO_DATA(
                     in_data,
                     audio_handle,
                     &samples,
                     &num_samples,
-                    &actual_rate,
-                    &bytes_per_samp,
-                    &num_chans,
-                    &fmt_signed) == PF_Err_NONE && samples != nullptr && num_samples > 0)
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    nullptr) == PF_Err_NONE && samples != nullptr && num_samples > 0)
             {
+                rp.audio_num_samples = num_samples;
                 /* Cascaded 1-pole IIR filter bank at ~44.1kHz:
                  * Lowpass @ ~160Hz (Bass), Bandpass @ 160Hz-2.5kHz (Mid), Highpass > 2.5kHz (High) */
                 float lp_bass = 0.0f;
@@ -138,14 +143,11 @@ inline void AnalyzeAudioReactivity(
 
                 A_long max_inspect = num_samples > 8192 ? 8192 : num_samples;
                 for (A_long i = 0; i < max_inspect; ++i) {
-                    float mono = 0.0f;
-                    if (num_chans >= 2) {
-                        mono = 0.5f * (samples[i * num_chans] + samples[i * num_chans + 1]);
-                    } else {
-                        mono = samples[i];
-                    }
+                    float mono = samples[i];
                     /* Guard against NaN/Inf in audio buffer */
                     if (!(mono >= -4.0f && mono <= 4.0f)) mono = 0.0f;
+                    float am = std::fabs(mono);
+                    if (am > peak_abs) peak_abs = am;
 
                     lp_bass += alpha_bass * (mono - lp_bass);
                     lp_mid  += alpha_mid  * (mono - lp_mid);
@@ -179,10 +181,14 @@ inline void AnalyzeAudioReactivity(
     }
 
     /* 3. Apply user band weights & master gain */
-    rp.audio_bass    = std::min(3.0f, raw_bass * bass_weight * master_gain);
-    rp.audio_mid     = std::min(3.0f, raw_mid  * mid_weight  * master_gain);
-    rp.audio_high    = std::min(3.0f, raw_high * high_weight * master_gain);
-    rp.audio_overall = (rp.audio_bass * 0.45f + rp.audio_mid * 0.35f + rp.audio_high * 0.20f);
+    rp.audio_raw_bass    = raw_bass;
+    rp.audio_raw_mid     = raw_mid;
+    rp.audio_raw_high    = raw_high;
+    rp.audio_peak_sample = peak_abs;
+    rp.audio_bass        = std::min(3.0f, raw_bass * bass_weight * master_gain);
+    rp.audio_mid         = std::min(3.0f, raw_mid  * mid_weight  * master_gain);
+    rp.audio_high        = std::min(3.0f, raw_high * high_weight * master_gain);
+    rp.audio_overall     = (rp.audio_bass * 0.45f + rp.audio_mid * 0.35f + rp.audio_high * 0.20f);
 }
 
 /*==================================================================
@@ -282,18 +288,24 @@ inline FloatRGBA SampleGradient(const DreamyRenderParams& rp, float t) {
  *==================================================================*/
 inline FloatRGBA SampleWorldBilinear(const DreamyRenderParams& rp, float x, float y) {
     const PF_EffectWorld* w = rp.input_world;
-    if (!w || !w->data || rp.width <= 0 || rp.height <= 0) {
+    if (!w || !w->data || w->width <= 0 || w->height <= 0) {
         return { 0.0f, 0.0f, 0.0f, 1.0f };
     }
 
-    /* Clamp coordinates to valid layer bounds */
-    float cx = std::max(0.0f, std::min((float)(rp.width - 1), x));
-    float cy = std::max(0.0f, std::min((float)(rp.height - 1), y));
+    /* Guard against NaN / Inf coordinates */
+    if (!(x >= -1e7f && x <= 1e7f)) x = 0.0f;
+    if (!(y >= -1e7f && y <= 1e7f)) y = 0.0f;
+
+    /* Clamp coordinates to valid input layer bounds */
+    float max_x = (float)(w->width - 1);
+    float max_y = (float)(w->height - 1);
+    float cx = x < 0.0f ? 0.0f : (x > max_x ? max_x : x);
+    float cy = y < 0.0f ? 0.0f : (y > max_y ? max_y : y);
 
     A_long x0 = (A_long)cx;
     A_long y0 = (A_long)cy;
-    A_long x1 = std::min(x0 + 1, rp.width - 1);
-    A_long y1 = std::min(y0 + 1, rp.height - 1);
+    A_long x1 = (x0 + 1 < w->width)  ? (x0 + 1) : (w->width - 1);
+    A_long y1 = (y0 + 1 < w->height) ? (y0 + 1) : (w->height - 1);
 
     float fx = cx - (float)x0;
     float fy = cy - (float)y0;

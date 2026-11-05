@@ -15,7 +15,7 @@
 #define MAJOR_VERSION       1
 #define MINOR_VERSION       0
 #define BUG_VERSION         0
-#define STAGE_VERSION       PF_Stage_RELEASE
+#define STAGE_VERSION       PF_Stage_DEVELOP
 #define BUILD_VERSION       1
 
 #define PLUGIN_NAME         "Dreamy Music VHS"
@@ -192,6 +192,14 @@ typedef struct {
     float       audio_mid;
     float       audio_high;
     float       audio_overall;
+
+    /* Raw Audio Checkout Diagnostics (for detailed log) */
+    PF_Err      audio_checkout_err;
+    A_long      audio_num_samples;
+    float       audio_raw_bass;
+    float       audio_raw_mid;
+    float       audio_raw_high;
+    float       audio_peak_sample;
 
     /* Gradient Settings */
     A_long      gradient_mode;

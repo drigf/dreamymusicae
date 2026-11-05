@@ -93,22 +93,31 @@ Restart After Effects (hold **`Shift + Option`** on launch if After Effects prev
 
 ## Diagnostic Logging & Troubleshooting
 
-The plugin includes a built-in diagnostic logger (`DreamyLog` in [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp)) that automatically records:
-* Mach-O binary load events (`OnDreamyPluginLoaded`)
-* `PluginDataEntryFunction2` host handshake and version verification
-* `PF_Cmd_GLOBAL_SETUP` flags and struct ABI verification (`sizeof(PF_InData)`, `sizeof(PF_OutData)`, `sizeof(PF_ParamDef)`)
-* `PF_Cmd_PARAMS_SETUP` parameter registration and any `PF_ADD_PARAM` error codes
-* Any runtime or `PF_Cmd_RENDER` errors
+The plugin includes a **two-tier live diagnostic logging system** in [`src/DreamyMusic.cpp`](src/DreamyMusic.cpp):
+
+### 1. Friendly Live Monitor Log (`dreamymusic.log` & `/tmp/dreamymusic.log`)
+Designed for clean, human-readable real-time monitoring (`DreamyLog`):
+* `✨ Dreamy Music VHS v1.0 Loaded` — Mach-O binary load and `PluginDataEntryFunction2` host registration
+* `✅ [INIT]` — `PF_Cmd_GLOBAL_SETUP` version (`524289` matching PiPL), Deep Color (8/16-bit), and Multi-Frame Rendering status
+* `🎛️ [UI SETUP]` — `PF_Cmd_PARAMS_SETUP` confirmation of all Effect Controls across 6 collapsible groups
+* `🎚️ [CONTROL CHANGED]` / `🎨 [PRESET CHANGED]` / `☑️ [TOGGLE CHANGED]` — Logs the exact slider value, preset name, color RGB stop, or toggle you change in Effect Controls
+* `🎬 [RENDER #N]` — Logs active frame renders with resolution, bit depth, live 3-band audio levels (`Audio[Bass, Mid, High]`), active gradient palette, and enabled synthesis modules (`FM`, `Bend`, `VHS`, `CRT`)
+
+### 2. In-Depth Technical Diagnostic Log (`dreamymusic_detailed.log` & `/tmp/dreamymusic_detailed.log`)
+Designed for deep DSP, parameter, and buffer inspection (`DreamyDetailLog`):
+* `[PARAM_DEF]` — Logs every slider's registered `[valid_min .. valid_max]`, `slider=[slider_min .. slider_max]`, and `default` values during `PF_Cmd_PARAMS_SETUP`
+* `[PERF & BUFFER]` — Logs frame synthesis time in milliseconds (`RenderTime`), input/output pixel buffer addresses, dimensions, `rowbytes`, and center pixel `RGB(in) -> RGB(out)` verification
+* `[AUDIO DSP]` — Logs `checkout_layer_audio` status code, checked-out sample count, waveform peak amplitude, raw 3-band RMS (`Raw[B, M, H]`), user gain weights, and resulting active modulation envelopes
+* `[MODULE PARAMS]` — Full per-frame dump of every parameter value across Gradient, FM/Rutt-Etra, Circuit Bending, VHS, and CRT modules
 
 ### Where to View the Logs
-Logs are written simultaneously to two locations so they are always accessible:
-1. **In your VS Code Workspace**: Open [`dreamymusic.log`](dreamymusic.log) directly in the VS Code editor.
-2. **In Terminal (`/tmp/dreamymusic.log`)**: Stream live events in real time with:
-   ```bash
-   tail -f /tmp/dreamymusic.log
-   ```
-   Or stream the workspace log:
+1. **Friendly Live Monitor**:
    ```bash
    tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic.log"
    ```
+2. **In-Depth Technical Diagnostics**:
+   ```bash
+   tail -f "/Users/niall/Developer/AE Plugins/dreamymusic/dreamymusic_detailed.log"
+   ```
+
 

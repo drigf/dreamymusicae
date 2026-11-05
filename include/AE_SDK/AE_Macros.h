@@ -19,13 +19,17 @@
     #define DREAMY_CHECK_ADD_PARAM(NAME, ID, ERR) \
         do { \
             if ((ERR) != PF_Err_NONE) { \
-                DreamyLog("PF_ADD_PARAM FAILED: name='%s' id=%d err=%d", (NAME), (int)(ID), (int)(ERR)); \
+                DreamyLog("❌ PF_ADD_PARAM FAILED: name='%s' id=%d err=%d", (NAME), (int)(ID), (int)(ERR)); \
                 return (ERR); \
             } \
         } while (0)
+    #define DREAMY_DETAIL_SLIDER(NAME, ID, VMIN, VMAX, SMIN, SMAX, DFLT) \
+        DreamyDetailLog("   [PARAM_DEF] ID=%d '%s' | valid=[%.1f .. %.1f] slider=[%.1f .. %.1f] default=%.1f", \
+                        (int)(ID), (NAME), (double)(VMIN), (double)(VMAX), (double)(SMIN), (double)(SMAX), (double)(DFLT))
 #else
     #define DREAMY_CHECK_ADD_PARAM(NAME, ID, ERR) \
         do { if ((ERR) != PF_Err_NONE) return (ERR); } while (0)
+    #define DREAMY_DETAIL_SLIDER(NAME, ID, VMIN, VMAX, SMIN, SMAX, DFLT) do {} while (0)
 #endif
 
 #define PF_CHECKOUT_PARAM(IN_DATA, INDEX, TIME, STEP, SCALE, PARAM) \
@@ -57,16 +61,19 @@
 
 /* Parameter setup helper macros */
 
-#define PF_ADD_TOPIC(NAME, ID) \
+#define PF_ADD_TOPICX(NAME, FLAGS, ID) \
     do { \
         PF_Err priv_err = PF_Err_NONE; \
         def.param_type = PF_Param_GROUP_START; \
         strncpy(def.name, (NAME), 31); \
         def.name[31] = '\0'; \
+        def.flags = (FLAGS); \
         def.uu.id = (ID); \
         priv_err = PF_ADD_PARAM(in_data, -1, &def); \
         DREAMY_CHECK_ADD_PARAM((NAME), (ID), priv_err); \
     } while (0)
+
+#define PF_ADD_TOPIC(NAME, ID) PF_ADD_TOPICX((NAME), 0, (ID))
 
 #define PF_END_TOPIC(ID) \
     do { \
@@ -84,17 +91,18 @@
         strncpy(def.name, (NAME), 31); \
         def.name[31] = '\0'; \
         def.flags = (FLAGS); \
-        def.u.fs_d.valid_min = (A_FpLong)(VALID_MIN); \
-        def.u.fs_d.slider_min = (A_FpLong)(SLIDER_MIN); \
-        def.u.fs_d.valid_max = (A_FpLong)(VALID_MAX); \
-        def.u.fs_d.slider_max = (A_FpLong)(SLIDER_MAX); \
+        def.u.fs_d.valid_min = (A_FpShort)(VALID_MIN); \
+        def.u.fs_d.valid_max = (A_FpShort)(VALID_MAX); \
+        def.u.fs_d.slider_min = (A_FpShort)(SLIDER_MIN); \
+        def.u.fs_d.slider_max = (A_FpShort)(SLIDER_MAX); \
         def.u.fs_d.value = (A_FpLong)(DFLT); \
-        def.u.fs_d.dephault = (A_FpLong)(DFLT); \
+        def.u.fs_d.dephault = (A_FpShort)(DFLT); \
         def.u.fs_d.precision = (A_short)(PREC); \
         def.u.fs_d.display_flags = (A_short)(DISP); \
-        def.u.fs_d.curve_tolerance = 0.05f; \
+        def.u.fs_d.curve_tolerance = 0.0f; \
         def.uu.id = (ID); \
         priv_err = PF_ADD_PARAM(in_data, -1, &def); \
+        DREAMY_DETAIL_SLIDER((NAME), (ID), (VALID_MIN), (VALID_MAX), (SLIDER_MIN), (SLIDER_MAX), (DFLT)); \
         DREAMY_CHECK_ADD_PARAM((NAME), (ID), priv_err); \
     } while (0)
 

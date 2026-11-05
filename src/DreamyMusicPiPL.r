@@ -41,7 +41,7 @@ resource 'PiPL' (16000) {
         },
         /* [8] */
         AE_Effect_Version {
-            524289  /* 1.0.0 Release (PF_VERSION(1,0,0,3,1)) */
+            524289  /* 1.0.0 (PF_VERSION(1,0,0,0,1) == 0x00080001) */
         },
         /* [9] */
         AE_Effect_Info_Flags {
@@ -49,7 +49,7 @@ resource 'PiPL' (16000) {
         },
         /* [10] */
         AE_Effect_Global_OutFlags {
-            0x06040404  /* PF_OutFlag_NON_PARAM_VARY | PF_OutFlag_PIX_INDEPENDENT | PF_OutFlag_I_USE_AUDIO | PF_OutFlag_DEEP_COLOR_AWARE | PF_OutFlag_SEND_UPDATE_PARAMS_UI */
+            0x06000404  /* PF_OutFlag_NON_PARAM_VARY | PF_OutFlag_PIX_INDEPENDENT | PF_OutFlag_DEEP_COLOR_AWARE | PF_OutFlag_SEND_UPDATE_PARAMS_UI */
         },
         /* [11] */
         AE_Effect_Global_OutFlags_2 {

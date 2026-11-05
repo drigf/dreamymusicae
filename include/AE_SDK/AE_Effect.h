@@ -168,12 +168,13 @@ enum {
      (((A_u_long)(stage) & 0x3UL) << 9) | \
      ((A_u_long)(build) & 0x1ffUL))
 
-enum {
-    PF_Stage_DEVELOP = 0,
-    PF_Stage_ALPHA,
-    PF_Stage_BETA,
-    PF_Stage_RELEASE
-};
+#define PF_Stage_DEVELOP        0
+#define PF_Stage_ALPHA          1
+#define PF_Stage_BETA           2
+#define PF_Stage_RELEASE        3
+
+/* Note: Modern AE SDK PF_VERSION macro shifts stage to bits 9..10 or 0:
+ * Wait: in AsciiDepth, 1.0.0 with STAGE_VERSION=PF_Stage_DEVELOP (0) produced 0x80001 (524289)! */
 
 /* Pixel Structures */
 typedef struct {
@@ -248,29 +249,57 @@ enum {
     PF_WorldFlag_RESERVED       = 1L << 31
 };
 
+/* Exact 120-byte (0x78) PF_EffectWorld / PF_LayerDef layout verified against AE 2025/2026:
+ *   +0x00: reserved0 (8 bytes)
+ *   +0x08: reserved1 (8 bytes)
+ *   +0x10: world_flags (4 bytes, bit 0 = PF_WorldFlag_DEEP)
+ *   +0x14: reserved_pad0 (4 bytes alignment padding)
+ *   +0x18: data (8 bytes PF_PixelPtr)
+ *   +0x20: rowbytes (4 bytes signed int)
+ *   +0x24: width (4 bytes signed int)
+ *   +0x28: height (4 bytes signed int)
+ *   +0x2C: extent_hint (16 bytes PF_UnionableRect)
+ *   +0x3C: reserved2 (4 bytes)
+ *   +0x40: reserved3 (4 bytes)
+ *   +0x44: pix_aspect_ratio (8 bytes PF_RationalScale)
+ *   +0x4C: reserved4 (4 bytes)
+ *   +0x50: origin_x (4 bytes)
+ *   +0x54: origin_y (4 bytes)
+ *   +0x58: reserved5 (4 bytes)
+ *   +0x5C: reserved6 (4 bytes)
+ *   +0x60: reserved7 (8 bytes)
+ *   +0x68: platform_ref (8 bytes)
+ *   +0x70: reserved8 (4 bytes)
+ *   +0x74: dephault (4 bytes -> +0xAC inside PF_ParamDef, total PF_LayerDef = 0x78)
+ */
 typedef struct PF_EffectWorld {
-    void*               world_handle;
-    PF_PixelPtr         data;
-    A_long              rowbytes;
-    A_long              width;
-    A_long              height;
-    PF_UnionableRect    extent_hint;
-    A_long              pix_aspect_ratio_num;
-    A_u_long            pix_aspect_ratio_den;
-    A_long              world_flags;
-    void*               platform_ref;
-    A_long              reserved_long1;
-    void*               reserved_ptr1;
-    void*               reserved_ptr2;
-    A_long              reserved_long2;
-    A_long              reserved_long3;
-    A_long              reserved_pad[3];
-    A_long              dephault;
+    void*               reserved0;          /* +0x00 */
+    void*               reserved1;          /* +0x08 */
+    A_long              world_flags;        /* +0x10 */
+    A_long              reserved_pad0;      /* +0x14 */
+    PF_PixelPtr         data;               /* +0x18 */
+    A_long              rowbytes;           /* +0x20 */
+    A_long              width;              /* +0x24 */
+    A_long              height;             /* +0x28 */
+    PF_UnionableRect    extent_hint;        /* +0x2C */
+    A_long              reserved2;          /* +0x3C */
+    A_long              reserved3;          /* +0x40 */
+    PF_RationalScale    pix_aspect_ratio;   /* +0x44 */
+    A_long              reserved4;          /* +0x4C */
+    A_long              origin_x;           /* +0x50 */
+    A_long              origin_y;           /* +0x54 */
+    A_long              reserved5;          /* +0x58 */
+    A_long              reserved6;          /* +0x5C */
+    void*               reserved7;          /* +0x60 */
+    void*               platform_ref;       /* +0x68 */
+    A_long              reserved8;          /* +0x70 */
+    A_long              dephault;           /* +0x74 (+0xAC in PF_ParamDef) */
 } PF_EffectWorld, PF_LayerDef;
 
 #define PF_WORLD_IS_DEEP(W)     (((W)->world_flags & PF_WorldFlag_DEEP) != 0)
 
 /* Audio Types */
+typedef uint32_t PF_UFixed;
 typedef float   PF_SoundSampleFloat;
 enum {
     PF_SSS_1 = 1,
@@ -374,8 +403,8 @@ typedef struct {
     PF_ParamValue   value;
     A_char          value_str[32];
     A_char          value_desc[32];
-    PF_ParamValue   valid_min, slider_min;
-    PF_ParamValue   valid_max, slider_max;
+    PF_ParamValue   valid_min, valid_max;
+    PF_ParamValue   slider_min, slider_max;
     PF_ParamValue   dephault;
 } PF_SliderDef;
 
@@ -383,8 +412,8 @@ typedef struct {
     A_Fixed         value;
     A_char          value_str[32];
     A_char          value_desc[32];
-    A_Fixed         valid_min, slider_min;
-    A_Fixed         valid_max, slider_max;
+    A_Fixed         valid_min, valid_max;
+    A_Fixed         slider_min, slider_max;
     A_Fixed         dephault;
     A_short         precision;
     A_short         display_flags;
@@ -392,16 +421,18 @@ typedef struct {
 
 #define AE_FLOAT_SLIDER_PHASE_NONE 0
 typedef struct {
-    A_FpLong        value;
-    A_FpLong        phase;
-    A_char          value_desc[32];
-    A_FpLong        valid_min, slider_min;
-    A_FpLong        valid_max, slider_max;
-    A_FpLong        dephault;
-    A_short         precision;
-    A_short         display_flags;
-    A_u_long        fs_flags;
-    A_FpShort       curve_tolerance;
+    A_FpLong        value;              /* +0x00 (in def: +0x38, 8 bytes double) */
+    A_FpLong        phase;              /* +0x08 (in def: +0x40, 8 bytes double) */
+    A_char          value_desc[32];     /* +0x10 (in def: +0x48, 32 bytes) */
+    A_FpShort       valid_min;          /* +0x30 (in def: +0x68, 4 bytes float!) */
+    A_FpShort       valid_max;          /* +0x34 (in def: +0x6C, 4 bytes float!) */
+    A_FpShort       slider_min;         /* +0x38 (in def: +0x70, 4 bytes float!) */
+    A_FpShort       slider_max;         /* +0x3C (in def: +0x74, 4 bytes float!) */
+    A_FpShort       dephault;           /* +0x40 (in def: +0x78, 4 bytes float!) */
+    A_short         precision;          /* +0x44 (in def: +0x7C, 2 bytes short) */
+    A_short         display_flags;      /* +0x46 (in def: +0x7E, 2 bytes short) */
+    A_u_long        fs_flags;           /* +0x48 (in def: +0x80, 4 bytes) */
+    A_FpShort       curve_tolerance;    /* +0x4C (in def: +0x84, 4 bytes float) */
 } PF_FloatSliderDef;
 
 typedef struct {
@@ -540,7 +571,7 @@ typedef struct {
         A_long              start_time,
         A_long              duration,
         A_u_long            time_scale,
-        A_FpLong            rate,
+        PF_UFixed           rate,
         A_long              bytes_per_sample,
         A_long              num_channels,
         A_long              fmt_signed,
@@ -555,7 +586,7 @@ typedef struct {
         void*               audio,
         PF_SoundSampleFloat **data0,
         A_long              *num_samples0,
-        A_FpLong            *rate0,
+        PF_UFixed           *rate0,
         A_long              *bytes_per_sample0,
         A_long              *num_channels0,
         A_long              *fmt_signed0);
@@ -721,6 +752,90 @@ typedef PF_Err (*PF_PluginDataCB2)(
     A_long          aeSpecVersionMinorL,
     A_u_long        reservedL,
     const A_u_char  *supportUrlZ);
+
+typedef struct {
+    PF_LRect        rect;
+    A_long          field;
+    PF_RationalScale downsample_x;
+    PF_RationalScale downsample_y;
+    A_long          preserve_rgb_of_zero_alpha;
+    A_long          channel_mask;
+    A_long          reserved[4];
+} PF_RenderRequest;
+
+typedef struct {
+    PF_RenderRequest    output_request;
+    A_short             bitdepth;
+    const void          *pre_render_data;
+    void                *pre_render_data_flat;
+    A_u_long            pre_render_data_flat_size;
+    A_long              reserved[4];
+} PF_PreRenderInput;
+
+typedef struct {
+    PF_LRect            result_rect;
+    PF_LRect            max_result_rect;
+    A_Boolean           solid;
+    A_Boolean           reservedB[3];
+    void                *pre_render_data;
+    PF_Err              (*delete_pre_render_data_func)(void* pre_render_data);
+    A_long              flags;
+    A_long              reserved[4];
+} PF_PreRenderOutput;
+
+typedef struct {
+    PF_LRect        result_rect;
+    PF_LRect        max_result_rect;
+    PF_RationalScale par;
+    A_long          solid;
+    A_long          reserved[16];
+    A_long          ref_width;
+    A_long          ref_height;
+} PF_CheckoutResult;
+
+typedef struct {
+    PF_Err (*checkout_layer)(
+        void*                   effect_ref,
+        A_long                  index,
+        A_long                  checkout_idL,
+        const PF_RenderRequest  *req,
+        A_long                  what_time,
+        A_long                  time_step,
+        A_u_long                time_scale,
+        PF_CheckoutResult       *checkout_result);
+} PF_PreRenderCallbacks;
+
+typedef struct {
+    PF_PreRenderInput       input;
+    PF_PreRenderOutput      output;
+    PF_PreRenderCallbacks   *cb;
+} PF_PreRenderExtra;
+
+typedef struct {
+    PF_RenderRequest    output_request;
+    A_short             bitdepth;
+    void                *pre_render_data;
+    A_long              what_gpu;
+    A_u_long            device_index;
+} PF_SmartRenderInput;
+
+typedef struct {
+    PF_Err (*checkout_layer_pixels)(
+        void*           effect_ref,
+        A_long          checkout_idL,
+        PF_EffectWorld  **pixels);
+    PF_Err (*checkin_layer_pixels)(
+        void*           effect_ref,
+        A_long          checkout_idL);
+    PF_Err (*checkout_output)(
+        void*           effect_ref,
+        PF_EffectWorld  **output);
+} PF_SmartRenderCallbacks;
+
+typedef struct {
+    PF_SmartRenderInput     input;
+    PF_SmartRenderCallbacks *cb;
+} PF_SmartRenderExtra;
 
 typedef struct {
     PF_ParamIndex   param_index;

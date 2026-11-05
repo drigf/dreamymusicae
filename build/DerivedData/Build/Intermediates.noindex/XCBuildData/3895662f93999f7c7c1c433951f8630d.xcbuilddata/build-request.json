@@ -43,7 +43,7 @@
     "overrides" : {
       "commandLine" : {
         "table" : {
-
+          "SYMROOT" : "/Users/niall/Developer/AE Plugins/dreamymusic/build"
         }
       },
       "synthesized" : {
