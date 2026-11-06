@@ -91,6 +91,19 @@ inline void AnalyzeAudioReactivity(
     rp.audio_checkout_err = PF_Err_NONE;
     rp.audio_num_samples  = 0;
 
+    /* If music reactivity is disabled, bypass all audio checkout and filtering immediately */
+    if (!rp.audio_enable) {
+        rp.audio_raw_bass    = 0.0f;
+        rp.audio_raw_mid     = 0.0f;
+        rp.audio_raw_high    = 0.0f;
+        rp.audio_peak_sample = 0.0f;
+        rp.audio_bass        = 0.0f;
+        rp.audio_mid         = 0.0f;
+        rp.audio_high        = 0.0f;
+        rp.audio_overall     = 0.0f;
+        return;
+    }
+
     /* 1. Attempt direct audio checkout from PARAM_AUDIO_LAYER */
     if (in_data->inter.checkout_layer_audio && in_data->inter.get_audio_data && in_data->time_scale > 0) {
         void* audio_handle = nullptr;
@@ -300,15 +313,24 @@ inline void PrecomputeFrameConstants(DreamyRenderParams& rp) {
     rp.inv_width  = rp.width  > 0 ? (1.0f / (float)rp.width)  : 0.0f;
     rp.inv_height = rp.height > 0 ? (1.0f / (float)rp.height) : 0.0f;
 
+    /* Per-target audio modulation weights */
+    const bool audio_active = (rp.audio_enable != FALSE);
+    const float fm_audio_react   = (audio_active && rp.audio_react_fm)       ? rp.fm_audio_react   : 0.0f;
+    const float bend_audio_react = (audio_active && rp.audio_react_bend)     ? rp.bend_audio_react : 0.0f;
+    const float vhs_bass         = (audio_active && rp.audio_react_vhs)      ? rp.audio_bass       : 0.0f;
+    const float vhs_mid          = (audio_active && rp.audio_react_vhs)      ? rp.audio_mid        : 0.0f;
+    const float echo_bass        = (audio_active && rp.audio_react_echo)     ? rp.audio_bass       : 0.0f;
+    const float echo_mid         = (audio_active && rp.audio_react_echo)     ? rp.audio_mid        : 0.0f;
+
     /* FM & Rutt-Etra constants */
-    rp.fm_audio_mult    = 1.0f + (rp.audio_bass * 1.1f + rp.audio_mid * 0.6f) * rp.fm_audio_react;
+    rp.fm_audio_mult    = 1.0f + (rp.audio_bass * 1.1f + rp.audio_mid * 0.6f) * fm_audio_react;
     rp.fm_carrier_rad   = (rp.fm_carrier_freq * 0.5f) * (float)(2.0 * M_PI);
     rp.fm_mod_index     = rp.fm_mod_depth * rp.fm_audio_mult * 18.0f;
     rp.fm_x_shift_scale = (rp.fm_mod_depth * 14.0f * rp.fm_audio_mult) * rp.downsample_scale;
     rp.fm_z_elev        = rp.fm_rutt_etra_z * rp.fm_audio_mult;
 
     /* Circuit Bending constants */
-    rp.bend_audio_mult = 1.0f + (rp.audio_high * 0.9f + rp.audio_bass * 0.6f) * rp.bend_audio_react;
+    rp.bend_audio_mult = 1.0f + (rp.audio_high * 0.9f + rp.audio_bass * 0.6f) * bend_audio_react;
     float fb_angle     = (rp.bend_feedback_shift * rp.bend_audio_mult) * (float)M_PI * 1.5f;
     rp.bend_fb_cos     = std::cos(fb_angle);
     rp.bend_fb_sin     = std::sin(fb_angle);
@@ -317,14 +339,14 @@ inline void PrecomputeFrameConstants(DreamyRenderParams& rp) {
     rp.bend_xor_mask   = (uint8_t)((int)(rp.bend_crush_amt * 170.0f) & 0xFC);
 
     /* VHS constants */
-    rp.vhs_eff_wobble = rp.vhs_tape_wobble * (1.0f + rp.audio_bass * 1.35f);
-    rp.vhs_eff_track  = rp.vhs_tracking_noise * (1.0f + rp.audio_bass * 0.8f);
+    rp.vhs_eff_wobble = rp.vhs_tape_wobble * (1.0f + vhs_bass * 1.35f);
+    rp.vhs_eff_track  = rp.vhs_tracking_noise * (1.0f + vhs_bass * 0.8f);
     float bpos        = FastFract(0.88f - rp.time_sec * 0.12f);
     if (bpos < 0.0f) bpos += 1.0f;
     rp.vhs_bar_pos      = bpos;
-    float eff_bleed     = rp.vhs_chroma_bleed * (1.0f + rp.audio_mid * 0.8f);
+    float eff_bleed     = rp.vhs_chroma_bleed * (1.0f + vhs_mid * 0.8f);
     rp.vhs_eff_bleed_px = eff_bleed > 0.001f ? (eff_bleed * 18.0f * rp.downsample_scale) : 0.0f;
-    rp.vhs_eff_bloom    = rp.vhs_dream_bloom * (1.0f + rp.audio_mid * 0.9f + rp.audio_bass * 0.5f);
+    rp.vhs_eff_bloom    = rp.vhs_dream_bloom * (1.0f + vhs_mid * 0.9f + vhs_bass * 0.5f);
     rp.vhs_bloom_rad1   = (6.0f + rp.vhs_eff_bloom * 12.0f) * rp.downsample_scale;
     rp.vhs_bloom_rad2   = (14.0f + rp.vhs_eff_bloom * 26.0f) * rp.downsample_scale;
 
@@ -336,17 +358,17 @@ inline void PrecomputeFrameConstants(DreamyRenderParams& rp) {
 
     /* Echo Trail precomputed per-step tables */
     rp.echo_active_count  = 0;
-    rp.echo_glow_strength = rp.echo_glow * (1.0f + rp.audio_mid * 0.5f);
+    rp.echo_glow_strength = rp.echo_glow * (1.0f + echo_mid * 0.5f);
     rp.echo_trail_mix     = Clamp01(rp.echo_opacity * 0.78f);
 
     if (rp.echo_enable && rp.echo_count > 0 && rp.echo_opacity > 0.001f) {
         int max_echoes = (int)std::min<A_long>(rp.echo_count, 12);
-        float audio_trail_boost = 1.0f + (rp.audio_bass * 0.45f + rp.audio_mid * 0.45f);
+        float audio_trail_boost = 1.0f + (echo_bass * 0.45f + echo_mid * 0.45f);
         float step_dist = rp.echo_offset_px * audio_trail_boost * rp.downsample_scale;
         float decay_rate = Clamp01(rp.echo_decay);
         float glow_rad = (4.0f + rp.echo_glow * 14.0f) * rp.downsample_scale;
 
-        float base_angle = rp.time_sec * 1.15f + rp.audio_bass * 0.8f;
+        float base_angle = rp.time_sec * 1.15f + echo_bass * 0.8f;
         float dir_x = std::cos(base_angle);
         float dir_y = std::sin(base_angle * 0.75f) * 0.65f;
 
@@ -418,10 +440,13 @@ inline FloatRGBA SampleSpecificWorldBilinear(const PF_EffectWorld* w, A_Boolean 
         const PF_Pixel16& p11 = row1[x1];
 
         const float inv16 = 1.0f / 32768.0f;
-        float w00 = (1.0f - fx) * (1.0f - fy) * inv16;
-        float w10 = fx * (1.0f - fy) * inv16;
-        float w01 = (1.0f - fx) * fy * inv16;
-        float w11 = fx * fy * inv16;
+        float omfx = 1.0f - fx;
+        float omfy = (1.0f - fy) * inv16;
+        float fyy  = fy * inv16;
+        float w00  = omfx * omfy;
+        float w10  = fx * omfy;
+        float w01  = omfx * fyy;
+        float w11  = fx * fyy;
 
         return {
             p00.red   * w00 + p10.red   * w10 + p01.red   * w01 + p11.red   * w11,
@@ -439,10 +464,13 @@ inline FloatRGBA SampleSpecificWorldBilinear(const PF_EffectWorld* w, A_Boolean 
         const PF_Pixel8& p11 = row1[x1];
 
         const float inv8 = 1.0f / 255.0f;
-        float w00 = (1.0f - fx) * (1.0f - fy) * inv8;
-        float w10 = fx * (1.0f - fy) * inv8;
-        float w01 = (1.0f - fx) * fy * inv8;
-        float w11 = fx * fy * inv8;
+        float omfx = 1.0f - fx;
+        float omfy = (1.0f - fy) * inv8;
+        float fyy  = fy * inv8;
+        float w00  = omfx * omfy;
+        float w10  = fx * omfy;
+        float w01  = omfx * fyy;
+        float w11  = fx * fyy;
 
         return {
             p00.red   * w00 + p10.red   * w10 + p01.red   * w01 + p11.red   * w11,

@@ -28,47 +28,69 @@ enum {
 
     /* 1. Audio & Music Reactivity */
     PARAM_TOPIC_AUDIO_START,
+    PARAM_AUDIO_ENABLE,             /* Master Enable / Bypass toggle for Music Reactivity */
     PARAM_AUDIO_LAYER,              /* Layer picker for direct audio analysis */
     PARAM_AUDIO_SLIDER,             /* Keyframable slider (for Convert Audio to Keyframes / Expressions) */
     PARAM_AUDIO_GAIN,               /* Master Audio Reactivity Multiplier (0 - 500%) */
+    PARAM_AUDIO_REACT_GRADIENT,     /* Toggle music modulation on Color Gradient */
+    PARAM_AUDIO_REACT_FM,           /* Toggle music modulation on FM & Rutt-Etra */
+    PARAM_AUDIO_REACT_BEND,         /* Toggle music modulation on Circuit Bending */
+    PARAM_AUDIO_REACT_VHS,          /* Toggle music modulation on VHS & Bloom */
+    PARAM_AUDIO_REACT_ECHO,         /* Toggle music modulation on Echo Trail */
+
+    /* Nested Advanced Audio Submenu */
+    PARAM_TOPIC_AUDIO_ADV_START,
     PARAM_AUDIO_BASS_WEIGHT,        /* Sub/Bass reactivity weight (FM & VHS Tracking) */
     PARAM_AUDIO_MID_WEIGHT,         /* Midrange reactivity weight (Gradient & Bloom) */
     PARAM_AUDIO_HIGH_WEIGHT,        /* Treble/High reactivity weight (Circuit Bend & Glitch) */
     PARAM_AUDIO_SMOOTHING,          /* Temporal window smoothing (ms) */
+    PARAM_TOPIC_AUDIO_ADV_END,
     PARAM_TOPIC_AUDIO_END,
 
     /* 2. Gradient Color Palette */
     PARAM_TOPIC_GRADIENT_START,
     PARAM_GRADIENT_ENABLE,          /* Enable / Disable Gradient Colorizer (keep original colors when off) */
     PARAM_GRADIENT_MODE,            /* Popup: Custom 4-Stop, Sunset Dream, Neon Oscilloscope, Acid Circuit, Cyberpunk VHS, Thermal CRT, Pastel Vaporwave, Off */
+    PARAM_GRADIENT_MIX,             /* Blend with original layer color (0 - 100%) */
+    PARAM_GRADIENT_CYCLE,           /* Color phase shift / cycle speed */
+
+    /* Nested Advanced Palette Submenu */
+    PARAM_TOPIC_GRADIENT_ADV_START,
     PARAM_COLOR_SHADOW,             /* Stop 1: Deep Shadows */
     PARAM_COLOR_MID_LOW,            /* Stop 2: Low Midtones */
     PARAM_COLOR_MID_HIGH,           /* Stop 3: High Midtones */
     PARAM_COLOR_HIGHLIGHT,          /* Stop 4: Bright Highlights */
-    PARAM_GRADIENT_MIX,             /* Blend with original layer color (0 - 100%) */
-    PARAM_GRADIENT_CYCLE,           /* Color phase shift / cycle speed */
     PARAM_GRADIENT_AUDIO_SHIFT,     /* Audio-driven color phase cycling */
+    PARAM_TOPIC_GRADIENT_ADV_END,
     PARAM_TOPIC_GRADIENT_END,
 
     /* 3. Frequency Modulation (FM) & Rutt-Etra Oscilloscope */
     PARAM_TOPIC_FM_START,
     PARAM_FM_ENABLE,                /* Enable FM / Rutt-Etra Synthesis */
-    PARAM_FM_CARRIER_FREQ,          /* Carrier frequency (horizontal wave density) */
     PARAM_FM_MOD_DEPTH,             /* Luma-to-Phase FM modulation depth */
     PARAM_FM_RUTT_ETRA_Z,           /* 3D Scanline vertical elevation (Rutt-Etra Z-extrusion) */
+    PARAM_FM_CARRIER_FREQ,          /* Carrier frequency (horizontal wave density) */
+
+    /* Nested Advanced FM Submenu */
+    PARAM_TOPIC_FM_ADV_START,
     PARAM_FM_SCANLINE_DENSITY,      /* Number of glowing Rutt-Etra horizontal scan ribbons */
     PARAM_FM_LINE_THICKNESS,        /* Ribbon beam thickness / glow falloff */
     PARAM_FM_AUDIO_REACT,           /* How strongly music drives FM & Rutt-Etra elevation */
+    PARAM_TOPIC_FM_ADV_END,
     PARAM_TOPIC_FM_END,
 
     /* 4. Circuit Bending (Analog Video Synth Glitch) */
     PARAM_TOPIC_BEND_START,
     PARAM_BEND_ENABLE,              /* Enable Circuit Bending */
     PARAM_BEND_PHASE_FOLD,          /* Analog wavefolder / RGB solarization wraps */
-    PARAM_BEND_XOR_CRUSH,           /* Digital DAC pin short / bitwise XOR quantization */
     PARAM_BEND_SMEAR_TEAR,          /* Horizontal line hold tear & analog color smear */
+
+    /* Nested Advanced Circuit Bending Submenu */
+    PARAM_TOPIC_BEND_ADV_START,
+    PARAM_BEND_XOR_CRUSH,           /* Digital DAC pin short / bitwise XOR quantization */
     PARAM_BEND_FEEDBACK_SHIFT,      /* Cross-channel RGB matrix bend */
     PARAM_BEND_AUDIO_REACT,         /* Music-triggered circuit bend spikes */
+    PARAM_TOPIC_BEND_ADV_END,
     PARAM_TOPIC_BEND_END,
 
     /* 5. Dreamy VHS & Tape Aesthetics */
@@ -77,30 +99,42 @@ enum {
     PARAM_VHS_DREAM_BLOOM,          /* Soft halation & dreamy highlight glow */
     PARAM_VHS_CHROMA_BLEED,         /* YIQ/YUV chroma delay & horizontal color smear */
     PARAM_VHS_TAPE_WOBBLE,          /* Analog 60Hz timebase jitter & tape flutter */
+
+    /* Nested Advanced VHS Submenu */
+    PARAM_TOPIC_VHS_ADV_START,
     PARAM_VHS_TRACKING_NOISE,       /* Bottom/floating VHS tape tracking static bar */
     PARAM_VHS_GRAIN,                /* Analog magnetic tape noise */
+    PARAM_TOPIC_VHS_ADV_END,
     PARAM_TOPIC_VHS_END,
 
     /* 6. CRT Scanlines & Trinitron Phosphor Mask */
     PARAM_TOPIC_CRT_START,
     PARAM_CRT_ENABLE,               /* Enable CRT Display Emulation */
-    PARAM_CRT_SCANLINE_PITCH,       /* Scanline height in pixels (e.g. 2.0 - 12.0 px) */
-    PARAM_CRT_SCANLINE_INTENSITY,   /* Scanline darkness / contrast */
     PARAM_CRT_PHOSPHOR_MASK,        /* Popup: None, Trinitron Aperture Grille, Shadow Mask Dot Triad, Slot Mask */
-    PARAM_CRT_PHOSPHOR_STRENGTH,    /* RGB Subpixel grille visibility */
+    PARAM_CRT_SCANLINE_INTENSITY,   /* Scanline darkness / contrast */
     PARAM_CRT_CURVATURE,            /* Subtle CRT glass barrel distortion & vignette */
+
+    /* Nested Advanced CRT Submenu */
+    PARAM_TOPIC_CRT_ADV_START,
+    PARAM_CRT_SCANLINE_PITCH,       /* Scanline height in pixels (e.g. 2.0 - 12.0 px) */
+    PARAM_CRT_PHOSPHOR_STRENGTH,    /* RGB Subpixel grille visibility */
+    PARAM_TOPIC_CRT_ADV_END,
     PARAM_TOPIC_CRT_END,
 
     /* 7. Dreamy Echo Trail (Windows Cursor Trail Style Temporal/Spatial Ghosting) */
     PARAM_TOPIC_ECHO_START,
     PARAM_ECHO_ENABLE,              /* Enable / Disable Echo Trail */
     PARAM_ECHO_COUNT,               /* Number of ghost copies in the trail (1 - 12) */
+    PARAM_ECHO_OPACITY,             /* Trail transparency / opacity (0 - 100%) */
+    PARAM_ECHO_GLOW,                /* Customizable glow intensity around the echo trail (0 - 200%) */
+
+    /* Nested Advanced Echo Submenu */
+    PARAM_TOPIC_ECHO_ADV_START,
     PARAM_ECHO_DELAY,               /* Time delay between trail copies in frames (0.2 - 8.0 frames) */
     PARAM_ECHO_OFFSET,              /* Spatial cursor-trail offset / drift distance (px) */
-    PARAM_ECHO_OPACITY,             /* Trail transparency / opacity (0 - 100%) */
     PARAM_ECHO_DECAY,               /* How quickly each successive ghost copy fades out (0 - 100%) */
-    PARAM_ECHO_GLOW,                /* Customizable glow intensity around the echo trail (0 - 200%) */
     PARAM_ECHO_GLOW_COLOR,          /* Custom glow tint color for the echo trail */
+    PARAM_TOPIC_ECHO_ADV_END,
     PARAM_TOPIC_ECHO_END,
 
     DREAMY_NUM_PARAMS
@@ -117,6 +151,14 @@ enum {
     ID_AUDIO_HIGH_WEIGHT,
     ID_AUDIO_SMOOTHING,
     ID_TOPIC_AUDIO_END,
+    ID_AUDIO_ENABLE = 150,
+    ID_AUDIO_REACT_GRADIENT,
+    ID_AUDIO_REACT_FM,
+    ID_AUDIO_REACT_BEND,
+    ID_AUDIO_REACT_VHS,
+    ID_AUDIO_REACT_ECHO,
+    ID_TOPIC_AUDIO_ADV_START = 160,
+    ID_TOPIC_AUDIO_ADV_END = 161,
 
     ID_TOPIC_GRADIENT_START = 200,
     ID_GRADIENT_MODE,
@@ -129,6 +171,8 @@ enum {
     ID_GRADIENT_AUDIO_SHIFT,
     ID_TOPIC_GRADIENT_END,
     ID_GRADIENT_ENABLE = 220,
+    ID_TOPIC_GRADIENT_ADV_START = 230,
+    ID_TOPIC_GRADIENT_ADV_END = 231,
 
     ID_TOPIC_FM_START = 300,
     ID_FM_ENABLE,
@@ -139,6 +183,8 @@ enum {
     ID_FM_LINE_THICKNESS,
     ID_FM_AUDIO_REACT,
     ID_TOPIC_FM_END,
+    ID_TOPIC_FM_ADV_START = 330,
+    ID_TOPIC_FM_ADV_END = 331,
 
     ID_TOPIC_BEND_START = 400,
     ID_BEND_ENABLE,
@@ -148,6 +194,8 @@ enum {
     ID_BEND_FEEDBACK_SHIFT,
     ID_BEND_AUDIO_REACT,
     ID_TOPIC_BEND_END,
+    ID_TOPIC_BEND_ADV_START = 430,
+    ID_TOPIC_BEND_ADV_END = 431,
 
     ID_TOPIC_VHS_START = 500,
     ID_VHS_ENABLE,
@@ -157,6 +205,8 @@ enum {
     ID_VHS_TRACKING_NOISE,
     ID_VHS_GRAIN,
     ID_TOPIC_VHS_END,
+    ID_TOPIC_VHS_ADV_START = 530,
+    ID_TOPIC_VHS_ADV_END = 531,
 
     ID_TOPIC_CRT_START = 600,
     ID_CRT_ENABLE,
@@ -166,6 +216,8 @@ enum {
     ID_CRT_PHOSPHOR_STRENGTH,
     ID_CRT_CURVATURE,
     ID_TOPIC_CRT_END,
+    ID_TOPIC_CRT_ADV_START = 630,
+    ID_TOPIC_CRT_ADV_END = 631,
 
     ID_TOPIC_ECHO_START = 700,
     ID_ECHO_ENABLE,
@@ -176,7 +228,9 @@ enum {
     ID_ECHO_DECAY,
     ID_ECHO_GLOW,
     ID_ECHO_GLOW_COLOR,
-    ID_TOPIC_ECHO_END
+    ID_TOPIC_ECHO_END,
+    ID_TOPIC_ECHO_ADV_START = 730,
+    ID_TOPIC_ECHO_ADV_END = 731
 };
 
 /* Gradient Preset Modes (1-based popup index in AE) */
@@ -213,7 +267,13 @@ typedef struct {
     A_long      frame_num;
     float       downsample_scale;
 
-    /* Evaluated Audio Reactivity Envelopes (0.0 -> 2.0+) */
+    /* Evaluated Audio Reactivity Envelopes & Target Routing */
+    A_Boolean   audio_enable;           /* Master music reactivity on/off */
+    A_Boolean   audio_react_gradient;   /* Route music to Gradient */
+    A_Boolean   audio_react_fm;         /* Route music to FM & Rutt-Etra */
+    A_Boolean   audio_react_bend;       /* Route music to Circuit Bending */
+    A_Boolean   audio_react_vhs;        /* Route music to VHS & Bloom */
+    A_Boolean   audio_react_echo;       /* Route music to Echo Trail */
     float       audio_bass;
     float       audio_mid;
     float       audio_high;

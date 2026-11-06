@@ -274,12 +274,18 @@ static const char* GradientModeToString(A_long mode) {
 
 static const char* ParamIndexToFriendlyName(PF_ParamIndex idx) {
     switch (idx) {
+        case PARAM_AUDIO_ENABLE:         return "Enable Music Reactivity";
         case PARAM_AUDIO_LAYER:          return "Audio Source Layer";
         case PARAM_AUDIO_SLIDER:         return "Audio Keyframe Slider";
         case PARAM_AUDIO_GAIN:           return "Master Audio Reactivity";
-        case PARAM_AUDIO_BASS_WEIGHT:    return "Bass Reactivity (FM & VHS)";
-        case PARAM_AUDIO_MID_WEIGHT:     return "Mid Reactivity (Bloom & Color)";
-        case PARAM_AUDIO_HIGH_WEIGHT:    return "High Reactivity (Circuit Bend)";
+        case PARAM_AUDIO_REACT_GRADIENT: return "React: Color Gradient";
+        case PARAM_AUDIO_REACT_FM:       return "React: FM & Rutt-Etra";
+        case PARAM_AUDIO_REACT_BEND:     return "React: Circuit Bending";
+        case PARAM_AUDIO_REACT_VHS:      return "React: VHS & Bloom";
+        case PARAM_AUDIO_REACT_ECHO:     return "React: Echo Trail";
+        case PARAM_AUDIO_BASS_WEIGHT:    return "Bass Response (FM & VHS)";
+        case PARAM_AUDIO_MID_WEIGHT:     return "Mid Response (Bloom & Color)";
+        case PARAM_AUDIO_HIGH_WEIGHT:    return "Treble Response (Glitch)";
         case PARAM_AUDIO_SMOOTHING:      return "Audio Smoothing (ms)";
         case PARAM_GRADIENT_ENABLE:      return "Enable Color Gradient";
         case PARAM_GRADIENT_MODE:        return "Palette Preset";
@@ -453,6 +459,9 @@ ParamsSetup(
     PF_ADD_TOPIC("Music & Audio Reactivity", ID_TOPIC_AUDIO_START);
 
     AEFX_CLR_STRUCT(def);
+    PF_ADD_CHECKBOXX("Enable Music Reactivity", TRUE, PF_ParamFlag_SUPERVISE, ID_AUDIO_ENABLE);
+
+    AEFX_CLR_STRUCT(def);
     PF_ADD_LAYER("Audio Source Layer", PF_LayerDefault_MYSELF, ID_AUDIO_LAYER);
 
     AEFX_CLR_STRUCT(def);
@@ -468,6 +477,25 @@ ParamsSetup(
         0.0, 500.0, 0.0, 250.0, 125.0,
         1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
         ID_AUDIO_GAIN);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_CHECKBOXX("React: Color Gradient", TRUE, 0, ID_AUDIO_REACT_GRADIENT);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_CHECKBOXX("React: FM & Rutt-Etra", TRUE, 0, ID_AUDIO_REACT_FM);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_CHECKBOXX("React: Circuit Bending", TRUE, 0, ID_AUDIO_REACT_BEND);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_CHECKBOXX("React: VHS & Bloom", TRUE, 0, ID_AUDIO_REACT_VHS);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_CHECKBOXX("React: Echo Trail", TRUE, 0, ID_AUDIO_REACT_ECHO);
+
+    /* Nested Advanced Audio Submenu */
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_TOPICX("Advanced Audio Tuning", PF_ParamFlag_START_COLLAPSED, ID_TOPIC_AUDIO_ADV_START);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
@@ -498,6 +526,9 @@ ParamsSetup(
         ID_AUDIO_SMOOTHING);
 
     AEFX_CLR_STRUCT(def);
+    PF_END_TOPIC(ID_TOPIC_AUDIO_ADV_END);
+
+    AEFX_CLR_STRUCT(def);
     PF_END_TOPIC(ID_TOPIC_AUDIO_END);
 
     /*==============================================================
@@ -525,19 +556,6 @@ ParamsSetup(
         PF_ParamFlag_SUPERVISE,
         ID_GRADIENT_MODE);
 
-    /* Default custom stops match Sunset Dream so switching to Custom starts from a gorgeous palette */
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_COLOR("Shadow Color (Stop 1)", 20, 5, 36, ID_COLOR_SHADOW);
-
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_COLOR("Low Midtone (Stop 2)", 224, 38, 166, ID_COLOR_MID_LOW);
-
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_COLOR("High Midtone (Stop 3)", 255, 143, 26, ID_COLOR_MID_HIGH);
-
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_COLOR("Highlight Color (Stop 4)", 184, 230, 255, ID_COLOR_HIGHLIGHT);
-
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "Gradient Blend",
@@ -552,12 +570,31 @@ ParamsSetup(
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_GRADIENT_CYCLE);
 
+    /* Nested Advanced Palette Submenu */
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_TOPICX("Advanced Palette & Stops", PF_ParamFlag_START_COLLAPSED, ID_TOPIC_GRADIENT_ADV_START);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_COLOR("Shadow Color (Stop 1)", 20, 5, 36, ID_COLOR_SHADOW);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_COLOR("Low Midtone (Stop 2)", 224, 38, 166, ID_COLOR_MID_LOW);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_COLOR("High Midtone (Stop 3)", 255, 143, 26, ID_COLOR_MID_HIGH);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_COLOR("Highlight Color (Stop 4)", 184, 230, 255, ID_COLOR_HIGHLIGHT);
+
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "Audio Color Cycling",
         0.0, 200.0, 0.0, 100.0, 35.0,
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_GRADIENT_AUDIO_SHIFT);
+
+    AEFX_CLR_STRUCT(def);
+    PF_END_TOPIC(ID_TOPIC_GRADIENT_ADV_END);
 
     AEFX_CLR_STRUCT(def);
     PF_END_TOPIC(ID_TOPIC_GRADIENT_END);
@@ -573,13 +610,6 @@ ParamsSetup(
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
-        "FM Wave Frequency",
-        1.0, 400.0, 10.0, 200.0, 85.0,
-        1, PF_ValueDisplayFlag_NONE, 0,
-        ID_FM_CARRIER_FREQ);
-
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_FLOAT_SLIDERX(
         "FM Wave Depth",
         0.0, 100.0, 0.0, 100.0, 25.0,
         1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
@@ -591,6 +621,17 @@ ParamsSetup(
         0.0, 200.0, 0.0, 100.0, 35.0,
         1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
         ID_FM_RUTT_ETRA_Z);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "FM Wave Frequency",
+        1.0, 400.0, 10.0, 200.0, 85.0,
+        1, PF_ValueDisplayFlag_NONE, 0,
+        ID_FM_CARRIER_FREQ);
+
+    /* Nested Advanced FM Submenu */
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_TOPICX("Advanced FM & Oscilloscope", PF_ParamFlag_START_COLLAPSED, ID_TOPIC_FM_ADV_START);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
@@ -614,6 +655,9 @@ ParamsSetup(
         ID_FM_AUDIO_REACT);
 
     AEFX_CLR_STRUCT(def);
+    PF_END_TOPIC(ID_TOPIC_FM_ADV_END);
+
+    AEFX_CLR_STRUCT(def);
     PF_END_TOPIC(ID_TOPIC_FM_END);
 
     /*==============================================================
@@ -634,17 +678,21 @@ ParamsSetup(
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
-        "Digital Pin-Short (XOR)",
-        0.0, 100.0, 0.0, 100.0, 0.0,
-        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
-        ID_BEND_XOR_CRUSH);
-
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_FLOAT_SLIDERX(
         "Horizontal Sync Tear",
         0.0, 100.0, 0.0, 100.0, 15.0,
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_BEND_SMEAR_TEAR);
+
+    /* Nested Advanced Circuit Bending Submenu */
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_TOPICX("Advanced Circuit Bending", PF_ParamFlag_START_COLLAPSED, ID_TOPIC_BEND_ADV_START);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Digital Pin-Short (XOR)",
+        0.0, 100.0, 0.0, 100.0, 0.0,
+        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
+        ID_BEND_XOR_CRUSH);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
@@ -659,6 +707,9 @@ ParamsSetup(
         0.0, 300.0, 0.0, 200.0, 100.0,
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_BEND_AUDIO_REACT);
+
+    AEFX_CLR_STRUCT(def);
+    PF_END_TOPIC(ID_TOPIC_BEND_ADV_END);
 
     AEFX_CLR_STRUCT(def);
     PF_END_TOPIC(ID_TOPIC_BEND_END);
@@ -693,6 +744,10 @@ ParamsSetup(
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_VHS_TAPE_WOBBLE);
 
+    /* Nested Advanced VHS Submenu */
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_TOPICX("Advanced VHS & Tape", PF_ParamFlag_START_COLLAPSED, ID_TOPIC_VHS_ADV_START);
+
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "VHS Tracking Static Bar",
@@ -708,6 +763,9 @@ ParamsSetup(
         ID_VHS_GRAIN);
 
     AEFX_CLR_STRUCT(def);
+    PF_END_TOPIC(ID_TOPIC_VHS_ADV_END);
+
+    AEFX_CLR_STRUCT(def);
     PF_END_TOPIC(ID_TOPIC_VHS_END);
 
     /*==============================================================
@@ -718,20 +776,6 @@ ParamsSetup(
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_CHECKBOXX("Enable CRT Display", TRUE, PF_ParamFlag_SUPERVISE, ID_CRT_ENABLE);
-
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_FLOAT_SLIDERX(
-        "Scanline Size (px)",
-        2.0, 24.0, 2.0, 12.0, 4.0,
-        1, PF_ValueDisplayFlag_PIXEL, 0,
-        ID_CRT_SCANLINE_PITCH);
-
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_FLOAT_SLIDERX(
-        "Scanline Contrast",
-        0.0, 100.0, 0.0, 100.0, 45.0,
-        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
-        ID_CRT_SCANLINE_INTENSITY);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_POPUPX(
@@ -747,10 +791,10 @@ ParamsSetup(
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
-        "Phosphor Mask Intensity",
-        0.0, 100.0, 0.0, 100.0, 40.0,
-        1, PF_ValueDisplayFlag_PERCENT, 0,
-        ID_CRT_PHOSPHOR_STRENGTH);
+        "Scanline Contrast",
+        0.0, 100.0, 0.0, 100.0, 45.0,
+        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
+        ID_CRT_SCANLINE_INTENSITY);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
@@ -758,6 +802,27 @@ ParamsSetup(
         0.0, 100.0, 0.0, 100.0, 15.0,
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_CRT_CURVATURE);
+
+    /* Nested Advanced CRT Submenu */
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_TOPICX("Advanced CRT Display", PF_ParamFlag_START_COLLAPSED, ID_TOPIC_CRT_ADV_START);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Scanline Size (px)",
+        2.0, 24.0, 2.0, 12.0, 4.0,
+        1, PF_ValueDisplayFlag_PIXEL, 0,
+        ID_CRT_SCANLINE_PITCH);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Phosphor Mask Intensity",
+        0.0, 100.0, 0.0, 100.0, 40.0,
+        1, PF_ValueDisplayFlag_PERCENT, 0,
+        ID_CRT_PHOSPHOR_STRENGTH);
+
+    AEFX_CLR_STRUCT(def);
+    PF_END_TOPIC(ID_TOPIC_CRT_ADV_END);
 
     AEFX_CLR_STRUCT(def);
     PF_END_TOPIC(ID_TOPIC_CRT_END);
@@ -780,6 +845,24 @@ ParamsSetup(
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
+        "Echo Trail Opacity",
+        0.0, 100.0, 0.0, 100.0, 55.0,
+        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
+        ID_ECHO_OPACITY);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
+        "Echo Trail Glow",
+        0.0, 200.0, 0.0, 150.0, 65.0,
+        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
+        ID_ECHO_GLOW);
+
+    /* Nested Advanced Echo Submenu */
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_TOPICX("Advanced Echo Options", PF_ParamFlag_START_COLLAPSED, ID_TOPIC_ECHO_ADV_START);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_FLOAT_SLIDERX(
         "Echo Time Delay (Frames)",
         0.2, 8.0, 0.5, 4.0, 1.5,
         1, PF_ValueDisplayFlag_NONE, 0,
@@ -794,33 +877,22 @@ ParamsSetup(
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
-        "Echo Trail Opacity",
-        0.0, 100.0, 0.0, 100.0, 55.0,
-        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
-        ID_ECHO_OPACITY);
-
-    AEFX_CLR_STRUCT(def);
-    PF_ADD_FLOAT_SLIDERX(
         "Echo Trail Fade Decay",
         0.0, 100.0, 10.0, 95.0, 45.0,
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_ECHO_DECAY);
 
     AEFX_CLR_STRUCT(def);
-    PF_ADD_FLOAT_SLIDERX(
-        "Echo Trail Glow",
-        0.0, 200.0, 0.0, 150.0, 65.0,
-        1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
-        ID_ECHO_GLOW);
+    PF_ADD_COLOR("Echo Trail Glow Color", 230, 80, 255, ID_ECHO_GLOW_COLOR);
 
     AEFX_CLR_STRUCT(def);
-    PF_ADD_COLOR("Echo Trail Glow Color", 230, 80, 255, ID_ECHO_GLOW_COLOR);
+    PF_END_TOPIC(ID_TOPIC_ECHO_ADV_END);
 
     AEFX_CLR_STRUCT(def);
     PF_END_TOPIC(ID_TOPIC_ECHO_END);
 
     out_data->num_params = DREAMY_NUM_PARAMS;
-    DreamyLog("🎛️ [UI SETUP] Registered %d Effect Controls across 7 collapsible groups (All slider ranges verified)",
+    DreamyLog("🎛️ [UI SETUP] Registered %d Effect Controls across 7 collapsible groups with streamlined submenus (All slider ranges verified)",
               (int)out_data->num_params);
     return PF_Err_NONE;
 }
@@ -966,12 +1038,18 @@ Render(
     auto render_t0 = std::chrono::steady_clock::now();
 
     /* 1. Extract & Analyze Music Reactivity */
-    float audio_slider   = (float)params[PARAM_AUDIO_SLIDER]->u.fs_d.value;
-    float audio_gain     = (float)params[PARAM_AUDIO_GAIN]->u.fs_d.value * 0.01f;
-    float bass_weight    = (float)params[PARAM_AUDIO_BASS_WEIGHT]->u.fs_d.value * 0.01f;
-    float mid_weight     = (float)params[PARAM_AUDIO_MID_WEIGHT]->u.fs_d.value * 0.01f;
-    float high_weight    = (float)params[PARAM_AUDIO_HIGH_WEIGHT]->u.fs_d.value * 0.01f;
-    float smooth_ms      = (float)params[PARAM_AUDIO_SMOOTHING]->u.fs_d.value;
+    rp.audio_enable         = (A_Boolean)params[PARAM_AUDIO_ENABLE]->u.bd.value;
+    float audio_slider      = (float)params[PARAM_AUDIO_SLIDER]->u.fs_d.value;
+    float audio_gain        = (float)params[PARAM_AUDIO_GAIN]->u.fs_d.value * 0.01f;
+    rp.audio_react_gradient = (A_Boolean)params[PARAM_AUDIO_REACT_GRADIENT]->u.bd.value;
+    rp.audio_react_fm       = (A_Boolean)params[PARAM_AUDIO_REACT_FM]->u.bd.value;
+    rp.audio_react_bend     = (A_Boolean)params[PARAM_AUDIO_REACT_BEND]->u.bd.value;
+    rp.audio_react_vhs      = (A_Boolean)params[PARAM_AUDIO_REACT_VHS]->u.bd.value;
+    rp.audio_react_echo     = (A_Boolean)params[PARAM_AUDIO_REACT_ECHO]->u.bd.value;
+    float bass_weight       = (float)params[PARAM_AUDIO_BASS_WEIGHT]->u.fs_d.value * 0.01f;
+    float mid_weight        = (float)params[PARAM_AUDIO_MID_WEIGHT]->u.fs_d.value * 0.01f;
+    float high_weight       = (float)params[PARAM_AUDIO_HIGH_WEIGHT]->u.fs_d.value * 0.01f;
+    float smooth_ms         = (float)params[PARAM_AUDIO_SMOOTHING]->u.fs_d.value;
 
     /* 2. Extract Gradient Palette Settings */
     rp.gradient_enable = (A_Boolean)params[PARAM_GRADIENT_ENABLE]->u.bd.value;
@@ -1056,6 +1134,12 @@ Render(
             g_logged_legacy_recovery = true;
             DreamyLog("💡 [AUTO-RECOVERY] Layer had cached 0%% values from previous save — auto-applying default Dreamy Music VHS look! (Click 'Reset' next to Dreamy Music VHS in Effect Controls to refresh UI numbers)");
         }
+        rp.audio_enable           = TRUE;
+        rp.audio_react_gradient   = TRUE;
+        rp.audio_react_fm         = TRUE;
+        rp.audio_react_bend       = TRUE;
+        rp.audio_react_vhs        = TRUE;
+        rp.audio_react_echo       = TRUE;
         audio_gain                = 1.25f;
         bass_weight               = 1.30f;
         mid_weight                = 1.00f;
@@ -1096,7 +1180,8 @@ Render(
         high_weight,
         smooth_ms);
 
-    rp.gradient_phase = manual_phase + rp.audio_mid * audio_phase;
+    float grad_audio = (rp.audio_enable && rp.audio_react_gradient) ? rp.audio_mid : 0.0f;
+    rp.gradient_phase = manual_phase + grad_audio * audio_phase;
 
     /* Checkout past frames for the temporal Echo Trail if enabled */
     PF_ParamDef echo_checked_out[12];
@@ -1139,16 +1224,22 @@ Render(
     bool should_log_this_frame = (g_render_frame_counter <= 5 || g_log_next_render || (g_render_frame_counter % 15) == 0);
     if (should_log_this_frame) {
         g_log_next_render = false;
-        DreamyLog("🎬 [RENDER #%d] Frame %d (%.2fs) | %dx%d (%s) | Audio[Bass:%.2f Mid:%.2f High:%.2f] | Palette: %s (Mix:%.0f%%) | Modules[FM:%s Bend:%s VHS:%s CRT:%s Echo:%s]",
+        DreamyLog("🎬 [RENDER #%d] Frame %d (%.2fs) | %dx%d (%s) | Music: %s [Bass:%.2f Mid:%.2f High:%.2f] | React:[Grad:%s FM:%s Bend:%s VHS:%s Echo:%s] | Palette: %s (Mix:%.0f%%) | Modules[FM:%s Bend:%s VHS:%s CRT:%s Echo:%s]",
                   g_render_frame_counter,
                   (int)rp.frame_num,
                   rp.time_sec,
                   (int)rp.width,
                   (int)rp.height,
                   rp.is_16bit ? "16-bit" : "8-bit",
+                  rp.audio_enable ? "ON" : "OFF",
                   rp.audio_bass,
                   rp.audio_mid,
                   rp.audio_high,
+                  rp.audio_react_gradient ? "ON" : "off",
+                  rp.audio_react_fm ? "ON" : "off",
+                  rp.audio_react_bend ? "ON" : "off",
+                  rp.audio_react_vhs ? "ON" : "off",
+                  rp.audio_react_echo ? "ON" : "off",
                   (rp.gradient_enable && grad_mode != GRAD_MODE_OFF) ? GradientModeToString(grad_mode) : "OFF (Original Colors)",
                   rp.gradient_mix * 100.0f,
                   rp.fm_enable ? "ON" : "off",

@@ -50,37 +50,53 @@ An audio-reactive Adobe After Effects C++ plugin (**Effect > Stylize > Dreamy Mu
 
 ## 2. Complete Feature & Control Reference
 
-The Effect Controls panel is organized into **7 collapsible topic groups**. The 3 core look groups start expanded for immediate tweaking, while the 4 secondary hardware/tape/trail groups start collapsed to keep the UI tidy.
+The Effect Controls panel is organized into **7 streamlined groups**, each with an **Advanced Submenu** kept collapsed by default. This keeps your working panel uncluttered while giving you full access to deep parameters whenever you want them.
 
 ### Group 1: Music & Audio Reactivity *(Starts Open)*
 
+Full control over how your music drives the visuals. You can toggle audio reactivity on or off globally, pick which modules react, or route reactivity individually. When audio reactivity is disabled, the plugin bypasses all audio checkout and filtering to maximize playback speed.
+
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
-| **Audio Source Layer** | Layer Picker | `Self` | Selects the composition layer whose audio waveform drives the 3-band DSP analyzer. Select `None` if you want a purely static/manual look. |
+| **Enable Music Reactivity** | Checkbox | `On` | Master toggle to turn music reactivity on or off across the whole plugin. When off, all audio checkout and DSP analysis are bypassed immediately. |
+| **Audio Source Layer** | Layer Picker | `Self` | Selects the composition layer whose audio waveform drives the 3-band DSP analyzer. Select `None` if you want a purely static or manual look. |
 | **Audio Keyframe Slider** | `0 – 200` (Slider `0 – 50`) | `0.0` | Manual or expression-driven audio amplitude input (`0–50` typical keyframe range). Adds directly to the live waveform analyzer. |
-| **Master Reactivity** | `0% – 500%` | `125.0%` | Global multiplier for all audio-reactive motion across all modules. Set to `0%` to freeze all audio modulation. |
-| **Bass Response (FM & VHS)** | `0% – 300%` | `130.0%` | Controls how strongly sub-bass and kick drums (`< 160 Hz`) drive **FM Wave Depth**, **3D Scanline Elevation**, and **VHS Tape Edge Wobble**. |
-| **Mid Response (Glow & Color)** | `0% – 300%` | `100.0%` | Controls how strongly vocals, synths, and snares (`160 Hz – 2.5 kHz`) drive **Dreamy Halation Glow**, **VHS Color Bleed**, and **Audio Color Cycling**. |
-| **Treble Response (Glitch)** | `0% – 300%` | `120.0%` | Controls how strongly hi-hats and transients (`> 2.5 kHz`) trigger **Circuit Bending** wavefolding, XOR pin-shorts, and horizontal sync tears. |
-| **Audio Smoothing (ms)** | `15 – 350 ms` | `75 ms` | Duration of the sliding RMS audio analysis window. Lower values (`15–35 ms`) create snappy, jittery beat reactions; higher values (`150–350 ms`) create slow, floating, dreamy swells. |
+| **Master Reactivity** | `0% – 500%` | `125.0%` | Global multiplier for all audio-reactive motion across active modules. Set to `0%` to freeze all audio modulation. |
+| **React: Color Gradient** | Checkbox | `On` | Allows audio to cycle and modulate the color gradient palette. |
+| **React: FM & Rutt-Etra** | Checkbox | `On` | Allows audio to modulate FM wave depth and 3D scanline elevation. |
+| **React: Circuit Bending** | Checkbox | `On` | Allows audio peaks to trigger wavefolding, sync tears, and glitch bursts. |
+| **React: VHS & Bloom** | Checkbox | `On` | Allows audio to drive VHS tape wobble, tracking jitter, and halation bloom. |
+| **React: Echo Trail** | Checkbox | `On` | Allows audio to expand echo spacing and boost trail glow. |
+
+#### Submenu: Advanced Audio Tuning *(Starts Collapsed)*
+| Control | Range | Default | How It Works & How to Use It |
+| :--- | :--- | :--- | :--- |
+| **Bass Response (FM & VHS)** | `0% – 300%` | `130.0%` | Controls how strongly sub-bass and kick drums (`< 160 Hz`) drive active modules. |
+| **Mid Response (Glow & Color)** | `0% – 300%` | `100.0%` | Controls how strongly vocals, synths, and snares (`160 Hz – 2.5 kHz`) drive active modules. |
+| **Treble Response (Glitch)** | `0% – 300%` | `120.0%` | Controls how strongly hi-hats and transients (`> 2.5 kHz`) drive active modules. |
+| **Audio Smoothing (ms)** | `15 – 350 ms` | `75 ms` | Duration of the sliding RMS audio analysis window. Lower values (`15–35 ms`) create snappy reactions; higher values (`150–350 ms`) create smooth swells. |
 
 ---
 
 ### Group 2: Dreamy Color Gradient *(Starts Open)*
 
-Maps image luminance (plus FM wave ridges and circuit-bent phase contours) through a smooth hermite-interpolated 4-stop color palette while preserving natural highlight roll-off. You can turn off the gradient colors at any time to keep 100% of your original footage colors while keeping FM/Rutt-Etra, VHS, Circuit Bending, and CRT scanlines active.
+Maps image luminance (plus FM wave ridges and circuit-bent phase contours) through a smooth 4-stop color palette while preserving natural highlight roll-off. You can turn off the gradient colors at any time to keep 100% of your original footage colors while keeping FM, VHS, Circuit Bending, and CRT scanlines active.
 
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
-| **Enable Color Gradient** | Checkbox | `On` | Master toggle for the color gradient synthesizer. Uncheck this to turn off the gradient colors and keep 100% of your original video colors. |
-| **Palette Preset** | Popup (8 modes) | `Sunset Dream` | Choose **Custom 4-Stop Gradient** to use your own color pickers below, pick one of the 6 built-in curated palettes, or choose **Off (Original Footage Colors)** to bypass gradient colorization. |
-| **Shadow Color (Stop 1)** | RGB Picker | `#140524` (Deep Violet) | Color mapped to dark shadows (`Luma 0.00 – 0.33`) when **Palette Preset** is set to `Custom 4-Stop Gradient`. |
-| **Low Midtone (Stop 2)** | RGB Picker | `#E026A6` (Electric Magenta) | Color mapped to lower midtones (`Luma 0.33 – 0.66`) in Custom mode. |
-| **High Midtone (Stop 3)** | RGB Picker | `#FF8F1A` (Fiery Orange-Gold) | Color mapped to upper midtones (`Luma 0.66 – 1.00`) in Custom mode. |
-| **Highlight Color (Stop 4)** | RGB Picker | `#B8E6FF` (Pastel Cyan-White) | Color mapped to bright specular highlights and oscilloscope beam peaks in Custom mode. |
+| **Enable Color Gradient** | Checkbox | `On` | Master toggle for the color gradient synthesizer. Uncheck this to keep 100% of your original video colors. |
+| **Palette Preset** | Popup (8 modes) | `Sunset Dream` | Choose **Custom 4-Stop Gradient** to use custom colors, pick one of the 6 built-in curated palettes, or choose **Off (Original Footage Colors)**. |
 | **Gradient Blend** | `0% – 100%` | `85.0%` | Blends between the original video colors (`0%`) and the dreamy gradient synthesizer (`100%`). |
-| **Color Phase Shift** | `-500% – 500%` | `0.0%` | Manually scrolls/rotates the 4 stops across the luminance spectrum. Keyframe this for continuous rainbow palette evolution. |
-| **Audio Color Cycling** | `0% – 200%` | `35.0%` | Shifts the gradient phase dynamically in response to **Mid** and **Bass** energy so colors pulse with the music. |
+| **Color Phase Shift** | `-500% – 500%` | `0.0%` | Manually scrolls the 4 stops across the luminance spectrum. Keyframe this for continuous rainbow palette evolution. |
+
+#### Submenu: Advanced Palette & Stops *(Starts Collapsed)*
+| Control | Range | Default | How It Works & How to Use It |
+| :--- | :--- | :--- | :--- |
+| **Shadow Color (Stop 1)** | RGB Picker | `#140524` (Deep Violet) | Color mapped to dark shadows in Custom mode. |
+| **Low Midtone (Stop 2)** | RGB Picker | `#E026A6` (Electric Magenta) | Color mapped to lower midtones in Custom mode. |
+| **High Midtone (Stop 3)** | RGB Picker | `#FF8F1A` (Fiery Orange-Gold) | Color mapped to upper midtones in Custom mode. |
+| **Highlight Color (Stop 4)** | RGB Picker | `#B8E6FF` (Pastel Cyan-White) | Color mapped to bright highlights in Custom mode. |
+| **Audio Color Cycling** | `0% – 200%` | `35.0%` | Shifts the gradient phase dynamically with music beats when React: Color Gradient is enabled. |
 
 #### Built-in Palette Presets:
 1. **Custom 4-Stop Gradient**: Uses your 4 custom RGB pickers (`Stop 1` through `Stop 4`).
@@ -101,27 +117,35 @@ Emulates classic analog Rutt/Etra video synthesizers and frequency-modulated CRT
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
 | **Enable FM & Rutt-Etra** | Checkbox | `On` | Master bypass toggle for the FM & Rutt-Etra synthesizer stage. |
-| **FM Wave Frequency** | `1 – 400` | `85.0` | Base horizontal carrier frequency of the FM sine oscillator. Higher values create finer, tightly packed ripple textures. |
-| **FM Wave Depth** | `0% – 100%` | `25.0%` | Controls how strongly image brightness warps horizontal pixel coordinates and superimposes FM harmonic ripples. |
-| **3D Scanline Elevation** | `0% – 200%` | `35.0%` | Rutt-Etra Z-axis vertical deflection: bright areas of the video physically lift scanlines upward into 3D topographic ridges. |
-| **Oscilloscope Lines** | `0 – 400` | `90` | Number of discrete horizontal oscilloscope contour ribbons drawn across the frame. Set to `0` for smooth continuous FM displacement without discrete ribbon gaps. |
-| **Oscilloscope Beam Width** | `5% – 100%` | `62.0%` | Thickness of the glowing phosphor beam relative to the dark inter-line gap. Lower values (`15%–35%`) produce thin, sharp vector lines on a dark background. |
-| **FM Music Reactivity** | `0% – 300%` | `90.0%` | Scales how strongly **Bass** and **Mid** audio energy boost FM Wave Depth and 3D Scanline Elevation on beats. |
+| **FM Wave Depth** | `0% – 100%` | `25.0%` | Controls how strongly image brightness warps horizontal coordinates and superimposes FM ripples. |
+| **3D Scanline Elevation** | `0% – 200%` | `35.0%` | Rutt-Etra vertical deflection: bright areas lift scanlines upward into 3D topographic ridges. |
+| **FM Wave Frequency** | `1 – 400` | `85.0` | Base horizontal carrier frequency of the FM sine oscillator. Higher values create finer ripple textures. |
+
+#### Submenu: Advanced FM & Oscilloscope *(Starts Collapsed)*
+| Control | Range | Default | How It Works & How to Use It |
+| :--- | :--- | :--- | :--- |
+| **Oscilloscope Lines** | `0 – 400` | `90` | Number of discrete horizontal oscilloscope ribbons across the frame. Set to `0` for smooth continuous displacement. |
+| **Oscilloscope Beam Width** | `5% – 100%` | `62.0%` | Thickness of the glowing phosphor beam relative to the line gap. Lower values produce thin vector lines. |
+| **FM Music Reactivity** | `0% – 300%` | `90.0%` | Scales how strongly music boosts FM Wave Depth and 3D Scanline Elevation on beats when React: FM & Rutt-Etra is enabled. |
 
 ---
 
 ### Group 4: Circuit Bending Glitch *(Starts Collapsed)*
 
-Emulates hardware-bent analog/digital video processors (such as Tachyons+ / dirty video mixers / shorted ADC data pins).
+Emulates hardware-bent analog and digital video processors like dirty video mixers and shorted ADC data pins.
 
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
 | **Enable Circuit Bending** | Checkbox | `On` | Master bypass toggle for all circuit-bending processors. |
-| **Psychedelic Wavefolder** | `0% – 100%` | `18.0%` | Analog sinusoidal wavefolder: pushes RGB channels past `1.0` and folds them back down (`0.5 - 0.5 * cos(...)`), creating liquid solarized color bands. |
-| **Digital Pin-Short (XOR)** | `0% – 100%` | `0.0%` | Simulates shorting digital bits on an 8-bit video DAC chip using bitwise `XOR` (`^`) patterns for crunchy hardware quantization artifacts. |
-| **Horizontal Sync Tear** | `0% – 100%` | `15.0%` | Analog H-sync line-hold instability that tears random horizontal scanline bands sideways and smears their chroma trail. |
+| **Psychedelic Wavefolder** | `0% – 100%` | `18.0%` | Analog sinusoidal wavefolder: pushes RGB channels past `1.0` and folds them back down for liquid solarized color bands. |
+| **Horizontal Sync Tear** | `0% – 100%` | `15.0%` | Analog H-sync line-hold instability that tears random horizontal scanlines sideways with a color smear trail. |
+
+#### Submenu: Advanced Circuit Bending *(Starts Collapsed)*
+| Control | Range | Default | How It Works & How to Use It |
+| :--- | :--- | :--- | :--- |
+| **Digital Pin-Short (XOR)** | `0% – 100%` | `0.0%` | Simulates shorting digital bits on a video DAC using bitwise `XOR` (`^`) patterns for crunchy hardware quantization. |
 | **RGB Matrix Shift** | `0% – 100%` | `12.0%` | Rotates and cross-feeds Red, Green, and Blue channels (`R->G->B`) in a time-varying phase loop. |
-| **Bend Music Reactivity** | `0% – 300%` | `100.0%` | Scales how strongly **Treble** and **Bass** peaks trigger wavefolding, H-sync tearing, and XOR pin glitches. |
+| **Bend Music Reactivity** | `0% – 300%` | `100.0%` | Scales how strongly audio peaks trigger wavefolding, H-sync tearing, and XOR pin glitches when React: Circuit Bending is enabled. |
 
 ---
 
@@ -132,11 +156,15 @@ Models magnetic VHS tape transport, analog YIQ color under-carrier smearing, and
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
 | **Enable Dreamy VHS** | Checkbox | `On` | Master bypass toggle for the VHS tape and dreamy bloom stage. |
-| **Dreamy Halation Glow** | `0% – 150%` | `55.0%` | Wide multi-tap horizontal/vertical highlight diffusion that surrounds bright areas with a warm magenta-tinted dreamy aura. |
-| **VHS Color Bleed** | `0% – 100%` | `42.0%` | Separates luma (`Y`) from chroma (`R-Y`, `B-Y`) and delays the color signal horizontally to the right while keeping luma edges sharp. |
-| **Tape Edge Wobble** | `0% – 100%` | `24.0%` | Combines 60 Hz mains-hum wave distortion with high-frequency capstan flutter and audio-driven head-switching jitter. |
-| **VHS Tracking Static Bar** | `0% – 100%` | `20.0%` | Renders a scrolling horizontal VHS tracking error band with white snow particles and horizontal sync pull. |
-| **Magnetic Tape Grain** | `0% – 100%` | `18.0%` | Temporal analog luma/chroma tape hiss and grain. |
+| **Dreamy Halation Glow** | `0% – 150%` | `55.0%` | Multi-tap highlight diffusion that surrounds bright areas with a warm magenta-tinted dreamy aura. |
+| **VHS Color Bleed** | `0% – 100%` | `42.0%` | Delays the chroma signal horizontally to the right while keeping luma edges sharp. |
+| **Tape Edge Wobble** | `0% – 100%` | `24.0%` | Combines 60 Hz mains-hum wave distortion with capstan flutter and tape jitter. |
+
+#### Submenu: Advanced VHS & Tape *(Starts Collapsed)*
+| Control | Range | Default | How It Works & How to Use It |
+| :--- | :--- | :--- | :--- |
+| **VHS Tracking Static Bar** | `0% – 100%` | `20.0%` | Renders a scrolling horizontal VHS tracking error band with snow particles and horizontal sync pull. |
+| **Magnetic Tape Grain** | `0% – 100%` | `18.0%` | Temporal analog luma and chroma tape hiss and grain. |
 
 ---
 
@@ -147,11 +175,15 @@ Simulates a physical cathode-ray tube television monitor with discrete RGB subpi
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
 | **Enable CRT Display** | Checkbox | `On` | Master bypass toggle for CRT scanlines, phosphor masks, and screen curvature. |
-| **Scanline Size (px)** | `2.0 – 24.0 px` | `4.0 px` | Vertical height of each CRT scanline cycle in pixels. Increase to `6–12 px` for bold, macro-zoom CRT lines. |
-| **Scanline Contrast** | `0% – 100%` | `45.0%` | Darkness of the gap between scanlines, featuring automatic highlight beam-bloom compensation so bright whites widen the electron beam naturally. |
-| **Phosphor Subpixel Mask** | Popup (4 modes) | `Trinitron Aperture Grille` | Selects the physical RGB phosphor subpixel layout:<br>• **None (Scanlines Only)**<br>• **Trinitron Aperture Grille**: Continuous vertical `R | G | B` stripes<br>• **Shadow Mask Delta Triad**: Brick-staggered RGB triads<br>• **Arcade Slot Mask**: Staggered slot mask with horizontal dark bridges |
-| **Phosphor Mask Intensity** | `0% – 100%` | `40.0%` | Visibility of the individual Red, Green, and Blue phosphor subpixels. Push to `75%–100%` for extreme macro close-up CRT aesthetics. |
-| **CRT Screen Curvature** | `0% – 100%` | `15.0%` | Applies spherical CRT glass barrel distortion and darkened tube-bezel corners. Set to `0%` for a flat-screen framing. |
+| **Phosphor Subpixel Mask** | Popup (4 modes) | `Trinitron Aperture Grille` | Selects the physical RGB phosphor layout: None, Trinitron Aperture Grille, Shadow Mask Delta Triad, or Arcade Slot Mask. |
+| **Scanline Contrast** | `0% – 100%` | `45.0%` | Darkness of the gap between scanlines, with highlight beam-bloom compensation. |
+| **CRT Screen Curvature** | `0% – 100%` | `15.0%` | Applies spherical CRT glass barrel distortion and darkened tube-bezel corners. Set to `0%` for a flat screen. |
+
+#### Submenu: Advanced CRT Display *(Starts Collapsed)*
+| Control | Range | Default | How It Works & How to Use It |
+| :--- | :--- | :--- | :--- |
+| **Scanline Size (px)** | `2.0 – 24.0 px` | `4.0 px` | Vertical height of each CRT scanline cycle in pixels. Increase to `6–12 px` for bold CRT lines. |
+| **Phosphor Mask Intensity** | `0% – 100%` | `40.0%` | Visibility of the individual Red, Green, and Blue phosphor subpixels. |
 
 ---
 
@@ -162,12 +194,16 @@ Creates a semi-transparent ghosting trail (similar to the classic Windows mouse 
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
 | **Enable Echo Trail** | Checkbox | `On` | Master toggle to turn the Echo Trail effect on or off. |
-| **Echo Trail Count** | `1 – 12` (Slider `1 – 10`) | `4` | Customizes the number of discrete ghost copies in the trail. Higher counts create longer, ribbon-like trails. |
+| **Echo Trail Count** | `1 – 12` (Slider `1 – 10`) | `4` | Customizes the number of discrete ghost copies in the trail. Higher counts create longer trails. |
+| **Echo Trail Opacity** | `0% – 100%` | `55.0%` | Controls the overall transparency and opacity of the echo trail. |
+| **Echo Trail Glow** | `0% – 200%` | `65.0%` | Customizes the intensity and radius of the dreamy luminous halo surrounding each ghost copy. |
+
+#### Submenu: Advanced Echo Options *(Starts Collapsed)*
+| Control | Range | Default | How It Works & How to Use It |
+| :--- | :--- | :--- | :--- |
 | **Echo Time Delay (Frames)** | `0.2 – 8.0` | `1.5` | Temporal spacing (in composition frames) between each ghost copy in the trail. |
-| **Echo Trail Spacing (px)** | `0.0 – 120.0 px` | `12.0 px` | Spatial cursor-trail offset distance between each ghost copy, modulated dynamically by Bass and Mid audio energy. |
-| **Echo Trail Opacity** | `0% – 100%` | `55.0%` | Controls the overall transparency/opacity of the echo trail (`0%` = completely transparent, `100%` = solid bright ghost copies). |
+| **Echo Trail Spacing (px)** | `0.0 – 120.0 px` | `12.0 px` | Spatial cursor-trail offset distance between each ghost copy, modulated by Bass and Mid audio energy. |
 | **Echo Trail Fade Decay** | `0% – 100%` | `45.0%` | Controls how rapidly each successive copy in the trail becomes more transparent from the first echo to the last. |
-| **Echo Trail Glow** | `0% – 200%` | `65.0%` | Customizes the intensity and radius of the dreamy luminous halo surrounding each ghost copy in the trail. |
 | **Echo Trail Glow Color** | RGB Picker | `#E650FF` (Dreamy Violet-Pink) | Customizes the color tint of the glow aura around the echo trail. |
 
 ---
@@ -188,7 +224,7 @@ Creates a semi-transparent ghosting trail (similar to the classic Windows mouse 
 
 ---
 
-## 4. Building, Editing & Installing (VS Code & Xcode)
+## 4. Building, Editing & Installing 
 
 ### Prerequisites
 * **macOS** (Apple Silicon `arm64` or Intel `x86_64`)
