@@ -18,6 +18,14 @@
 #include <cmath>
 #include <algorithm>
 
+#if defined(__ARM_NEON) || defined(__ARM_NEON__)
+#include <arm_neon.h>
+#define DREAMY_HAS_NEON 1
+#elif defined(__SSE2__) || defined(_M_X64) || defined(_M_IX86)
+#include <immintrin.h>
+#define DREAMY_HAS_SSE 1
+#endif
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -49,6 +57,35 @@ inline float Clamp01(float v) {
     return v < 0.0f ? 0.0f : (v > 1.0f ? 1.0f : v);
 }
 
+inline FloatRGBA ClampColor01(const FloatRGBA& c) {
+#if defined(DREAMY_HAS_NEON)
+    float32x4_t v = vld1q_f32(&c.r);
+    float32x4_t zero = vdupq_n_f32(0.0f);
+    float32x4_t one = vdupq_n_f32(1.0f);
+    v = vmaxq_f32(v, zero);
+    v = vminq_f32(v, one);
+    FloatRGBA res;
+    vst1q_f32(&res.r, v);
+    return res;
+#elif defined(DREAMY_HAS_SSE)
+    __m128 v = _mm_loadu_ps(&c.r);
+    __m128 zero = _mm_setzero_ps();
+    __m128 one = _mm_set1_ps(1.0f);
+    v = _mm_max_ps(v, zero);
+    v = _mm_min_ps(v, one);
+    FloatRGBA res;
+    _mm_storeu_ps(&res.r, v);
+    return res;
+#else
+    return {
+        Clamp01(c.r),
+        Clamp01(c.g),
+        Clamp01(c.b),
+        Clamp01(c.a)
+    };
+#endif
+}
+
 inline float SmoothStep(float edge0, float edge1, float x) {
     float t = Clamp01((x - edge0) / (edge1 - edge0 + 1e-6f));
     return t * t * (3.0f - 2.0f * t);
@@ -59,12 +96,35 @@ inline float Lerp(float a, float b, float t) {
 }
 
 inline FloatRGBA LerpColor(const FloatRGBA& a, const FloatRGBA& b, float t) {
+#if defined(DREAMY_HAS_NEON)
+    float32x4_t va = vld1q_f32(&a.r);
+    float32x4_t vb = vld1q_f32(&b.r);
+    float32x4_t diff = vsubq_f32(vb, va);
+    FloatRGBA res;
+    vst1q_f32(&res.r, vmlaq_n_f32(va, diff, t));
+    return res;
+#elif defined(DREAMY_HAS_SSE)
+    __m128 va = _mm_loadu_ps(&a.r);
+    __m128 vb = _mm_loadu_ps(&b.r);
+    __m128 vt = _mm_set1_ps(t);
+    __m128 diff = _mm_sub_ps(vb, va);
+#if defined(__FMA__) || defined(__AVX2__)
+    FloatRGBA res;
+    _mm_storeu_ps(&res.r, _mm_fmadd_ps(diff, vt, va));
+    return res;
+#else
+    FloatRGBA res;
+    _mm_storeu_ps(&res.r, _mm_add_ps(va, _mm_mul_ps(diff, vt)));
+    return res;
+#endif
+#else
     return {
         Lerp(a.r, b.r, t),
         Lerp(a.g, b.g, t),
         Lerp(a.b, b.b, t),
         Lerp(a.a, b.a, t)
     };
+#endif
 }
 
 inline float Luminance(const FloatRGBA& c) {
@@ -448,12 +508,53 @@ inline FloatRGBA SampleSpecificWorldBilinear(const PF_EffectWorld* w, A_Boolean 
         float w01  = omfx * fyy;
         float w11  = fx * fyy;
 
+#if defined(DREAMY_HAS_NEON)
+        float32x4_t v00 = { (float)p00.red, (float)p00.green, (float)p00.blue, (float)p00.alpha };
+        float32x4_t v10 = { (float)p10.red, (float)p10.green, (float)p10.blue, (float)p10.alpha };
+        float32x4_t v01 = { (float)p01.red, (float)p01.green, (float)p01.blue, (float)p01.alpha };
+        float32x4_t v11 = { (float)p11.red, (float)p11.green, (float)p11.blue, (float)p11.alpha };
+
+        float32x4_t res = vmulq_n_f32(v00, w00);
+        res = vmlaq_n_f32(res, v10, w10);
+        res = vmlaq_n_f32(res, v01, w01);
+        res = vmlaq_n_f32(res, v11, w11);
+
+        FloatRGBA out;
+        vst1q_f32(&out.r, res);
+        return out;
+#elif defined(DREAMY_HAS_SSE)
+        __m128 v00 = _mm_set_ps((float)p00.alpha, (float)p00.blue, (float)p00.green, (float)p00.red);
+        __m128 v10 = _mm_set_ps((float)p10.alpha, (float)p10.blue, (float)p10.green, (float)p10.red);
+        __m128 v01 = _mm_set_ps((float)p01.alpha, (float)p01.blue, (float)p01.green, (float)p01.red);
+        __m128 v11 = _mm_set_ps((float)p11.alpha, (float)p11.blue, (float)p11.green, (float)p11.red);
+
+        __m128 vw00 = _mm_set1_ps(w00);
+        __m128 vw10 = _mm_set1_ps(w10);
+        __m128 vw01 = _mm_set1_ps(w01);
+        __m128 vw11 = _mm_set1_ps(w11);
+
+#if defined(__FMA__) || defined(__AVX2__)
+        __m128 res = _mm_mul_ps(v00, vw00);
+        res = _mm_fmadd_ps(v10, vw10, res);
+        res = _mm_fmadd_ps(v01, vw01, res);
+        res = _mm_fmadd_ps(v11, vw11, res);
+#else
+        __m128 res = _mm_add_ps(
+            _mm_add_ps(_mm_mul_ps(v00, vw00), _mm_mul_ps(v10, vw10)),
+            _mm_add_ps(_mm_mul_ps(v01, vw01), _mm_mul_ps(v11, vw11))
+        );
+#endif
+        FloatRGBA out;
+        _mm_storeu_ps(&out.r, res);
+        return out;
+#else
         return {
             p00.red   * w00 + p10.red   * w10 + p01.red   * w01 + p11.red   * w11,
             p00.green * w00 + p10.green * w10 + p01.green * w01 + p11.green * w11,
             p00.blue  * w00 + p10.blue  * w10 + p01.blue  * w01 + p11.blue  * w11,
             p00.alpha * w00 + p10.alpha * w10 + p01.alpha * w01 + p11.alpha * w11
         };
+#endif
     } else {
         const PF_Pixel8* row0 = reinterpret_cast<const PF_Pixel8*>(base + y0 * w->rowbytes);
         const PF_Pixel8* row1 = reinterpret_cast<const PF_Pixel8*>(base + y1 * w->rowbytes);
@@ -472,12 +573,53 @@ inline FloatRGBA SampleSpecificWorldBilinear(const PF_EffectWorld* w, A_Boolean 
         float w01  = omfx * fyy;
         float w11  = fx * fyy;
 
+#if defined(DREAMY_HAS_NEON)
+        float32x4_t v00 = { (float)p00.red, (float)p00.green, (float)p00.blue, (float)p00.alpha };
+        float32x4_t v10 = { (float)p10.red, (float)p10.green, (float)p10.blue, (float)p10.alpha };
+        float32x4_t v01 = { (float)p01.red, (float)p01.green, (float)p01.blue, (float)p01.alpha };
+        float32x4_t v11 = { (float)p11.red, (float)p11.green, (float)p11.blue, (float)p11.alpha };
+
+        float32x4_t res = vmulq_n_f32(v00, w00);
+        res = vmlaq_n_f32(res, v10, w10);
+        res = vmlaq_n_f32(res, v01, w01);
+        res = vmlaq_n_f32(res, v11, w11);
+
+        FloatRGBA out;
+        vst1q_f32(&out.r, res);
+        return out;
+#elif defined(DREAMY_HAS_SSE)
+        __m128 v00 = _mm_set_ps((float)p00.alpha, (float)p00.blue, (float)p00.green, (float)p00.red);
+        __m128 v10 = _mm_set_ps((float)p10.alpha, (float)p10.blue, (float)p10.green, (float)p10.red);
+        __m128 v01 = _mm_set_ps((float)p01.alpha, (float)p01.blue, (float)p01.green, (float)p01.red);
+        __m128 v11 = _mm_set_ps((float)p11.alpha, (float)p11.blue, (float)p11.green, (float)p11.red);
+
+        __m128 vw00 = _mm_set1_ps(w00);
+        __m128 vw10 = _mm_set1_ps(w10);
+        __m128 vw01 = _mm_set1_ps(w01);
+        __m128 vw11 = _mm_set1_ps(w11);
+
+#if defined(__FMA__) || defined(__AVX2__)
+        __m128 res = _mm_mul_ps(v00, vw00);
+        res = _mm_fmadd_ps(v10, vw10, res);
+        res = _mm_fmadd_ps(v01, vw01, res);
+        res = _mm_fmadd_ps(v11, vw11, res);
+#else
+        __m128 res = _mm_add_ps(
+            _mm_add_ps(_mm_mul_ps(v00, vw00), _mm_mul_ps(v10, vw10)),
+            _mm_add_ps(_mm_mul_ps(v01, vw01), _mm_mul_ps(v11, vw11))
+        );
+#endif
+        FloatRGBA out;
+        _mm_storeu_ps(&out.r, res);
+        return out;
+#else
         return {
             p00.red   * w00 + p10.red   * w10 + p01.red   * w01 + p11.red   * w11,
             p00.green * w00 + p10.green * w10 + p01.green * w01 + p11.green * w11,
             p00.blue  * w00 + p10.blue  * w10 + p01.blue  * w01 + p11.blue  * w11,
             p00.alpha * w00 + p10.alpha * w10 + p01.alpha * w01 + p11.alpha * w11
         };
+#endif
     }
 }
 
@@ -703,16 +845,21 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, const DreamyRowSt
     if (rp.fm_enable) {
         /* 1. True Phase/Frequency Modulation:
          * Brightness modulates the phase of a high-frequency carrier wave */
-        float dx_tap = 3.0f * rp.downsample_scale;
-        float luma_left   = Luminance(SampleWorldBilinear(rp, sample_x - dx_tap, sample_y));
-        float luma_right  = Luminance(SampleWorldBilinear(rp, sample_x + dx_tap, sample_y));
-        float smooth_luma = 0.25f * luma_left + 0.5f * local_luma + 0.25f * luma_right;
+        float smooth_luma = local_luma;
+        if (rp.fm_mod_depth > 0.001f || rp.fm_z_elev > 0.001f) {
+            float dx_tap = 3.0f * rp.downsample_scale;
+            float luma_left   = Luminance(SampleWorldBilinear(rp, sample_x - dx_tap, sample_y));
+            float luma_right  = Luminance(SampleWorldBilinear(rp, sample_x + dx_tap, sample_y));
+            smooth_luma = 0.25f * luma_left + 0.5f * local_luma + 0.25f * luma_right;
+        }
 
         /* Horizontal FM displacement + carrier harmonic texture */
         float fm_phase = u * rp.fm_carrier_rad + smooth_luma * rp.fm_mod_index + rp.time_sec * 6.0f;
         fm_carrier_signal = std::sin(fm_phase);
 
-        sample_x += fm_carrier_signal * rp.fm_x_shift_scale;
+        if (rp.fm_x_shift_scale > 0.001f) {
+            sample_x += fm_carrier_signal * rp.fm_x_shift_scale;
+        }
 
         /* 2. Rutt-Etra 3D Scanline Z-Elevation & Glowing Oscilloscope Ribbons:
          * In a Rutt-Etra video synthesizer, each horizontal scanline is deflected
@@ -799,12 +946,54 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, const DreamyRowSt
             FloatRGBA b7 = SampleWorldBilinear(rp, sample_x + rad2_diag, sample_y - rad2_diag);
             FloatRGBA b8 = SampleWorldBilinear(rp, sample_x - rad2_diag, sample_y - rad2_diag);
 
+#if defined(DREAMY_HAS_NEON)
+            float32x4_t vb1 = vld1q_f32(&b1.r);
+            float32x4_t vb2 = vld1q_f32(&b2.r);
+            float32x4_t vb3 = vld1q_f32(&b3.r);
+            float32x4_t vb4 = vld1q_f32(&b4.r);
+            float32x4_t vb5 = vld1q_f32(&b5.r);
+            float32x4_t vb6 = vld1q_f32(&b6.r);
+            float32x4_t vb7 = vld1q_f32(&b7.r);
+            float32x4_t vb8 = vld1q_f32(&b8.r);
+
+            float32x4_t card = vaddq_f32(vaddq_f32(vb1, vb2), vaddq_f32(vb3, vb4));
+            float32x4_t diag = vaddq_f32(vaddq_f32(vb5, vb6), vaddq_f32(vb7, vb8));
+            float32x4_t vbloom = vmlaq_n_f32(vmulq_n_f32(card, 0.15f), diag, 0.10f);
+
+            FloatRGBA avg_halo;
+            vst1q_f32(&avg_halo.r, vbloom);
+            avg_halo.a = 1.0f;
+#elif defined(DREAMY_HAS_SSE)
+            __m128 vb1 = _mm_loadu_ps(&b1.r);
+            __m128 vb2 = _mm_loadu_ps(&b2.r);
+            __m128 vb3 = _mm_loadu_ps(&b3.r);
+            __m128 vb4 = _mm_loadu_ps(&b4.r);
+            __m128 vb5 = _mm_loadu_ps(&b5.r);
+            __m128 vb6 = _mm_loadu_ps(&b6.r);
+            __m128 vb7 = _mm_loadu_ps(&b7.r);
+            __m128 vb8 = _mm_loadu_ps(&b8.r);
+
+            __m128 card = _mm_add_ps(_mm_add_ps(vb1, vb2), _mm_add_ps(vb3, vb4));
+            __m128 diag = _mm_add_ps(_mm_add_ps(vb5, vb6), _mm_add_ps(vb7, vb8));
+            __m128 vcard_w = _mm_set1_ps(0.15f);
+            __m128 vdiag_w = _mm_set1_ps(0.10f);
+
+#if defined(__FMA__) || defined(__AVX2__)
+            __m128 vbloom = _mm_fmadd_ps(diag, vdiag_w, _mm_mul_ps(card, vcard_w));
+#else
+            __m128 vbloom = _mm_add_ps(_mm_mul_ps(card, vcard_w), _mm_mul_ps(diag, vdiag_w));
+#endif
+            FloatRGBA avg_halo;
+            _mm_storeu_ps(&avg_halo.r, vbloom);
+            avg_halo.a = 1.0f;
+#else
             FloatRGBA avg_halo = {
                 (b1.r + b2.r + b3.r + b4.r) * 0.15f + (b5.r + b6.r + b7.r + b8.r) * 0.10f,
                 (b1.g + b2.g + b3.g + b4.g) * 0.15f + (b5.g + b6.g + b7.g + b8.g) * 0.10f,
                 (b1.b + b2.b + b3.b + b4.b) * 0.15f + (b5.b + b6.b + b7.b + b8.b) * 0.10f,
                 1.0f
             };
+#endif
 
             /* Highlight knee extraction + dreamy warm/magenta halation tint */
             float halo_luma = Luminance(avg_halo);

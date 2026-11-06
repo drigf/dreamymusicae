@@ -920,7 +920,7 @@ RenderRowTask(
     if (rp->is_16bit) {
         PF_Pixel16* out_row = reinterpret_cast<PF_Pixel16*>(dst_base + y * rp->output_world->rowbytes);
         for (A_long x = 0; x < rp->width; ++x) {
-            FloatRGBA c = DreamyDSP::SynthesizePixel(*rp, rs, x, y);
+            FloatRGBA c = DreamyDSP::ClampColor01(DreamyDSP::SynthesizePixel(*rp, rs, x, y));
             out_row[x].red   = (A_u_short)(c.r * 32768.0f + 0.5f);
             out_row[x].green = (A_u_short)(c.g * 32768.0f + 0.5f);
             out_row[x].blue  = (A_u_short)(c.b * 32768.0f + 0.5f);
@@ -929,7 +929,7 @@ RenderRowTask(
     } else {
         PF_Pixel8* out_row = reinterpret_cast<PF_Pixel8*>(dst_base + y * rp->output_world->rowbytes);
         for (A_long x = 0; x < rp->width; ++x) {
-            FloatRGBA c = DreamyDSP::SynthesizePixel(*rp, rs, x, y);
+            FloatRGBA c = DreamyDSP::ClampColor01(DreamyDSP::SynthesizePixel(*rp, rs, x, y));
             out_row[x].red   = (A_u_char)(c.r * 255.0f + 0.5f);
             out_row[x].green = (A_u_char)(c.g * 255.0f + 0.5f);
             out_row[x].blue  = (A_u_char)(c.b * 255.0f + 0.5f);
