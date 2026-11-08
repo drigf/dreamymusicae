@@ -6,7 +6,7 @@
 	<integer>13</integer>
 	<key>logs</key>
 	<dict>
-		<key>6A548D8C-DFAA-48DC-BEFB-41EDC865587C</key>
+		<key>8C6F6E8A-B95D-4B73-AA7F-F3B98FA0547F</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,13 +15,13 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>6A548D8C-DFAA-48DC-BEFB-41EDC865587C.xcactivitylog</string>
+			<string>8C6F6E8A-B95D-4B73-AA7F-F3B98FA0547F.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>W</string>
+				<string>S</string>
 				<key>totalNumberOfAnalyzerIssues</key>
 				<integer>0</integer>
 				<key>totalNumberOfErrors</key>
@@ -29,7 +29,7 @@
 				<key>totalNumberOfTestFailures</key>
 				<integer>0</integer>
 				<key>totalNumberOfWarnings</key>
-				<integer>3</integer>
+				<integer>0</integer>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>DreamyMusic project</string>
@@ -40,15 +40,15 @@
 			<key>signature</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>timeStartedRecording</key>
-			<real>815677892.21790195</real>
+			<real>815793581.77811301</real>
 			<key>timeStoppedRecording</key>
-			<real>815677893.53361106</real>
+			<real>815793582.29821706</real>
 			<key>title</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>uniqueIdentifier</key>
-			<string>6A548D8C-DFAA-48DC-BEFB-41EDC865587C</string>
+			<string>8C6F6E8A-B95D-4B73-AA7F-F3B98FA0547F</string>
 		</dict>
-		<key>88D070EA-E61D-4314-8B8C-40BF40A29D0A</key>
+		<key>B3C59DA8-653A-4216-9468-4E9976EE077F</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -57,7 +57,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>88D070EA-E61D-4314-8B8C-40BF40A29D0A.xcactivitylog</string>
+			<string>B3C59DA8-653A-4216-9468-4E9976EE077F.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -82,13 +82,13 @@
 			<key>signature</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>timeStartedRecording</key>
-			<real>815675144.72268498</real>
+			<real>815793481.60057604</real>
 			<key>timeStoppedRecording</key>
-			<real>815675146.498914</real>
+			<real>815793484.92649603</real>
 			<key>title</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>uniqueIdentifier</key>
-			<string>88D070EA-E61D-4314-8B8C-40BF40A29D0A</string>
+			<string>B3C59DA8-653A-4216-9468-4E9976EE077F</string>
 		</dict>
 	</dict>
 </dict>

@@ -284,7 +284,7 @@ static const char* ParamIndexToFriendlyName(PF_ParamIndex idx) {
         case PARAM_AUDIO_REACT_VHS:      return "React: VHS & Bloom";
         case PARAM_AUDIO_REACT_ECHO:     return "React: Echo Trail";
         case PARAM_AUDIO_BASS_WEIGHT:    return "Bass Response (FM & VHS)";
-        case PARAM_AUDIO_MID_WEIGHT:     return "Mid Response (Bloom & Color)";
+        case PARAM_AUDIO_MID_WEIGHT:     return "Mid Response (Glow & Color)";
         case PARAM_AUDIO_HIGH_WEIGHT:    return "Treble Response (Glitch)";
         case PARAM_AUDIO_SMOOTHING:      return "Audio Smoothing (ms)";
         case PARAM_GRADIENT_ENABLE:      return "Enable Color Gradient";
