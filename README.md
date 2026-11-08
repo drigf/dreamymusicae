@@ -112,31 +112,32 @@ Maps image luminance (plus FM wave ridges and circuit-bent phase contours) throu
 
 ### Group 3: FM & Rutt-Etra Waves *(Starts Open)*
 
-Emulates classic analog Rutt/Etra video synthesizers and frequency-modulated CRT oscilloscopes.
+Emulates classic analog Rutt/Etra video synthesizers and frequency-modulated CRT oscilloscopes. Uses a liquid 2D analog oscillator with RGB phase dispersion and glowing topographic contour ribbons that softly lift highlights without dark black gap carving or CRT scanline moire.
 
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
 | **Enable FM & Rutt-Etra** | Checkbox | `On` | Master bypass toggle for the FM & Rutt-Etra synthesizer stage. |
-| **FM Wave Depth** | `0% – 100%` | `25.0%` | Controls how strongly image brightness warps horizontal coordinates and superimposes FM ripples. |
-| **3D Scanline Elevation** | `0% – 200%` | `35.0%` | Rutt-Etra vertical deflection: bright areas lift scanlines upward into 3D topographic ridges. |
-| **FM Wave Frequency** | `1 – 400` | `85.0` | Base horizontal carrier frequency of the FM sine oscillator. Higher values create finer ripple textures. |
+| **FM Wave Depth** | `0% – 100%` | `18.0%` | Controls how strongly image brightness warps horizontal coordinates and superimposes liquid FM ripples. |
+| **3D Scanline Elevation** | `0% – 200%` | `26.0%` | Rutt-Etra vertical deflection: bright areas lift scanlines upward into 3D topographic relief. |
+| **FM Wave Frequency** | `1 – 400` | `42.0` | Base carrier frequency of the liquid FM oscillator. Higher values create finer ripple textures. |
 
 #### Submenu: Advanced FM & Oscilloscope *(Starts Collapsed)*
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
-| **Oscilloscope Lines** | `0 – 400` | `90` | Number of discrete horizontal oscilloscope ribbons across the frame. Set to `0` for smooth continuous displacement. |
-| **Oscilloscope Beam Width** | `5% – 100%` | `62.0%` | Thickness of the glowing phosphor beam relative to the line gap. Lower values produce thin vector lines. |
-| **FM Music Reactivity** | `0% – 300%` | `90.0%` | Scales how strongly music boosts FM Wave Depth and 3D Scanline Elevation on beats when React: FM & Rutt-Etra is enabled. |
+| **Oscilloscope Lines** | `0 – 400` | `64` | Number of discrete horizontal oscilloscope ribbons across the frame. Set to `0` for smooth continuous displacement. |
+| **Oscilloscope Beam Width** | `5% – 100%` | `68.0%` | Thickness of the glowing phosphor contour ribbons. |
+| **FM Music Reactivity** | `0% – 300%` | `80.0%` | Scales how strongly music boosts FM Wave Depth and 3D Scanline Elevation on beats when React: FM & Rutt-Etra is enabled. |
 
 ---
 
 ### Group 4: Circuit Bending Glitch *(Starts Collapsed)*
 
-Emulates hardware-bent analog and digital video processors like dirty video mixers and shorted ADC data pins.
+Emulates hardware-bent analog and digital video processors like dirty video mixers and shorted ADC data pins. Includes selectable blend modes to composite glitches smoothly over your footage.
 
 | Control | Range | Default | How It Works & How to Use It |
 | :--- | :--- | :--- | :--- |
 | **Enable Circuit Bending** | Checkbox | `On` | Master bypass toggle for all circuit-bending processors. |
+| **Bend Blend Mode** | Popup (10 modes) | `Normal` | Compositing blend mode for circuit bend effects: Normal, Screen, Overlay, Soft Light, Multiply, Darken, Lighten, Difference, Exclusion, or Linear Dodge (Add). |
 | **Psychedelic Wavefolder** | `0% – 100%` | `18.0%` | Analog sinusoidal wavefolder: pushes RGB channels past `1.0` and folds them back down for liquid solarized color bands. |
 | **Horizontal Sync Tear** | `0% – 100%` | `15.0%` | Analog H-sync line-hold instability that tears random horizontal scanlines sideways with a color smear trail. |
 

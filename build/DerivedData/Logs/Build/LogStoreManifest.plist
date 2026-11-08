@@ -6,7 +6,7 @@
 	<integer>13</integer>
 	<key>logs</key>
 	<dict>
-		<key>8C6F6E8A-B95D-4B73-AA7F-F3B98FA0547F</key>
+		<key>CABBFAAC-511C-49C5-8978-83D8E44E2BA5</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,49 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>8C6F6E8A-B95D-4B73-AA7F-F3B98FA0547F.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>0</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>0</integer>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>DreamyMusic project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>DreamyMusic</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
-			<key>timeStartedRecording</key>
-			<real>815793581.77811301</real>
-			<key>timeStoppedRecording</key>
-			<real>815793582.29821706</real>
-			<key>title</key>
-			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
-			<key>uniqueIdentifier</key>
-			<string>8C6F6E8A-B95D-4B73-AA7F-F3B98FA0547F</string>
-		</dict>
-		<key>B3C59DA8-653A-4216-9468-4E9976EE077F</key>
-		<dict>
-			<key>className</key>
-			<string>IDECommandLineBuildLog</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
-			<key>fileName</key>
-			<string>B3C59DA8-653A-4216-9468-4E9976EE077F.xcactivitylog</string>
+			<string>CABBFAAC-511C-49C5-8978-83D8E44E2BA5.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -82,13 +40,55 @@
 			<key>signature</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>timeStartedRecording</key>
-			<real>815793481.60057604</real>
+			<real>815794634.37281704</real>
 			<key>timeStoppedRecording</key>
-			<real>815793484.92649603</real>
+			<real>815794636.97532403</real>
 			<key>title</key>
 			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
 			<key>uniqueIdentifier</key>
-			<string>B3C59DA8-653A-4216-9468-4E9976EE077F</string>
+			<string>CABBFAAC-511C-49C5-8978-83D8E44E2BA5</string>
+		</dict>
+		<key>CD12209B-FEDD-4AF6-BC4C-36E0E643CD33</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>CD12209B-FEDD-4AF6-BC4C-36E0E643CD33.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>3</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>DreamyMusic project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>DreamyMusic</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
+			<key>timeStartedRecording</key>
+			<real>815794952.54947603</real>
+			<key>timeStoppedRecording</key>
+			<real>815794954.345945</real>
+			<key>title</key>
+			<string>Building project DreamyMusic with scheme DreamyMusic and configuration Release</string>
+			<key>uniqueIdentifier</key>
+			<string>CD12209B-FEDD-4AF6-BC4C-36E0E643CD33</string>
 		</dict>
 	</dict>
 </dict>

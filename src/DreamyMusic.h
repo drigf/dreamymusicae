@@ -13,7 +13,7 @@
 #include "AE_Macros.h"
 
 #define MAJOR_VERSION       1
-#define MINOR_VERSION       0
+#define MINOR_VERSION       1
 #define BUG_VERSION         0
 #define STAGE_VERSION       PF_Stage_DEVELOP
 #define BUILD_VERSION       1
@@ -82,6 +82,7 @@ enum {
     /* 4. Circuit Bending (Analog Video Synth Glitch) */
     PARAM_TOPIC_BEND_START,
     PARAM_BEND_ENABLE,              /* Enable Circuit Bending */
+    PARAM_BEND_BLEND_MODE,          /* Popup: Normal, Screen, Overlay, Soft Light, Multiply, Darken, Lighten, Difference, Exclusion, Add */
     PARAM_BEND_PHASE_FOLD,          /* Analog wavefolder / RGB solarization wraps */
     PARAM_BEND_SMEAR_TEAR,          /* Horizontal line hold tear & analog color smear */
 
@@ -196,6 +197,7 @@ enum {
     ID_TOPIC_BEND_END,
     ID_TOPIC_BEND_ADV_START = 430,
     ID_TOPIC_BEND_ADV_END = 431,
+    ID_BEND_BLEND_MODE = 432,
 
     ID_TOPIC_VHS_START = 500,
     ID_VHS_ENABLE,
@@ -253,6 +255,20 @@ enum {
     CRT_MASK_SLOT_MASK              /* Arcade CRT staggered vertical slot mask */
 };
 
+/* Circuit Bending Blend Modes (1-based popup index in AE) */
+enum {
+    BEND_BLEND_NORMAL = 1,
+    BEND_BLEND_SCREEN,
+    BEND_BLEND_OVERLAY,
+    BEND_BLEND_SOFT_LIGHT,
+    BEND_BLEND_MULTIPLY,
+    BEND_BLEND_DARKEN,
+    BEND_BLEND_LIGHTEN,
+    BEND_BLEND_DIFFERENCE,
+    BEND_BLEND_EXCLUSION,
+    BEND_BLEND_ADD
+};
+
 /* Normalized RGB float helper */
 typedef struct {
     float r, g, b, a;
@@ -305,6 +321,7 @@ typedef struct {
 
     /* Circuit Bending Settings */
     A_Boolean   bend_enable;
+    A_long      bend_blend_mode;
     float       bend_phase_fold;
     float       bend_xor_crush;
     float       bend_smear_tear;

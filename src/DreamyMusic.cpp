@@ -272,6 +272,22 @@ static const char* GradientModeToString(A_long mode) {
     }
 }
 
+static const char* BendBlendModeToString(A_long mode) {
+    switch (mode) {
+        case BEND_BLEND_NORMAL:           return "Normal";
+        case BEND_BLEND_SCREEN:           return "Screen";
+        case BEND_BLEND_OVERLAY:          return "Overlay";
+        case BEND_BLEND_SOFT_LIGHT:       return "Soft Light";
+        case BEND_BLEND_MULTIPLY:         return "Multiply";
+        case BEND_BLEND_DARKEN:           return "Darken";
+        case BEND_BLEND_LIGHTEN:          return "Lighten";
+        case BEND_BLEND_DIFFERENCE:       return "Difference";
+        case BEND_BLEND_EXCLUSION:        return "Exclusion";
+        case BEND_BLEND_ADD:              return "Linear Dodge (Add)";
+        default:                          return "Normal";
+    }
+}
+
 static const char* ParamIndexToFriendlyName(PF_ParamIndex idx) {
     switch (idx) {
         case PARAM_AUDIO_ENABLE:         return "Enable Music Reactivity";
@@ -304,6 +320,7 @@ static const char* ParamIndexToFriendlyName(PF_ParamIndex idx) {
         case PARAM_FM_LINE_THICKNESS:    return "Oscilloscope Beam Width";
         case PARAM_FM_AUDIO_REACT:       return "FM Music Reactivity";
         case PARAM_BEND_ENABLE:          return "Enable Circuit Bending";
+        case PARAM_BEND_BLEND_MODE:      return "Bend Blend Mode";
         case PARAM_BEND_PHASE_FOLD:      return "Psychedelic Wavefolder";
         case PARAM_BEND_XOR_CRUSH:       return "Digital Pin-Short Glitch";
         case PARAM_BEND_SMEAR_TEAR:      return "Horizontal Sync Tear";
@@ -611,21 +628,21 @@ ParamsSetup(
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "FM Wave Depth",
-        0.0, 100.0, 0.0, 100.0, 25.0,
+        0.0, 100.0, 0.0, 100.0, 18.0,
         1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
         ID_FM_MOD_DEPTH);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "3D Scanline Elevation",
-        0.0, 200.0, 0.0, 100.0, 35.0,
+        0.0, 200.0, 0.0, 100.0, 26.0,
         1, PF_ValueDisplayFlag_PERCENT, PF_ParamFlag_SUPERVISE,
         ID_FM_RUTT_ETRA_Z);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "FM Wave Frequency",
-        1.0, 400.0, 10.0, 200.0, 85.0,
+        1.0, 400.0, 5.0, 160.0, 42.0,
         1, PF_ValueDisplayFlag_NONE, 0,
         ID_FM_CARRIER_FREQ);
 
@@ -636,21 +653,21 @@ ParamsSetup(
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "Oscilloscope Lines",
-        0.0, 400.0, 0.0, 220.0, 90.0,
+        0.0, 400.0, 0.0, 200.0, 64.0,
         0, PF_ValueDisplayFlag_NONE, 0,
         ID_FM_SCANLINE_DENSITY);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "Oscilloscope Beam Width",
-        5.0, 100.0, 15.0, 95.0, 62.0,
+        5.0, 100.0, 15.0, 95.0, 68.0,
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_FM_LINE_THICKNESS);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
         "FM Music Reactivity",
-        0.0, 300.0, 0.0, 200.0, 90.0,
+        0.0, 300.0, 0.0, 200.0, 80.0,
         1, PF_ValueDisplayFlag_PERCENT, 0,
         ID_FM_AUDIO_REACT);
 
@@ -668,6 +685,24 @@ ParamsSetup(
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_CHECKBOXX("Enable Circuit Bending", TRUE, PF_ParamFlag_SUPERVISE, ID_BEND_ENABLE);
+
+    AEFX_CLR_STRUCT(def);
+    PF_ADD_POPUPX(
+        "Bend Blend Mode",
+        10,
+        BEND_BLEND_NORMAL,
+        "Normal|"
+        "Screen|"
+        "Overlay|"
+        "Soft Light|"
+        "Multiply|"
+        "Darken|"
+        "Lighten|"
+        "Difference|"
+        "Exclusion|"
+        "Linear Dodge (Add)",
+        PF_ParamFlag_SUPERVISE,
+        ID_BEND_BLEND_MODE);
 
     AEFX_CLR_STRUCT(def);
     PF_ADD_FLOAT_SLIDERX(
@@ -1080,6 +1115,7 @@ Render(
 
     /* 4. Extract Circuit Bending Settings */
     rp.bend_enable         = (A_Boolean)params[PARAM_BEND_ENABLE]->u.bd.value;
+    rp.bend_blend_mode     = params[PARAM_BEND_BLEND_MODE]->u.pd.value;
     rp.bend_phase_fold     = (float)params[PARAM_BEND_PHASE_FOLD]->u.fs_d.value * 0.01f;
     rp.bend_xor_crush      = (float)params[PARAM_BEND_XOR_CRUSH]->u.fs_d.value * 0.01f;
     rp.bend_smear_tear     = (float)params[PARAM_BEND_SMEAR_TEAR]->u.fs_d.value * 0.01f;
@@ -1148,12 +1184,13 @@ Render(
         rp.gradient_mix           = (rp.gradient_enable && grad_mode != GRAD_MODE_OFF) ? 0.85f : 0.0f;
         manual_phase              = 0.0f;
         audio_phase               = 0.35f;
-        rp.fm_carrier_freq        = 85.0f;
-        rp.fm_mod_depth           = 0.25f;
-        rp.fm_rutt_etra_z         = 0.35f;
-        rp.fm_scanline_density    = 90.0f;
-        rp.fm_line_thickness      = 0.62f;
-        rp.fm_audio_react         = 0.90f;
+        rp.fm_carrier_freq        = 42.0f;
+        rp.fm_mod_depth           = 0.18f;
+        rp.fm_rutt_etra_z         = 0.26f;
+        rp.fm_scanline_density    = 64.0f;
+        rp.fm_line_thickness      = 0.68f;
+        rp.fm_audio_react         = 0.80f;
+        rp.bend_blend_mode        = BEND_BLEND_NORMAL;
         rp.bend_phase_fold        = 0.18f;
         rp.bend_xor_crush         = 0.00f;
         rp.bend_smear_tear        = 0.15f;
@@ -1385,6 +1422,8 @@ UserChangedParam(
             case PF_Param_POPUP:
                 if (idx == PARAM_GRADIENT_MODE) {
                     DreamyLog("🎨 [PRESET CHANGED] %s -> %s", name, GradientModeToString(p->u.pd.value));
+                } else if (idx == PARAM_BEND_BLEND_MODE) {
+                    DreamyLog("📋 [BLEND MODE CHANGED] %s -> %s", name, BendBlendModeToString(p->u.pd.value));
                 } else {
                     DreamyLog("📋 [MENU CHANGED] %s -> Option #%d", name, (int)p->u.pd.value);
                 }

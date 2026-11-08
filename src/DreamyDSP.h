@@ -131,6 +131,44 @@ inline float Luminance(const FloatRGBA& c) {
     return 0.299f * c.r + 0.587f * c.g + 0.114f * c.b;
 }
 
+inline float BlendBendChannel(float b, float s, A_long mode) {
+    switch (mode) {
+        case BEND_BLEND_SCREEN:
+            return 1.0f - (1.0f - b) * (1.0f - s);
+        case BEND_BLEND_OVERLAY:
+            return b < 0.5f ? (2.0f * b * s) : (1.0f - 2.0f * (1.0f - b) * (1.0f - s));
+        case BEND_BLEND_SOFT_LIGHT:
+            return (1.0f - 2.0f * s) * b * b + 2.0f * s * b;
+        case BEND_BLEND_MULTIPLY:
+            return b * s;
+        case BEND_BLEND_DARKEN:
+            return std::min(b, s);
+        case BEND_BLEND_LIGHTEN:
+            return std::max(b, s);
+        case BEND_BLEND_DIFFERENCE:
+            return std::fabs(b - s);
+        case BEND_BLEND_EXCLUSION:
+            return b + s - 2.0f * b * s;
+        case BEND_BLEND_ADD:
+            return Clamp01(b + s);
+        case BEND_BLEND_NORMAL:
+        default:
+            return s;
+    }
+}
+
+inline FloatRGBA BlendCircuitColor(const FloatRGBA& base, const FloatRGBA& bent, A_long mode) {
+    if (mode <= BEND_BLEND_NORMAL) {
+        return bent;
+    }
+    return {
+        BlendBendChannel(base.r, bent.r, mode),
+        BlendBendChannel(base.g, bent.g, mode),
+        BlendBendChannel(base.b, bent.b, mode),
+        base.a
+    };
+}
+
 /*==================================================================
  * 1. BUILT-IN 3-BAND AUDIO LAYER ANALYZER + KEYFRAME SLIDER FUSION
  *==================================================================*/
@@ -383,10 +421,10 @@ inline void PrecomputeFrameConstants(DreamyRenderParams& rp) {
     const float echo_mid         = (audio_active && rp.audio_react_echo)     ? rp.audio_mid        : 0.0f;
 
     /* FM & Rutt-Etra constants */
-    rp.fm_audio_mult    = 1.0f + (rp.audio_bass * 1.1f + rp.audio_mid * 0.6f) * fm_audio_react;
-    rp.fm_carrier_rad   = (rp.fm_carrier_freq * 0.5f) * (float)(2.0 * M_PI);
-    rp.fm_mod_index     = rp.fm_mod_depth * rp.fm_audio_mult * 18.0f;
-    rp.fm_x_shift_scale = (rp.fm_mod_depth * 14.0f * rp.fm_audio_mult) * rp.downsample_scale;
+    rp.fm_audio_mult    = 1.0f + (rp.audio_bass * 0.95f + rp.audio_mid * 0.55f) * fm_audio_react;
+    rp.fm_carrier_rad   = (rp.fm_carrier_freq * 0.28f) * (float)(2.0 * M_PI);
+    rp.fm_mod_index     = rp.fm_mod_depth * rp.fm_audio_mult * 10.5f;
+    rp.fm_x_shift_scale = (rp.fm_mod_depth * 9.5f * rp.fm_audio_mult) * rp.downsample_scale;
     rp.fm_z_elev        = rp.fm_rutt_etra_z * rp.fm_audio_mult;
 
     /* Circuit Bending constants */
@@ -645,6 +683,11 @@ struct DreamyRowState {
     float     flat_vhs_bar_env;
     float     flat_snow_y;
 
+    /* Row-invariant FM & Rutt-Etra vertical analog wave state */
+    float     fm_row_drift;
+    float     fm_row_sub_wave;
+    float     fm_row_scan_base;
+
     /* Row-invariant CRT Scanline & Subpixel Phosphor Mask tables */
     float     crt_scan_wave;
     float     crt_sqrt_scan_wave;
@@ -666,6 +709,13 @@ inline void PrecomputeRowState(const DreamyRenderParams& rp, A_long py, DreamyRo
     rs.flat_dx_offset   = 0.0f;
     rs.flat_vhs_bar_env = 0.0f;
     rs.flat_snow_y      = std::floor(rs.sample_y0) + rp.time_sec * 120.0f;
+
+    /* Precompute row-flowing vertical LFOs for liquid 2D FM modulation */
+    float v_osc         = rs.v0 * (6.0f + rp.fm_carrier_freq * 0.08f);
+    rs.fm_row_drift     = std::sin(v_osc - rp.time_sec * 2.4f) * 1.35f
+                        + std::cos(rs.v0 * 3.5f + rp.time_sec * 1.6f) * 0.85f;
+    rs.fm_row_sub_wave  = std::sin(rs.v0 * 14.0f + rp.time_sec * 3.2f);
+    rs.fm_row_scan_base = rs.v0 * rp.fm_scanline_density;
 
     /* When CRT curvature is off, v and sample_y are constant across the entire row */
     if (!rs.has_curvature) {
@@ -835,7 +885,8 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, const DreamyRowSt
 
     /*--------------------------------------------------------------
      * STAGE D: Frequency Modulation (FM) & Rutt-Etra Scanline Synth
-     * (Glowing 3D-displaced FM oscilloscope waves)
+     * (Liquid 2D analog FM phase, RGB prism dispersion & glowing
+     *  topographic Rutt-Etra contour ribbons without black gap bars)
      *--------------------------------------------------------------*/
     FloatRGBA base_col = SampleWorldBilinear(rp, sample_x, sample_y);
     float local_luma = Luminance(base_col);
@@ -843,66 +894,107 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, const DreamyRowSt
     float fm_carrier_signal = 0.0f;
 
     if (rp.fm_enable) {
-        /* 1. True Phase/Frequency Modulation:
-         * Brightness modulates the phase of a high-frequency carrier wave */
+        /* 1. Low-pass smoothed luminance + horizontal edge gradient detector:
+         *    Modulating FM phase with both smoothed luma and local edge slope prevents
+         *    rigid vertical corrugated pinstripes in flat areas while making contours liquid. */
         float smooth_luma = local_luma;
+        float luma_grad   = 0.0f;
         if (rp.fm_mod_depth > 0.001f || rp.fm_z_elev > 0.001f) {
-            float dx_tap = 3.0f * rp.downsample_scale;
-            float luma_left   = Luminance(SampleWorldBilinear(rp, sample_x - dx_tap, sample_y));
-            float luma_right  = Luminance(SampleWorldBilinear(rp, sample_x + dx_tap, sample_y));
-            smooth_luma = 0.25f * luma_left + 0.5f * local_luma + 0.25f * luma_right;
+            float dx_tap     = 3.5f * rp.downsample_scale;
+            float luma_left  = Luminance(SampleWorldBilinear(rp, sample_x - dx_tap, sample_y));
+            float luma_right = Luminance(SampleWorldBilinear(rp, sample_x + dx_tap, sample_y));
+            smooth_luma      = 0.25f * luma_left + 0.50f * local_luma + 0.25f * luma_right;
+            luma_grad        = luma_right - luma_left;
         }
 
-        /* Horizontal FM displacement + carrier harmonic texture */
-        float fm_phase = u * rp.fm_carrier_rad + smooth_luma * rp.fm_mod_index + rp.time_sec * 6.0f;
-        fm_carrier_signal = std::sin(fm_phase);
+        /* 2. Liquid 2D Analog FM Oscillator:
+         *    Combines horizontal scan phase, row-flowing vertical LFO drift, and harmonic
+         *    phase modulation driven by image luminance and edge transitions. */
+        float row_drift = rs.has_curvature
+                        ? (std::sin(v * (6.0f + rp.fm_carrier_freq * 0.08f) - rp.time_sec * 2.4f) * 1.35f +
+                           std::cos(v * 3.5f + rp.time_sec * 1.6f) * 0.85f)
+                        : rs.fm_row_drift;
+        float row_sub   = rs.has_curvature
+                        ? std::sin(v * 14.0f + rp.time_sec * 3.2f)
+                        : rs.fm_row_sub_wave;
+
+        float luma_env   = SmoothStep(0.04f, 0.92f, smooth_luma);
+        float edge_boost = std::min(1.0f, std::fabs(luma_grad) * 3.2f);
+        float mod_env    = 0.22f + 0.78f * Clamp01(luma_env * 0.75f + edge_boost * 0.65f);
+
+        float fm_phase1 = u * rp.fm_carrier_rad
+                        + row_drift
+                        + (luma_env + luma_grad * 1.4f) * rp.fm_mod_index
+                        + rp.time_sec * 3.8f;
+        float fm_phase2 = (u * 0.38f - v * 0.62f) * rp.fm_carrier_rad
+                        + smooth_luma * (rp.fm_mod_index * 0.65f)
+                        - rp.time_sec * 2.3f;
+
+        /* Blend primary carrier with diagonal sub-harmonic so waves undulate organically */
+        float raw_fm      = 0.68f * std::sin(fm_phase1) + 0.32f * std::sin(fm_phase2 + row_sub * 0.7f);
+        fm_carrier_signal = raw_fm * mod_env;
 
         if (rp.fm_x_shift_scale > 0.001f) {
             sample_x += fm_carrier_signal * rp.fm_x_shift_scale;
         }
 
-        /* 2. Rutt-Etra 3D Scanline Z-Elevation & Glowing Oscilloscope Ribbons:
-         * In a Rutt-Etra video synthesizer, each horizontal scanline is deflected
-         * vertically (Y) proportional to image luminance (Z) + FM wave modulation. */
+        /* 3. Rutt-Etra 3D Topographic Elevation & Soft Luminous Contour Ribbons:
+         *    Smooth S-curve vertical relief displacement + additive/screen phosphor ribbons
+         *    (no dark gap_mask bars that clash with CRT scanlines). */
         float z_elev = rp.fm_z_elev;
-        if (z_elev > 0.001f || rp.fm_scanline_density > 0.001f) {
-            /* Vertical deflection of sampling coordinate by luminance + subtle FM ripple */
-            float y_deflect = (smooth_luma * 55.0f + fm_carrier_signal * 4.5f) * z_elev * rp.downsample_scale;
+        bool has_displacement = (rp.fm_x_shift_scale > 0.001f || z_elev > 0.001f);
+
+        if (z_elev > 0.001f) {
+            /* Sculptural vertical elevation proportional to smoothed luma knee + gentle FM ripple */
+            float y_deflect = -(luma_env * 24.0f + fm_carrier_signal * 2.8f) * z_elev * rp.downsample_scale;
             sample_y += y_deflect;
+        }
 
-            /* Re-sample at the FM + Rutt-Etra deflected coordinates */
+        if (has_displacement) {
             base_col = SampleWorldBilinear(rp, sample_x, sample_y);
-            local_luma = Luminance(base_col);
-
-            /* Generate glowing horizontal oscilloscope contour lines */
-            if (rp.fm_scanline_density > 1.0f) {
-                float num_lines = rp.fm_scanline_density;
-                /* Deformed scanline coordinate combines vertical position, luminance elevation, and FM wave */
-                float deformed_v = v * num_lines
-                                 - (local_luma * z_elev * (num_lines * 0.16f))
-                                 + (fm_carrier_signal * rp.fm_mod_depth * 0.45f * rp.fm_audio_mult);
-
-                /* Distance to nearest scanline center (0.0 at center, 0.5 at midpoint between lines) */
-                float frac_line = FastFract(deformed_v);
-                float dist_to_line = std::fabs(frac_line - 0.5f) * 2.0f; /* 0 at center, 1 at boundary */
-
-                /* Beam thickness & phosphor bloom around each Rutt-Etra line */
-                float beam_width = Clamp01(rp.fm_line_thickness);
-                float core_beam  = SmoothStep(beam_width, beam_width * 0.15f, dist_to_line);
-
-                /* High-frequency dotted/stippled FM beam modulation along the line */
-                float dot_mod = 0.82f + 0.18f * fm_carrier_signal;
-                rutt_ribbon_glow = core_beam * dot_mod;
-
-                /* Darken gaps between scanlines proportional to Rutt-Etra Z depth for authentic oscilloscope look */
-                float gap_mask = Lerp(1.0f, 0.12f + 0.88f * core_beam, Clamp01(z_elev * 0.85f));
-                base_col.r *= gap_mask;
-                base_col.g *= gap_mask;
-                base_col.b *= gap_mask;
+            /* Analog RGB FM Phase Dispersion: R and B ride slightly offset phases on the FM wave,
+             * creating a dreamy video-synth prism shimmer on modulated contours */
+            float disp_px = (rp.fm_x_shift_scale * 0.28f + z_elev * 1.8f * rp.downsample_scale)
+                          * (0.35f + 0.65f * std::fabs(fm_carrier_signal));
+            if (disp_px > 0.15f) {
+                FloatRGBA col_r = SampleWorldBilinear(rp, sample_x + disp_px, sample_y);
+                FloatRGBA col_b = SampleWorldBilinear(rp, sample_x - disp_px, sample_y);
+                base_col.r = Lerp(base_col.r, col_r.r, 0.55f);
+                base_col.b = Lerp(base_col.b, col_b.b, 0.55f);
             }
-        } else {
-            base_col = SampleWorldBilinear(rp, sample_x, sample_y);
             local_luma = Luminance(base_col);
+        }
+
+        /* 4. Glowing Topographic Oscilloscope Contour Ribbons */
+        if (rp.fm_scanline_density > 1.0f && (z_elev > 0.001f || rp.fm_mod_depth > 0.001f)) {
+            float num_lines = rp.fm_scanline_density;
+            float scan_base = rs.has_curvature ? (v * num_lines) : rs.fm_row_scan_base;
+
+            /* Deformed topographic contour phase follows 3D luma elevation and liquid FM wave */
+            float contour_luma = 0.65f * smooth_luma + 0.35f * local_luma;
+            float deformed_v   = scan_base
+                               - (contour_luma * z_elev * (num_lines * 0.14f))
+                               + (fm_carrier_signal * rp.fm_mod_depth * 0.32f * rp.fm_audio_mult);
+
+            /* Smooth raised-cosine phosphor beam profile (zero harsh edges or aliasing) */
+            float frac_line  = FastFract(deformed_v);
+            float cos_bell   = 0.5f - 0.5f * std::cos(frac_line * (float)(2.0 * M_PI)); /* 1 at center, 0 at edge */
+            float beam_width = Clamp01(rp.fm_line_thickness);
+            float exponent   = Lerp(4.2f, 1.15f, beam_width);
+            float core_beam  = std::pow(Clamp01(cos_bell), exponent);
+
+            /* Ribbons illuminate midtones, highlights, and active FM ridges while fading softly in deep shadows */
+            float ribbon_presence = SmoothStep(0.03f, 0.68f, local_luma + edge_boost * 0.35f + z_elev * 0.15f);
+            float strength_env    = Clamp01(z_elev * 0.85f + rp.fm_mod_depth * 0.45f);
+            float harmonic_sheen  = 0.86f + 0.14f * raw_fm;
+
+            rutt_ribbon_glow = core_beam * ribbon_presence * strength_env * harmonic_sheen;
+
+            /* Soft screen-blend phosphor lift on the ribbons (never darkens gaps between lines) */
+            float lift = rutt_ribbon_glow * 0.28f;
+            base_col.r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(lift * 1.10f));
+            base_col.g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(lift * 0.98f));
+            base_col.b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(lift * 1.18f));
         }
     }
 
@@ -1092,36 +1184,43 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, const DreamyRowSt
 
     /*--------------------------------------------------------------
      * STAGE F: Circuit Bending (Analog Wavefolding & DAC Pin XOR)
-     * (Psychedelic color wrapping & glitch)
+     * (Psychedelic color wrapping & glitch with Blend Mode support)
      *--------------------------------------------------------------*/
     if (rp.bend_enable) {
+        const FloatRGBA pre_bend = base_col;
+        FloatRGBA bent_col = base_col;
+        bool has_color_bend = false;
+
         /* 1. Cross-channel RGB feedback matrix rotation (using frame-precomputed sin/cos) */
         if (rp.bend_feedback_shift > 0.001f) {
+            has_color_bend = true;
             float ca = rp.bend_fb_cos;
             float sa = rp.bend_fb_sin * 0.6f;
-            float nr = base_col.r * ca - base_col.g * sa + base_col.b * sa;
-            float ng = base_col.g * ca + base_col.r * sa - base_col.b * sa;
-            float nb = base_col.b * ca - base_col.r * sa + base_col.g * sa;
-            base_col.r = Clamp01(std::fabs(nr));
-            base_col.g = Clamp01(std::fabs(ng));
-            base_col.b = Clamp01(std::fabs(nb));
+            float nr = bent_col.r * ca - bent_col.g * sa + bent_col.b * sa;
+            float ng = bent_col.g * ca + bent_col.r * sa - bent_col.b * sa;
+            float nb = bent_col.b * ca - bent_col.r * sa + bent_col.g * sa;
+            bent_col.r = Clamp01(std::fabs(nr));
+            bent_col.g = Clamp01(std::fabs(ng));
+            bent_col.b = Clamp01(std::fabs(nb));
         }
 
         /* 2. Analog Video Synth Phase Wavefolder / Solarization (Tachyons+ style) */
         if (rp.bend_phase_fold > 0.001f) {
+            has_color_bend = true;
             float fold_gain = rp.bend_fold_gain;
             /* Different phase offsets per channel create psychedelic rainbow contours */
-            base_col.r = 0.5f + 0.5f * std::sin((base_col.r * fold_gain - 0.25f) * (float)M_PI);
-            base_col.g = 0.5f + 0.5f * std::sin((base_col.g * fold_gain * 1.12f - 0.10f) * (float)M_PI);
-            base_col.b = 0.5f + 0.5f * std::sin((base_col.b * fold_gain * 1.25f + 0.15f) * (float)M_PI);
+            bent_col.r = 0.5f + 0.5f * std::sin((bent_col.r * fold_gain - 0.25f) * (float)M_PI);
+            bent_col.g = 0.5f + 0.5f * std::sin((bent_col.g * fold_gain * 1.12f - 0.10f) * (float)M_PI);
+            bent_col.b = 0.5f + 0.5f * std::sin((bent_col.b * fold_gain * 1.25f + 0.15f) * (float)M_PI);
         }
 
         /* 3. Digital DAC Pin Short / Bitwise XOR Quantization */
         if (rp.bend_xor_crush > 0.001f) {
+            has_color_bend = true;
             float crush_mix = rp.bend_crush_amt * 0.85f;
-            uint8_t r8 = (uint8_t)(Clamp01(base_col.r) * 255.0f);
-            uint8_t g8 = (uint8_t)(Clamp01(base_col.g) * 255.0f);
-            uint8_t b8 = (uint8_t)(Clamp01(base_col.b) * 255.0f);
+            uint8_t r8 = (uint8_t)(Clamp01(bent_col.r) * 255.0f);
+            uint8_t g8 = (uint8_t)(Clamp01(bent_col.g) * 255.0f);
+            uint8_t b8 = (uint8_t)(Clamp01(bent_col.b) * 255.0f);
 
             /* Emulate shorted data pins on an 8-bit video ADC/DAC */
             uint8_t mask = rp.bend_xor_mask;
@@ -1130,9 +1229,13 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, const DreamyRowSt
             uint8_t xb = (b8 ^ ((r8 >> 1) & mask));
 
             const float inv255 = 1.0f / 255.0f;
-            base_col.r = Lerp(base_col.r, xr * inv255, crush_mix);
-            base_col.g = Lerp(base_col.g, xg * inv255, crush_mix);
-            base_col.b = Lerp(base_col.b, xb * inv255, crush_mix);
+            bent_col.r = Lerp(bent_col.r, xr * inv255, crush_mix);
+            bent_col.g = Lerp(bent_col.g, xg * inv255, crush_mix);
+            bent_col.b = Lerp(bent_col.b, xb * inv255, crush_mix);
+        }
+
+        if (has_color_bend) {
+            base_col = BlendCircuitColor(pre_bend, bent_col, rp.bend_blend_mode);
         }
     }
 
@@ -1140,39 +1243,43 @@ inline FloatRGBA SynthesizePixel(const DreamyRenderParams& rp, const DreamyRowSt
      * STAGE G: 4-Stop Editable / Preset Gradient Colorizer (O(1) LUT)
      *--------------------------------------------------------------*/
     if (rp.gradient_enable && rp.gradient_mode != GRAD_MODE_OFF && rp.gradient_mix > 0.001f) {
-        /* Map pixel luminance + FM wave harmonic + Rutt-Etra ribbon intensity through the 1024-entry LUT */
+        /* Map pixel luminance + liquid FM wave + Rutt-Etra contour ribbon sheen through the 1024-entry LUT */
         float synth_luma = Luminance(base_col);
         if (rp.fm_enable) {
-            synth_luma = Clamp01(synth_luma + rutt_ribbon_glow * 0.28f + fm_carrier_signal * rp.fm_mod_depth * 0.12f);
+            float fm_palette_shimmer = fm_carrier_signal * rp.fm_mod_depth * 0.09f;
+            synth_luma = Clamp01(synth_luma + rutt_ribbon_glow * 0.24f + fm_palette_shimmer);
         }
 
         FloatRGBA grad_col = SampleGradient(rp, synth_luma);
 
-        /* If Rutt-Etra scanlines or circuit bending are active, allow subtle per-channel gradient offset
-         * so chroma separation shines through the gradient palette */
-        if ((rp.vhs_enable && rp.vhs_chroma_bleed > 0.01f) || (rp.bend_enable && rp.bend_phase_fold > 0.01f)) {
-            FloatRGBA grad_r = SampleGradient(rp, base_col.r);
-            FloatRGBA grad_g = SampleGradient(rp, base_col.g);
-            FloatRGBA grad_b = SampleGradient(rp, base_col.b);
+        /* Allow per-channel chroma separation (from VHS bleed, Circuit Bending, or FM prism dispersion)
+         * to shine organically through the 4-stop gradient palette */
+        if ((rp.vhs_enable && rp.vhs_chroma_bleed > 0.01f) ||
+            (rp.bend_enable && rp.bend_phase_fold > 0.01f) ||
+            (rp.fm_enable && (rp.fm_mod_depth > 0.01f || rp.fm_rutt_etra_z > 0.01f))) {
+            FloatRGBA grad_r = SampleGradient(rp, Clamp01(base_col.r + rutt_ribbon_glow * 0.15f));
+            FloatRGBA grad_g = SampleGradient(rp, Clamp01(base_col.g + rutt_ribbon_glow * 0.15f));
+            FloatRGBA grad_b = SampleGradient(rp, Clamp01(base_col.b + rutt_ribbon_glow * 0.15f));
             grad_col.r = Lerp(grad_col.r, grad_r.r, 0.45f);
             grad_col.g = Lerp(grad_col.g, grad_g.g, 0.45f);
             grad_col.b = Lerp(grad_col.b, grad_b.b, 0.45f);
         }
 
-        /* Boost Rutt-Etra glowing ribbon cores toward the bright highlight stop */
-        if (rutt_ribbon_glow > 0.01f) {
-            grad_col = LerpColor(grad_col, rp.stops[3], rutt_ribbon_glow * 0.35f);
+        /* Gently bloom Rutt-Etra topographic ribbon peaks toward the bright highlight stop */
+        if (rutt_ribbon_glow > 0.005f) {
+            FloatRGBA highlight_sheen = LerpColor(rp.stops[2], rp.stops[3], 0.72f);
+            grad_col = LerpColor(grad_col, highlight_sheen, Clamp01(rutt_ribbon_glow * 0.42f));
         }
 
         base_col.r = Lerp(base_col.r, grad_col.r, rp.gradient_mix);
         base_col.g = Lerp(base_col.g, grad_col.g, rp.gradient_mix);
         base_col.b = Lerp(base_col.b, grad_col.b, rp.gradient_mix);
-    } else if (rp.fm_enable && rutt_ribbon_glow > 0.01f) {
-        /* When gradient colors are turned off, preserve original footage colors while keeping subtle Rutt-Etra beam glow */
-        float boost = 1.0f + rutt_ribbon_glow * 0.22f;
-        base_col.r = Clamp01(base_col.r * boost);
-        base_col.g = Clamp01(base_col.g * boost);
-        base_col.b = Clamp01(base_col.b * boost);
+    } else if (rp.fm_enable && rutt_ribbon_glow > 0.005f) {
+        /* When gradient colors are turned off, preserve original footage colors with a soft analog ribbon sheen */
+        float sheen = rutt_ribbon_glow * 0.20f;
+        base_col.r = 1.0f - (1.0f - base_col.r) * (1.0f - Clamp01(sheen * 1.05f));
+        base_col.g = 1.0f - (1.0f - base_col.g) * (1.0f - Clamp01(sheen * 0.98f));
+        base_col.b = 1.0f - (1.0f - base_col.b) * (1.0f - Clamp01(sheen * 1.12f));
     }
 
     /*--------------------------------------------------------------
